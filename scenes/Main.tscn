@@ -1,0 +1,57 @@
+[gd_scene load_steps=9 format=3 uid="uid://c0ju5m2hkncdj"]
+
+[ext_resource type="Script" path="res://scenes/Main.cs" id="1_afkx3"]
+[ext_resource type="PackedScene" uid="uid://ckfeeckg6otx8" path="res://characters/enemies/meelee enemy/MeeleeEnemy.tscn" id="3_g8n7e"]
+[ext_resource type="PackedScene" uid="uid://dia4df047bi02" path="res://characters/player/Player.tscn" id="3_pnmoo"]
+[ext_resource type="Script" path="res://managers/DamageManager.cs" id="3_wh42q"]
+[ext_resource type="PackedScene" uid="uid://dc4yc7w8kltj2" path="res://scenes/environment/ParallaxBackground.tscn" id="5_te7os"]
+[ext_resource type="PackedScene" uid="uid://osl4kd03veii" path="res://scenes/ui/Userinterface.tscn" id="5_xk53c"]
+[ext_resource type="Theme" uid="uid://dtwfjgidd1q24" path="res://resources/theme.tres" id="6_um6vy"]
+[ext_resource type="Script" path="res://managers/UIManager.cs" id="7_73xji"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_afkx3")
+meeleeEnemyScene = ExtResource("3_g8n7e")
+metadata/_edit_lock_ = true
+
+[node name="Managers" type="Node" parent="."]
+
+[node name="UIManager" type="Node" parent="Managers"]
+script = ExtResource("7_73xji")
+
+[node name="DamageManager" type="Node" parent="Managers"]
+script = ExtResource("3_wh42q")
+
+[node name="Player" parent="." instance=ExtResource("3_pnmoo")]
+position = Vector2(96, 423)
+
+[node name="MeeleeEnemy" parent="." instance=ExtResource("3_g8n7e")]
+position = Vector2(504, 424)
+
+[node name="ParallaxBackground" parent="." instance=ExtResource("5_te7os")]
+
+[node name="UserInterface" parent="." instance=ExtResource("5_xk53c")]
+
+[node name="Panel" type="Panel" parent="UserInterface"]
+offset_top = 448.0
+offset_right = 640.0
+offset_bottom = 480.0
+theme = ExtResource("6_um6vy")
+
+[node name="PlayerHealthLabel" type="Label" parent="UserInterface/Panel"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 5.0
+offset_right = 64.0
+offset_bottom = 19.0
+theme = ExtResource("6_um6vy")
+text = "Life: "
+
+[node name="EnemyHealthLabel" type="Label" parent="UserInterface/Panel"]
+layout_mode = 0
+offset_left = 328.0
+offset_top = 8.0
+offset_right = 368.0
+offset_bottom = 21.7
+theme = ExtResource("6_um6vy")
+text = "Enemy life: "

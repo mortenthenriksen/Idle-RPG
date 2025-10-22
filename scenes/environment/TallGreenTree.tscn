@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://bbemuk8mif6v1"]
+
+[ext_resource type="Texture2D" uid="uid://cv0dhxy8244k6" path="res://assets/environment/tallGreenTree.png" id="1_672ix"]
+
+[node name="TallGreenTree" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(2, -72)
+texture = ExtResource("1_672ix")

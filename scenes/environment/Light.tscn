@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://prvwb14u5eve"]
+
+[node name="Light" type="Node2D"]
+
+[node name="DirectionalLight2D" type="DirectionalLight2D" parent="."]
+color = Color(1, 1, 0, 1)
+max_distance = 100.0
