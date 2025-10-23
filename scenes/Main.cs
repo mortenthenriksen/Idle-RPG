@@ -55,7 +55,10 @@ public partial class Main : Node
 		AddChild(newEnemy);
 
 		// Set position
-		newEnemy.GlobalPosition = enemySpawnPosition + player.Position;
+		float offset = player.Position.X + 100;
+		GD.Print(player.GlobalPosition);
+		newEnemy.GlobalPosition = new Vector2(enemySpawnPosition.X + offset, newEnemy.GlobalPosition.Y + 423);
+		GD.Print(newEnemy.GlobalPosition);
 
 		// Reconnect its signals
 		var newEnemyHealth = newEnemy.GetNode<HealthNode>("HealthNode");

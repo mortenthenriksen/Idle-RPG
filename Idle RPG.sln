@@ -1,6 +1,6 @@
 ﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Role Playing Inventory", "Role Playing Inventory.csproj", "{535B38C7-4938-4654-93BB-2744D87C0942}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Idle RPG", "Idle RPG.csproj", "{535B38C7-4938-4654-93BB-2744D87C0942}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
