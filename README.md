@@ -1,0 +1,9 @@
+## Todo
+
+- **Have fun and enjoy the journey :)**
+- Make the prestige system -> make enemies scale
+- Make the upgrade tab for the damage
+- Make the inventory :)
+- add skill to the game (more attacks)
+- add crit
+- make enemies drop gold

@@ -35,14 +35,14 @@ public partial class Player : CharacterBody2D
     
     private void OnFrameChanged()
     {
-        if (animatedSprite2D.Animation == "attack1" && animatedSprite2D.Frame == 3)
+        if (animatedSprite2D.Animation == "attack1" && animatedSprite2D.Frame == 4)
         {
             var bodies = area2D.GetOverlappingBodies();
             foreach (var body in bodies)
             {
-                if (body is MeeleeEnemy enemy)
+                if (body is CharacterBody2D target && body.IsInGroup("enemy"))
                 {
-					DamageManager.ApplyDamage(enemy, DamageAmount);
+					DamageManager.ApplyDamage(this, target, DamageAmount);
                 }
             }
         }
@@ -59,8 +59,7 @@ public partial class Player : CharacterBody2D
 
 	private void OnArea2DBodyEntered(Node2D node2D)
 	{
-		// change this to group everywhere, might aswel do it now, to make nice code :)
-		if (node2D is MeeleeEnemy player)
+		if (node2D is Enemy enemy)
 		{
 			enemyInRange = true;
 			animatedSprite2D.Play("idle");
@@ -70,7 +69,7 @@ public partial class Player : CharacterBody2D
 	
 	private void OnArea2DBodyExited(Node2D node2D)
     {
-        if (node2D is MeeleeEnemy player)
+        if (node2D is Enemy enemy)
 		{
 			enemyInRange = false;
 			animatedSprite2D.Play("run");
@@ -87,20 +86,4 @@ public partial class Player : CharacterBody2D
 			camera2D.GlobalPosition = (GlobalPosition + offsetVector).Round();
 		}
 	}
-
-	// public override void _Input(InputEvent @input)
-	// {
-	// 	if (@input.IsActionPressed("spacebar"))
-	// 	{
-	// 		enemyInRange = !enemyInRange;
-	// 		if (!enemyInRange)
-	// 		{
-	// 			animatedSprite2D.Play("idle");
-	// 		}
-	// 		else
-	// 		{
-	// 			animatedSprite2D.Play("run");
-	// 		}
-	// 	}
-	// }
 }

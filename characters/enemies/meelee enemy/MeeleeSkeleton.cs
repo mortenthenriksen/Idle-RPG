@@ -1,14 +1,12 @@
+using Autoload;
 using Components;
 using Godot;
 using Managers;
 
 namespace Characters;
 
-public partial class MeeleeEnemy : CharacterBody2D
+public partial class MeeleeSkeleton : Enemy
 {
-    [Signal]
-    public delegate void EnemyDiedEventHandler();
-
     private float DamageAmount = 1;
     private bool playerInRange = false;
 
@@ -19,11 +17,13 @@ public partial class MeeleeEnemy : CharacterBody2D
 
     public override void _Ready()
     {
+        base._Ready();
+
         animatedSprite2D = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
         attackTimer = GetNode<Timer>("AttackTimer");
         area2D = GetNode<Area2D>("Area2D");
         healthNode = GetNode<HealthNode>("HealthNode");
-        healthNode.Connect("Died", new Callable(this, nameof(OnDied)));
+        healthNode.Died += OnDeath;
     }
 
     private void OnAttackTimerTimeout()
@@ -42,7 +42,7 @@ public partial class MeeleeEnemy : CharacterBody2D
             {
                 if (body is Player player)
                 {
-                    DamageManager.ApplyDamage(player, DamageAmount);
+                    DamageManager.ApplyDamage(this, player, DamageAmount);
                 }
             }
         }
@@ -54,6 +54,10 @@ public partial class MeeleeEnemy : CharacterBody2D
         {
             animatedSprite2D.Play("idle");
             attackTimer.Start();
+        }
+        if (animatedSprite2D.Animation == "death")
+        {
+            QueueFree();
         }
     }
 
@@ -67,21 +71,17 @@ public partial class MeeleeEnemy : CharacterBody2D
         }
     }
     
-    private void OnDied()
+    protected override void OnDeath(CharacterBody2D characterBody2D)
     {
+        base.OnDeath(characterBody2D);
+
         animatedSprite2D.Play("death"); // your death animation name
-        EmitSignal(SignalName.EnemyDied);
 
         SetPhysicsProcess(false);
         SetProcess(false);
 
         var collision = GetNode<CollisionShape2D>("CollisionShape2D");
         collision.Disabled = true;
-
-        animatedSprite2D.AnimationFinished += () =>
-        {
-            QueueFree();
-        };
     }
     
     public override void _PhysicsProcess(double delta)

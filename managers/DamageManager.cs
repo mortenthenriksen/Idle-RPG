@@ -5,6 +5,9 @@ namespace Managers;
 
 public partial class DamageManager : Node
 {
+    [Signal]
+    public delegate void DamageDealtEventHandler(CharacterBody2D soruce, CharacterBody2D target, float DamageAmount);
+
     public static DamageManager Instance { get; private set; }
 
     public override void _Ready()
@@ -12,7 +15,7 @@ public partial class DamageManager : Node
         Instance = this;
     }
 
-    public static void ApplyDamage(Node2D target, float amount)
+    public static void ApplyDamage(CharacterBody2D source, CharacterBody2D target, float DamageAmount)
     {
         if (target == null)
             return;
@@ -20,7 +23,8 @@ public partial class DamageManager : Node
         var healthNode = target.GetNodeOrNull<HealthNode>("HealthNode");
         if (healthNode != null)
         {
-            healthNode.ApplyDamage(amount);
+            healthNode.ApplyDamage(DamageAmount);
+            Instance.EmitSignal("DamageDealt", source, target, DamageAmount);
         }
     }
 }

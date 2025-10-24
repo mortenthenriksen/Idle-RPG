@@ -10,207 +10,169 @@ script = ExtResource("1_18fsx")
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 0
-offset_right = 384.0
-offset_bottom = 540.0
+offset_right = 256.0
+offset_bottom = 288.0
 theme = ExtResource("1_0u2p3")
+metadata/_edit_lock_ = true
 
 [node name="GridContainer" type="GridContainer" parent="Panel"]
 layout_mode = 0
-offset_left = 18.0
-offset_top = 256.0
-offset_right = 370.0
-offset_bottom = 528.0
-columns = 8
+offset_left = 4.0
+offset_top = 180.0
+offset_right = 252.0
+offset_bottom = 284.0
+columns = 7
 metadata/_edit_lock_ = true
 
 [node name="Slot1" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 
 [node name="Slot2" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 
 [node name="Slot3" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 
 [node name="Slot4" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 
 [node name="Slot5" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 
 [node name="Slot6" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 
 [node name="Slot7" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 
 [node name="Slot8" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 
 [node name="Slot9" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 
 [node name="Slot10" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 
 [node name="Slot11" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 
 [node name="Slot12" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 
 [node name="Slot13" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 
 [node name="Slot14" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 
 [node name="Slot15" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 
 [node name="Slot16" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 
 [node name="Slot17" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 
 [node name="Slot18" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 
 [node name="Slot19" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 
 [node name="Slot20" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 
 [node name="Slot21" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 
-[node name="Slot22" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
+[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+layout_mode = 0
+offset_right = 104.0
+offset_bottom = 104.0
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+metadata/_edit_lock_ = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer"]
 layout_mode = 2
 
-[node name="Slot23" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
+[node name="RightVBox" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="ShieldSlot" type="Panel" parent="Panel/MarginContainer/HBoxContainer/RightVBox"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+theme = ExtResource("1_0u2p3")
+
+[node name="WeaponSlot" type="Panel" parent="Panel/MarginContainer/HBoxContainer/RightVBox"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+theme = ExtResource("1_0u2p3")
+
+[node name="MiddleVBox" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer"]
 layout_mode = 2
 
-[node name="Slot24" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
+[node name="HelmetSlot" type="Panel" parent="Panel/MarginContainer/HBoxContainer/MiddleVBox"]
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+theme = ExtResource("1_0u2p3")
 
-[node name="Slot25" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
+[node name="ArmorSlot" type="Panel" parent="Panel/MarginContainer/HBoxContainer/MiddleVBox"]
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+theme = ExtResource("1_0u2p3")
 
-[node name="Slot26" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
+[node name="PantsSlot" type="Panel" parent="Panel/MarginContainer/HBoxContainer/MiddleVBox"]
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+theme = ExtResource("1_0u2p3")
 
-[node name="Slot27" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
+[node name="BootsSlot" type="Panel" parent="Panel/MarginContainer/HBoxContainer/MiddleVBox"]
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+theme = ExtResource("1_0u2p3")
 
-[node name="Slot28" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
+[node name="LeftVBox" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer"]
 layout_mode = 2
+theme_override_constants/separation = 5
+alignment = 1
 
-[node name="Slot29" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
+[node name="AmuletSlot" type="Panel" parent="Panel/MarginContainer/HBoxContainer/LeftVBox"]
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+theme = ExtResource("1_0u2p3")
 
-[node name="Slot30" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
+[node name="RingSlot1" type="Panel" parent="Panel/MarginContainer/HBoxContainer/LeftVBox"]
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+theme = ExtResource("1_0u2p3")
 
-[node name="Slot31" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
+[node name="RingSlot2" type="Panel" parent="Panel/MarginContainer/HBoxContainer/LeftVBox"]
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-
-[node name="Slot32" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-
-[node name="Slot33" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-
-[node name="Slot34" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-
-[node name="Slot35" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-
-[node name="Slot36" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-
-[node name="Slot37" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-
-[node name="Slot38" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-
-[node name="Slot39" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-
-[node name="Slot40" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-
-[node name="Slot41" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-
-[node name="Slot42" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-
-[node name="Slot43" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-
-[node name="Slot44" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-
-[node name="Slot45" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-
-[node name="Slot46" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-
-[node name="Slot47" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-
-[node name="Slot48" type="Panel" parent="Panel/GridContainer"]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
+theme = ExtResource("1_0u2p3")

@@ -9,11 +9,11 @@
 [node name="ParallaxBackground" type="ParallaxBackground"]
 physics_interpolation_mode = 1
 
-[node name="ParallaxLayer5" type="ParallaxLayer" parent="."]
+[node name="ParallaxLayerTesting" type="ParallaxLayer" parent="."]
 visible = false
 motion_mirroring = Vector2(767, 0)
 
-[node name="Sprite2D" type="Sprite2D" parent="ParallaxLayer5"]
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxLayerTesting"]
 position = Vector2(400, 144)
 texture = ExtResource("5_l3hve")
 
@@ -49,3 +49,18 @@ motion_mirroring = Vector2(767, 0)
 position = Vector2(384, 288)
 scale = Vector2(1.33333, 1)
 texture = ExtResource("4_kpn77")
+
+[node name="Sprite2D2" type="Sprite2D" parent="ParallaxLayer4"]
+visible = false
+position = Vector2(1152, 288)
+scale = Vector2(1.33333, 1)
+texture = ExtResource("4_kpn77")
+region_enabled = true
+region_rect = Rect2(-1, 0, 577, 324)
+
+[node name="ParallaxLayer5" type="ParallaxLayer" parent="."]
+motion_mirroring = Vector2(767, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxLayer5"]
+position = Vector2(384, 688)
+scale = Vector2(1.33333, 1)
