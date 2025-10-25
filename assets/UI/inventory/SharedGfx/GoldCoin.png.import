@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dmv2x58rwn6ve"
-path="res://.godot/imported/SelectedBox.png-6d9b2cb84f44680b600b2409ecb15f45.ctex"
+uid="uid://ekws8jh7qn2"
+path="res://.godot/imported/GoldCoin.png-1e5b77ffc9362f4ae377cc236a3e2fc4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/inventory/SharedGfx/SelectedBox.png"
-dest_files=["res://.godot/imported/SelectedBox.png-6d9b2cb84f44680b600b2409ecb15f45.ctex"]
+source_file="res://assets/UI/inventory/SharedGfx/GoldCoin.png"
+dest_files=["res://.godot/imported/GoldCoin.png-1e5b77ffc9362f4ae377cc236a3e2fc4.ctex"]
 
 [params]
 

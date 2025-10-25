@@ -1,4 +1,6 @@
 using System;
+using Characters;
+using Components;
 using Godot;
 
 namespace Managers;
@@ -8,12 +10,20 @@ public partial class UIManager : Node
     [Export]
     public Theme pixelKubastaFontTheme;
 
+    [Export]
+    public PackedScene coinPackedScene;
+
     public static UIManager Instance { get; private set; }
-    
+
     private Label playerHealthLabel;
+    private Label playerLifeLabel;
+    private Label enemyLifeLabel;
     private Label enemyHealthLabel;
     private Label waveCounterLabel;
     private Label totalKillsCounterLabel;
+    private Label goldLabel;
+    private TextureProgressBar expBar;
+    private Label expLabel;
 
     public override void _Ready()
     {
@@ -22,38 +32,69 @@ public partial class UIManager : Node
         enemyHealthLabel = GetNode<Label>("/root/Main/UserInterface/BottomPanel/EnemyHealthLabel");
         waveCounterLabel = GetNode<Label>("/root/Main/UserInterface/TopPanel/WaveCounterLabel");
         totalKillsCounterLabel = GetNode<Label>("/root/Main/UserInterface/TopPanel/TotalKillsCounterLabel");
+        goldLabel = GetNode<Label>("%GoldLabel");
+        expBar = GetNode<TextureProgressBar>("%ExpBar");
+        expLabel = GetNode<Label>("%ExpLabel");
+        
+        var statsNode = GetNode("/root/Main/UserInterface/Statistics");
+        playerLifeLabel = statsNode.GetNode<Label>("%PlayerLifeLabel");
+        enemyLifeLabel = statsNode.GetNode<Label>("%EnemyLifeLabel");
 
-
-        DamageManager.Instance.DamageDealt += OnDamageDealt;
+        DamageManager.Instance.DamageDealt += DisplayDamageNumber;
     }
 
-    private void OnDamageDealt(CharacterBody2D source, CharacterBody2D target, float damageAmount)
+    public void UpdateExpUI(ulong expValue, ulong maxExp)
     {
-        DisplayDamageNumber(source.Position, target.Position, damageAmount);
+        expBar.Value = expValue;
+        expBar.MaxValue = maxExp;
+
+        expLabel.Text = $"{expValue} / {maxExp}";
     }
 
-    public void UpdatePlayerHealth(float newPlayerHealth)
+    public void UpdateGoldUI(Vector2 positionEnemy, ulong goldValue)
     {
-        playerHealthLabel.Text = $"Life: {newPlayerHealth}";
+        goldLabel.Text = $"Gold: {goldValue}";
+
+        DisplayGoldCoin(positionEnemy);
     }
 
-    public void UpdateEnemyHealth(float newEnemyHealth)
+    private void DisplayGoldCoin(Vector2 positionEnemy)
     {
-        enemyHealthLabel.Text = $"Enemy life: {newEnemyHealth}";
+        // Instantiate coin
+        var goldCoin = coinPackedScene.Instantiate<Node2D>();
+        goldCoin.GlobalPosition = positionEnemy;
+        AddChild(goldCoin);
+
+        // Create a tween for animation
+        var tween = GetTree().CreateTween();
+        tween.SetEase(Tween.EaseType.Out);
+        tween.SetTrans(Tween.TransitionType.Quad);
+
+        // Animate upward jump
+        Vector2 startPos = goldCoin.GlobalPosition;
+        Vector2 peakPos = startPos + new Vector2(0, -40); // move up 40px
+
+        tween.TweenProperty(goldCoin, "global_position", peakPos, 0.3f);
+
+        // Bounce down slightly
+        tween.TweenProperty(goldCoin, "global_position", startPos + new Vector2(0, -10), 0.25f);
+
+
+        // Fade out before removing
+        if (goldCoin is CanvasItem canvasItem)
+        {
+            tween.Parallel().TweenProperty(canvasItem, "modulate:a", 0f, 0.4f);
+        }
+
+        // QueueFree when done
+        tween.TweenCallback(Callable.From(() => goldCoin.QueueFree()));
     }
 
-    public void UpdateWaveCounter(int changeWaveValue)
+    private void DisplayDamageNumber(CharacterBody2D source, CharacterBody2D target, float damageAmount)
     {
-        waveCounterLabel.Text = $"Wave: {changeWaveValue} / {WaveManager.Instance.maxWave}";
-    }
+        Vector2 sourcePosition = source.Position;
+        Vector2 targetPosition = target.Position;
 
-    public void UpdateTotalKillsCounter(int totalKills)
-    {
-        totalKillsCounterLabel.Text = $"Total kills: {totalKills}";
-    }
-
-    private void DisplayDamageNumber(Vector2 sourcePosition, Vector2 targetPosition, float damageAmount)
-    {
         var number = new Label
         {
             GlobalPosition = targetPosition + new Vector2(0, -80),
@@ -105,5 +146,27 @@ public partial class UIManager : Node
 
         // Cleanup when finished
         tween.Finished += () => number.QueueFree();
+    }
+
+    public void UpdatePlayerHealth(float newPlayerHealth, float playerMaxHealth)
+    {
+        playerHealthLabel.Text = $"Life: {newPlayerHealth}";
+        playerLifeLabel.Text = $"{newPlayerHealth} / {playerMaxHealth}";
+    }
+
+    public void UpdateEnemyHealth(float newEnemyHealth, float enemyMaxHealth)
+    {
+        enemyHealthLabel.Text = $"Enemy life: {newEnemyHealth}";
+        enemyLifeLabel.Text = enemyMaxHealth.ToString();
+    }
+
+    public void UpdateWaveCounter(int changeWaveValue)
+    {
+        waveCounterLabel.Text = $"Wave: {changeWaveValue} / {WaveManager.Instance.maxWave}";
+    }
+
+    public void UpdateTotalKillsCounter(int totalKills)
+    {
+        totalKillsCounterLabel.Text = $"Total kills: {totalKills}";
     }
 }

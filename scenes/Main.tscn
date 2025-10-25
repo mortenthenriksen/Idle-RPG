@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://c0ju5m2hkncdj"]
+[gd_scene load_steps=22 format=3 uid="uid://c0ju5m2hkncdj"]
 
 [ext_resource type="Script" path="res://scenes/Main.cs" id="1_afkx3"]
 [ext_resource type="PackedScene" uid="uid://ckfeeckg6otx8" path="res://characters/enemies/meelee enemy/MeeleeSkeleton.tscn" id="3_g8n7e"]
@@ -7,12 +7,20 @@
 [ext_resource type="PackedScene" uid="uid://dc4yc7w8kltj2" path="res://scenes/environment/ParallaxBackground.tscn" id="5_te7os"]
 [ext_resource type="PackedScene" uid="uid://osl4kd03veii" path="res://scenes/ui/Userinterface.tscn" id="5_xk53c"]
 [ext_resource type="Script" path="res://managers/WaveManager.cs" id="6_7uq1e"]
+[ext_resource type="PackedScene" uid="uid://wfhmcrwcplmh" path="res://scenes/dropable/Coin.tscn" id="6_p3ie1"]
 [ext_resource type="Theme" uid="uid://dtwfjgidd1q24" path="res://resources/theme.tres" id="6_um6vy"]
 [ext_resource type="Script" path="res://managers/UIManager.cs" id="7_73xji"]
 [ext_resource type="Script" path="res://managers/KillTracker.cs" id="7_858o5"]
 [ext_resource type="Script" path="res://managers/GameEventsManager.cs" id="7_ncrx3"]
+[ext_resource type="Script" path="res://managers/GoldManager.cs" id="9_rpnlx"]
+[ext_resource type="Script" path="res://managers/ExperienceManger.cs" id="11_sbfnc"]
 [ext_resource type="PackedScene" uid="uid://bcrj5p7y4eawc" path="res://inventory/Inventory.tscn" id="12_1swpu"]
-[ext_resource type="Script" path="res://scenes/ShowInventoryButton.cs" id="12_atq6x"]
+[ext_resource type="Script" path="res://scenes/ui/ShowInventoryButton.cs" id="12_atq6x"]
+[ext_resource type="Texture2D" uid="uid://b3b1nio3bd1pp" path="res://assets/UI/HUD/Pixel Health Bar/Bar/empty health bar.png" id="15_0fgbi"]
+[ext_resource type="Script" path="res://scenes/ui/ShowStatsButton.cs" id="16_f7nf7"]
+[ext_resource type="Texture2D" uid="uid://ctvt4jmm4xogm" path="res://assets/UI/HUD/Pixel Health Bar/Health/no health.png" id="16_tu51r"]
+[ext_resource type="Texture2D" uid="uid://dt4b0r36j4wbf" path="res://assets/UI/HUD/Pixel Health Bar/Bar/health bar.png" id="18_e6jkb"]
+[ext_resource type="PackedScene" uid="uid://b5h7ndmv1ok8h" path="res://scenes/ui/Statistics.tscn" id="21_v8o2f"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_afkx3")
@@ -29,6 +37,7 @@ script = ExtResource("6_7uq1e")
 [node name="UIManager" type="Node" parent="Managers"]
 script = ExtResource("7_73xji")
 pixelKubastaFontTheme = ExtResource("6_um6vy")
+coinPackedScene = ExtResource("6_p3ie1")
 
 [node name="KillTracker" type="Node" parent="Managers"]
 script = ExtResource("7_858o5")
@@ -37,10 +46,17 @@ script = ExtResource("7_858o5")
 script = ExtResource("7_ncrx3")
 meeleeSkeletonScene = ExtResource("3_g8n7e")
 
+[node name="GoldManager" type="Node" parent="Managers"]
+script = ExtResource("9_rpnlx")
+
+[node name="ExperienceManager" type="Node" parent="Managers"]
+script = ExtResource("11_sbfnc")
+
 [node name="Player" parent="." instance=ExtResource("3_pnmoo")]
 position = Vector2(96, 423)
 
 [node name="MeeleeEnemy" parent="." instance=ExtResource("3_g8n7e")]
+unique_name_in_owner = true
 position = Vector2(504, 424)
 
 [node name="ParallaxBackground" parent="." instance=ExtResource("5_te7os")]
@@ -77,18 +93,66 @@ text = "Enemy life: "
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
+[node name="GoldLabel" type="Label" parent="UserInterface/BottomPanel"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 104.0
+offset_top = 8.0
+offset_right = 144.0
+offset_bottom = 22.0
+text = "Gold: "
+
 [node name="ShowInventoryButton" type="Button" parent="UserInterface/BottomPanel"]
 layout_mode = 1
 anchors_preset = -1
 anchor_top = -14.0
 anchor_bottom = -14.0
-offset_left = 573.0
-offset_top = 453.0
-offset_right = 635.0
-offset_bottom = 475.0
+offset_left = 574.0
+offset_top = 455.0
+offset_right = 636.0
+offset_bottom = 477.0
+focus_mode = 0
 text = "Inventory"
 script = ExtResource("12_atq6x")
-metadata/_edit_lock_ = true
+
+[node name="ShowStatsButton" type="Button" parent="UserInterface/BottomPanel"]
+layout_mode = 0
+offset_left = 504.0
+offset_top = 7.0
+offset_right = 572.0
+offset_bottom = 29.0
+focus_mode = 0
+text = "Statistics
+"
+script = ExtResource("16_f7nf7")
+
+[node name="ExpBar" type="TextureProgressBar" parent="UserInterface/BottomPanel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = -9.0
+offset_right = 640.0
+offset_bottom = 7.0
+value = 100.0
+nine_patch_stretch = true
+stretch_margin_left = 10
+stretch_margin_top = 10
+stretch_margin_right = 10
+texture_under = ExtResource("16_tu51r")
+texture_over = ExtResource("15_0fgbi")
+texture_progress = ExtResource("18_e6jkb")
+tint_under = Color(1, 1, 1, 0.422)
+
+[node name="ExpLabel" type="Label" parent="UserInterface/BottomPanel/ExpBar"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 296.0
+offset_top = 14.0
+offset_right = 336.0
+offset_bottom = 27.7
+text = "TEST "
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="TopPanel" type="Panel" parent="UserInterface"]
 offset_right = 640.0
@@ -122,3 +186,7 @@ metadata/_edit_lock_ = true
 unique_name_in_owner = true
 offset_top = 32.0
 offset_bottom = 32.0
+
+[node name="Statistics" parent="UserInterface" instance=ExtResource("21_v8o2f")]
+unique_name_in_owner = true
+metadata/_edit_lock_ = true

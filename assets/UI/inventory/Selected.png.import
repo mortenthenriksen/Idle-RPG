@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ckgvctnqkob8x"
-path="res://.godot/imported/32x32_RingsandAmulets.png-0631a42f2de4c18801c21954a2049fc4.ctex"
+uid="uid://btct8ovktw230"
+path="res://.godot/imported/Selected.png-467e93ec22091db4db0b688b3d88b793.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/inventory/sprites for equipment/32x32_RingsandAmulets.png"
-dest_files=["res://.godot/imported/32x32_RingsandAmulets.png-0631a42f2de4c18801c21954a2049fc4.ctex"]
+source_file="res://assets/UI/inventory/Selected.png"
+dest_files=["res://.godot/imported/Selected.png-467e93ec22091db4db0b688b3d88b793.ctex"]
 
 [params]
 

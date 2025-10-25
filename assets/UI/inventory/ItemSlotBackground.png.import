@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dhpob363yej7n"
-path="res://.godot/imported/ItemSlotBackground.png-7015cfd738c9e83454e677e06c0a2aef.ctex"
+path="res://.godot/imported/ItemSlotBackground.png-472b9e1539c801263cc9f7d8774c20a2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/inventory/ItemSlotBackground.png"
-dest_files=["res://.godot/imported/ItemSlotBackground.png-7015cfd738c9e83454e677e06c0a2aef.ctex"]
+source_file="res://assets/UI/inventory/ItemSlotBackground.png"
+dest_files=["res://.godot/imported/ItemSlotBackground.png-472b9e1539c801263cc9f7d8774c20a2.ctex"]
 
 [params]
 

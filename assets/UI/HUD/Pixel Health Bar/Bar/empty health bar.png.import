@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d3fnfeqjx2xwe"
-path="res://.godot/imported/ItemSlot.png-1bb52c8ba4a8acd3664eab390fdb70a8.ctex"
+uid="uid://b3b1nio3bd1pp"
+path="res://.godot/imported/empty health bar.png-fb5992462f3cc79060c30fc587d32538.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/inventory/ItemSlot.png"
-dest_files=["res://.godot/imported/ItemSlot.png-1bb52c8ba4a8acd3664eab390fdb70a8.ctex"]
+source_file="res://assets/UI/HUD/Pixel Health Bar/Bar/empty health bar.png"
+dest_files=["res://.godot/imported/empty health bar.png-fb5992462f3cc79060c30fc587d32538.ctex"]
 
 [params]
 

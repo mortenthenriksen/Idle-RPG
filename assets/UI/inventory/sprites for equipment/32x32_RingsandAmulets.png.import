@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bmhaeecupmr3o"
-path="res://.godot/imported/ItemBorder.png-72ebc7601fd965d122505c7d788004d4.ctex"
+uid="uid://ckgvctnqkob8x"
+path="res://.godot/imported/32x32_RingsandAmulets.png-a4d6816a2dcfbd70c33be4f2a759bb6d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/inventory/SharedGfx/ItemBorder.png"
-dest_files=["res://.godot/imported/ItemBorder.png-72ebc7601fd965d122505c7d788004d4.ctex"]
+source_file="res://assets/UI/inventory/sprites for equipment/32x32_RingsandAmulets.png"
+dest_files=["res://.godot/imported/32x32_RingsandAmulets.png-a4d6816a2dcfbd70c33be4f2a759bb6d.ctex"]
 
 [params]
 

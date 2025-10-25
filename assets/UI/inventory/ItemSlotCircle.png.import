@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://uc88llwvfbsf"
-path="res://.godot/imported/ItemBoxBackground.png-5b8572785b289a72db0e9b49a26e0b78.ctex"
+uid="uid://xlgr6m5sbbc5"
+path="res://.godot/imported/ItemSlotCircle.png-ced7d1ac53a5f75dbb39e0440da41874.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/inventory/SharedGfx/ItemBoxBackground.png"
-dest_files=["res://.godot/imported/ItemBoxBackground.png-5b8572785b289a72db0e9b49a26e0b78.ctex"]
+source_file="res://assets/UI/inventory/ItemSlotCircle.png"
+dest_files=["res://.godot/imported/ItemSlotCircle.png-ced7d1ac53a5f75dbb39e0440da41874.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://djdko66lelkb1"
-path="res://.godot/imported/ItemBox.png-0b1606d4ef6d3688cf43e1c0e46e0440.ctex"
+uid="uid://bmhaeecupmr3o"
+path="res://.godot/imported/ItemBorder.png-7f4037fc15c71a54c96960e1a5b27bb8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/inventory/SharedGfx/ItemBox.png"
-dest_files=["res://.godot/imported/ItemBox.png-0b1606d4ef6d3688cf43e1c0e46e0440.ctex"]
+source_file="res://assets/UI/inventory/SharedGfx/ItemBorder.png"
+dest_files=["res://.godot/imported/ItemBorder.png-7f4037fc15c71a54c96960e1a5b27bb8.ctex"]
 
 [params]
 

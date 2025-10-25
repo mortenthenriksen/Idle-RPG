@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dewavvmxw6ume"
-path="res://.godot/imported/32x32_PixelWeapons.png-ae5ef4b1c47c30a9496ca0a6b258fc39.ctex"
+uid="uid://d3fnfeqjx2xwe"
+path="res://.godot/imported/ItemSlot.png-51d11d02159e7775cf6688eb1c4873a3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/inventory/sprites for equipment/32x32_PixelWeapons.png"
-dest_files=["res://.godot/imported/32x32_PixelWeapons.png-ae5ef4b1c47c30a9496ca0a6b258fc39.ctex"]
+source_file="res://assets/UI/inventory/ItemSlot.png"
+dest_files=["res://.godot/imported/ItemSlot.png-51d11d02159e7775cf6688eb1c4873a3.ctex"]
 
 [params]
 

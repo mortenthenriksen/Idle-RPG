@@ -18,6 +18,7 @@ public partial class Player : CharacterBody2D
 
 	public override void _Ready()
 	{
+		AddToGroup("player");
 		camera2D = GetNode<Camera2D>("Camera2D");
 		healthNode = GetNode<HealthNode>("HealthNode");
 		animatedSprite2D = GetNode<AnimatedSprite2D>("AnimatedSprite2D");

@@ -167,7 +167,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"run",
-"speed": 8.0
+"speed": 10.0
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ya7m6"]
@@ -187,7 +187,7 @@ metadata/_edit_lock_ = true
 position = Vector2(6, -36)
 scale = Vector2(1.36, 1.36)
 sprite_frames = SubResource("SpriteFrames_kg1tn")
-animation = &"death"
+animation = &"attack1"
 autoplay = "run"
 flip_h = true
 metadata/_edit_lock_ = true
@@ -210,7 +210,7 @@ shape = SubResource("CapsuleShape2D_p3dhf")
 wait_time = 1.2
 
 [node name="HealthNode" parent="." instance=ExtResource("5_q2trx")]
-MaxHealth = 1.0
+maxHealth = 1.0
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 visible = false

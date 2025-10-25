@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://xlgr6m5sbbc5"
-path="res://.godot/imported/ItemSlotCircle.png-bddbf1b499408eefd5d2778011af348b.ctex"
+uid="uid://cog1tlwvqgr4w"
+path="res://.godot/imported/no health bar.png-68aaa63c92225e8829560876e5d00b12.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/inventory/ItemSlotCircle.png"
-dest_files=["res://.godot/imported/ItemSlotCircle.png-bddbf1b499408eefd5d2778011af348b.ctex"]
+source_file="res://assets/UI/HUD/Pixel Health Bar/Bar/no health bar.png"
+dest_files=["res://.godot/imported/no health bar.png-68aaa63c92225e8829560876e5d00b12.ctex"]
 
 [params]
 

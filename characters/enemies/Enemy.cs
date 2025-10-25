@@ -16,11 +16,11 @@ public abstract partial class Enemy : CharacterBody2D
         var healthNode = GetNode<HealthNode>("HealthNode");
         healthNode.HealthChanged += OnHealthChanged;
         healthNode.Died += OnDeath;
-        healthBar.Value = healthNode.MaxHealth;
-        healthBar.MaxValue = healthNode.MaxHealth;
+        healthBar.Value = healthNode.maxHealth;
+        healthBar.MaxValue = healthNode.maxHealth;
     }
 
-    private void OnHealthChanged(float newHealth)
+    private void OnHealthChanged(float newHealth, float maxHealth)
     {
         if (healthBar != null)
             healthBar.Value = newHealth;

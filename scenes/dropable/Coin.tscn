@@ -1,0 +1,56 @@
+[gd_scene load_steps=9 format=3 uid="uid://wfhmcrwcplmh"]
+
+[ext_resource type="Texture2D" uid="uid://diwxnyo8lsrp6" path="res://assets/dropable/spinning coin.png" id="1_7epp0"]
+[ext_resource type="Script" path="res://scenes/dropable/Coin.cs" id="1_cg20w"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s0aos"]
+atlas = ExtResource("1_7epp0")
+region = Rect2(0, 0, 20, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_datjp"]
+atlas = ExtResource("1_7epp0")
+region = Rect2(21, 0, 20, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_23tqr"]
+atlas = ExtResource("1_7epp0")
+region = Rect2(42, 0, 20, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4goyl"]
+atlas = ExtResource("1_7epp0")
+region = Rect2(63, 0, 20, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tkwsv"]
+atlas = ExtResource("1_7epp0")
+region = Rect2(84, 0, 20, 18)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_gdxwk"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s0aos")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_datjp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_23tqr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4goyl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tkwsv")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[node name="Coin" type="Node2D"]
+script = ExtResource("1_cg20w")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_gdxwk")
+autoplay = "default"
+frame = 4
+frame_progress = 1.0

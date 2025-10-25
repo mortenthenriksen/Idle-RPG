@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dh6noithfe7wp"
-path="res://.godot/imported/InventoryHeader.png-517486dc7a1af8edd22222805a599f0e.ctex"
+uid="uid://diwxnyo8lsrp6"
+path="res://.godot/imported/spinning coin.png-526c642d62fdf12f13b8df374229918a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/inventory/InventoryHeader.png"
-dest_files=["res://.godot/imported/InventoryHeader.png-517486dc7a1af8edd22222805a599f0e.ctex"]
+source_file="res://assets/dropable/spinning coin.png"
+dest_files=["res://.godot/imported/spinning coin.png-526c642d62fdf12f13b8df374229918a.ctex"]
 
 [params]
 

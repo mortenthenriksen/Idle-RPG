@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://diusj0hkgmyvb"
-path="res://.godot/imported/32x32_PixelAmour.png-0910c164646baa75bd64551b6d45640d.ctex"
+uid="uid://djdko66lelkb1"
+path="res://.godot/imported/ItemBox.png-270a3445b50cfb867246f7412d9b6172.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/inventory/sprites for equipment/32x32_PixelAmour.png"
-dest_files=["res://.godot/imported/32x32_PixelAmour.png-0910c164646baa75bd64551b6d45640d.ctex"]
+source_file="res://assets/UI/inventory/SharedGfx/ItemBox.png"
+dest_files=["res://.godot/imported/ItemBox.png-270a3445b50cfb867246f7412d9b6172.ctex"]
 
 [params]
 

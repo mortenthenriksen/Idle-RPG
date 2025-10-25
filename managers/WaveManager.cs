@@ -19,6 +19,7 @@ public partial class WaveManager : Node
 
     public void IncreaseWaveCounter()
     {
-        currentWave += 1 % 10;
+        currentWave += 1;
+        currentWave %= maxWave;
     }
 }

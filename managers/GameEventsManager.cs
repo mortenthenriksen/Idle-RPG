@@ -1,5 +1,3 @@
-using System;
-using System.Net.NetworkInformation;
 using Characters;
 using Components;
 using Godot;
@@ -13,6 +11,8 @@ public partial class GameEventsManager : Node
 	private HealthNode enemyHealth;
 	private MeeleeSkeleton meeleeEnemy;
 	private Player player;
+	private Enemy enemy;
+	private Statistics statistics; 
 	private int increaseWaveValue = 1;
 
 	[Export] 
@@ -24,33 +24,59 @@ public partial class GameEventsManager : Node
     public static GameEventsManager Instance { get; private set; }
 
 	public async override void _Ready()
-	{
+    {
 		Instance = this;
 		player = GetNode<Player>("/root/Main/Player");
+		enemy = GetTree().GetFirstNodeInGroup("enemy") as Enemy;
 
 		playerHealth = GetNode<HealthNode>("/root/Main/Player/HealthNode");
-		playerHealth.HealthChanged += OnPlayerHealthChanged;
+        playerHealth.HealthChanged += OnPlayerHealthChanged;
 		playerHealth.Died += OnPlayerDied;
-
-		enemyHealth = GetNode<HealthNode>("/root/Main/MeeleeEnemy/HealthNode");
-		enemyHealth.HealthChanged += OnEnemyHealthChanged;
+		
+        enemyHealth = GetNode<HealthNode>("/root/Main/MeeleeEnemy/HealthNode");
+        enemyHealth.HealthChanged += OnEnemyHealthChanged;
 		enemyHealth.Died += OnEnemyDied;
 
-		await ToSignal(GetTree(), "process_frame"); // Wait one frame
+		statistics = GetNode<Statistics>("/root/Main/UserInterface/Statistics");
+		statistics.PlayerStatUpgraded += OnPlayerStatUpgraded;
 
-		UIManager.Instance.UpdatePlayerHealth(playerHealth.CurrentHealth);
-		UIManager.Instance.UpdateEnemyHealth(enemyHealth.CurrentHealth);
-		UIManager.Instance.UpdateWaveCounter(WaveManager.Instance.currentWave);
-		UIManager.Instance.UpdateTotalKillsCounter(KillTracker.Instance.GetTotalKills());
-	}
+        await ToSignal(GetTree(), "process_frame"); // Wait one frame
 
-    private void OnEnemyDied(CharacterBody2D characterBody2D)
+        UpdateUI();
+        // UIManager.Instance.UpdateGoldLabel(GoldManager.Instance.goldValue);
+    }
+
+    private void OnPlayerStatUpgraded(string statName)
+    {
+		if (statName == "Life")
+		{
+			playerHealth.IncreaseMaxHealth((float)4);
+		}
+
+		UpdateUI();
+    }
+
+
+    private void UpdateUI()
+    {
+        UIManager.Instance.UpdatePlayerHealth(playerHealth.currentHealth, playerHealth.maxHealth);
+        UIManager.Instance.UpdateEnemyHealth(enemyHealth.currentHealth, enemyHealth.maxHealth);
+        UIManager.Instance.UpdateWaveCounter(WaveManager.Instance.currentWave);
+        UIManager.Instance.UpdateTotalKillsCounter(KillTracker.Instance.GetTotalKills());
+        UIManager.Instance.UpdateExpUI(ExperienceManger.Instance.currentExp, ExperienceManger.Instance.maxExp);
+    }
+
+
+    private void OnEnemyDied(Enemy enemy)
 	{
 		WaveManager.Instance.IncreaseWaveCounter();
-		KillTracker.Instance.IncreaseKillTracker((Enemy)characterBody2D);
+		KillTracker.Instance.IncreaseKillTracker(enemy);
+		GoldManager.Instance.GetGoldFromEnemy(enemy);
+		ExperienceManger.Instance.GainExp(enemy);
 
 		// change this to not just instantiate some Meeleskeleton, but rather the enemy for that place or a random one maybe
 		var newEnemy = meeleeSkeletonScene.Instantiate<MeeleeSkeleton>();
+		// also, find another way to do this than using the player pos
 		float offset = player.Position.X + 100;
 		newEnemy.GlobalPosition = new Vector2(enemySpawnPosition.X + offset, newEnemy.GlobalPosition.Y + 423);
 
@@ -60,9 +86,7 @@ public partial class GameEventsManager : Node
 		newEnemyHealth.HealthChanged += OnEnemyHealthChanged;
 		newEnemyHealth.Died += OnEnemyDied;
 
-		UIManager.Instance.UpdateEnemyHealth(newEnemyHealth.CurrentHealth);
-		UIManager.Instance.UpdateWaveCounter(WaveManager.Instance.currentWave);
-		UIManager.Instance.UpdateTotalKillsCounter(KillTracker.Instance.GetTotalKills());
+		UpdateUI();
     }
 
 
@@ -71,14 +95,13 @@ public partial class GameEventsManager : Node
 		GD.Print("Player died!");
     }
 
-
-    private void OnPlayerHealthChanged(float newHealth)
+    private void OnPlayerHealthChanged(float newHealth, float maxHealth)
     {
-		UIManager.Instance.UpdatePlayerHealth(newHealth);
+		UIManager.Instance.UpdatePlayerHealth(newHealth, maxHealth);
     }
 
-    private void OnEnemyHealthChanged(float newHealth)
+    private void OnEnemyHealthChanged(float newHealth, float maxHealth)
     {
-		UIManager.Instance.UpdateEnemyHealth(newHealth);
+		UIManager.Instance.UpdateEnemyHealth(newHealth, maxHealth);
     }
 }
