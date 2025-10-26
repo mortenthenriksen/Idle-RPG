@@ -271,7 +271,6 @@ height = 112.0
 [node name="Player" type="CharacterBody2D"]
 collision_mask = 2
 script = ExtResource("1_d6upt")
-metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
@@ -285,12 +284,6 @@ scale = Vector2(1.7, 1.7)
 sprite_frames = SubResource("SpriteFrames_kqghi")
 animation = &"run"
 autoplay = "run"
-metadata/_edit_lock_ = true
-
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(224, -183)
-process_callback = 0
-position_smoothing_enabled = true
 metadata/_edit_lock_ = true
 
 [node name="HealthNode" parent="." instance=ExtResource("4_vqo02")]
@@ -307,7 +300,13 @@ position = Vector2(0, -26)
 shape = SubResource("CapsuleShape2D_wpgj4")
 
 [node name="AttackTimer" type="Timer" parent="."]
-wait_time = 0.75
+unique_name_in_owner = true
+wait_time = 0.2
+one_shot = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(216, -208)
+process_callback = 0
 
 [connection signal="input_event" from="." to="." method="OnInputEvent"]
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="OnAnimatedSprite2DAnimationFinished"]

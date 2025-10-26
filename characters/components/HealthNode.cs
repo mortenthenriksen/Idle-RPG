@@ -9,13 +9,15 @@ public partial class HealthNode : Node
     [Export]
     public float maxHealth = 100;
     public float currentHealth { get; private set; }
+    public bool IsDead => currentHealth <= 0;
 
     [Signal]
     public delegate void HealthChangedEventHandler(float newHealth, float maxHealth);
 
     [Signal]
+    // right now this only works when the enemy dies, this needs to be fixed :))
     public delegate void DiedEventHandler(Enemy enemy);
-    
+
     public override void _Ready()
     {
         currentHealth = maxHealth;

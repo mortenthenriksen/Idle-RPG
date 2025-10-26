@@ -1,0 +1,78 @@
+[gd_scene load_steps=7 format=3 uid="uid://n4fnjrs3y045"]
+
+[ext_resource type="Theme" uid="uid://dtwfjgidd1q24" path="res://resources/theme.tres" id="1_5opkg"]
+[ext_resource type="Script" path="res://scenes/ui/Ancestry.cs" id="1_8il2a"]
+[ext_resource type="Texture2D" uid="uid://d3fnfeqjx2xwe" path="res://assets/UI/inventory/ItemSlot.png" id="3_4jb1u"]
+[ext_resource type="Script" path="res://scenes/ui/DraggableContent.cs" id="3_27ngf"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_u51f2"]
+texture = ExtResource("3_4jb1u")
+region_rect = Rect2(4.58145, 6.2602, 25.0038, 23.5774)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_vw28i"]
+texture = ExtResource("3_4jb1u")
+texture_margin_left = 3.65492
+texture_margin_top = 6.09153
+texture_margin_right = 4.3656
+texture_margin_bottom = 3.94355
+draw_center = false
+
+[node name="Ancestry" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_8il2a")
+
+[node name="Panel" type="Panel" parent="."]
+clip_contents = true
+layout_mode = 0
+offset_right = 325.0
+offset_bottom = 288.0
+theme = ExtResource("1_5opkg")
+
+[node name="DraggableContent" type="Panel" parent="Panel"]
+clip_contents = true
+layout_mode = 0
+offset_right = 652.0
+offset_bottom = 555.0
+theme = ExtResource("1_5opkg")
+theme_override_styles/panel = SubResource("StyleBoxTexture_u51f2")
+script = ExtResource("3_27ngf")
+
+[node name="Label_LEFT_DOWN" type="Label" parent="Panel/DraggableContent"]
+layout_mode = 0
+offset_left = 145.0
+offset_top = 390.0
+offset_right = 185.0
+offset_bottom = 404.0
+text = "TEST"
+
+[node name="Label2_LEFT_UP" type="Label" parent="Panel/DraggableContent"]
+layout_mode = 0
+offset_left = 145.0
+offset_top = 135.0
+offset_right = 185.0
+offset_bottom = 149.0
+text = "TEST"
+
+[node name="Label4_RIGHT_DOWN" type="Label" parent="Panel/DraggableContent"]
+layout_mode = 0
+offset_left = 484.0
+offset_top = 390.0
+offset_right = 524.0
+offset_bottom = 404.0
+text = "TEST"
+
+[node name="Label3_RIGHT_UP" type="Label" parent="Panel/DraggableContent"]
+layout_mode = 0
+offset_left = 444.0
+offset_top = 135.0
+offset_right = 484.0
+offset_bottom = 149.0
+text = "TEST"
+
+[node name="Panel" type="Panel" parent="Panel"]
+layout_mode = 0
+offset_right = 325.0
+offset_bottom = 288.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_vw28i")

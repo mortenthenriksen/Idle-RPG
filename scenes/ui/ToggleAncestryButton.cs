@@ -2,23 +2,21 @@ using Godot;
 
 namespace UI;
 
-public partial class ShowStatsButton : Button
+public partial class ToggleAncestryButton : Button
 {
-
-    private Statistics statistics;
+    private Ancestry ancestry;
     private bool isVisble = false;
 
     public override void _Ready()
     {
-        statistics = GetNode<Statistics>("%Statistics");
+        ancestry = GetNode<Ancestry>("%Ancestry");
         this.Pressed += ToggleStatisticsVisibility;
-        statistics.Visible = isVisble;
+        ancestry.Visible = isVisble;
     }
     
     private void ToggleStatisticsVisibility()
     {
         isVisble = !isVisble;
-        statistics.Visible = isVisble;
+        ancestry.Visible = isVisble;
     }
-
 }

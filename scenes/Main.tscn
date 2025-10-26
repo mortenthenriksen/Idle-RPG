@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://c0ju5m2hkncdj"]
+[gd_scene load_steps=24 format=3 uid="uid://c0ju5m2hkncdj"]
 
 [ext_resource type="Script" path="res://scenes/Main.cs" id="1_afkx3"]
 [ext_resource type="PackedScene" uid="uid://ckfeeckg6otx8" path="res://characters/enemies/meelee enemy/MeeleeSkeleton.tscn" id="3_g8n7e"]
@@ -20,7 +20,9 @@
 [ext_resource type="Script" path="res://scenes/ui/ShowStatsButton.cs" id="16_f7nf7"]
 [ext_resource type="Texture2D" uid="uid://ctvt4jmm4xogm" path="res://assets/UI/HUD/Pixel Health Bar/Health/no health.png" id="16_tu51r"]
 [ext_resource type="Texture2D" uid="uid://dt4b0r36j4wbf" path="res://assets/UI/HUD/Pixel Health Bar/Bar/health bar.png" id="18_e6jkb"]
+[ext_resource type="Script" path="res://scenes/ui/ToggleAncestryButton.cs" id="19_7i6u3"]
 [ext_resource type="PackedScene" uid="uid://b5h7ndmv1ok8h" path="res://scenes/ui/Statistics.tscn" id="21_v8o2f"]
+[ext_resource type="PackedScene" uid="uid://n4fnjrs3y045" path="res://scenes/ui/Ancestry.tscn" id="22_2cq8c"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_afkx3")
@@ -53,24 +55,27 @@ script = ExtResource("9_rpnlx")
 script = ExtResource("11_sbfnc")
 
 [node name="Player" parent="." instance=ExtResource("3_pnmoo")]
-position = Vector2(96, 423)
+position = Vector2(264, 480)
+metadata/_edit_lock_ = true
 
 [node name="MeeleeEnemy" parent="." instance=ExtResource("3_g8n7e")]
 unique_name_in_owner = true
-position = Vector2(504, 424)
+position = Vector2(736, 481)
+metadata/_edit_lock_ = true
 
 [node name="ParallaxBackground" parent="." instance=ExtResource("5_te7os")]
 
 [node name="UserInterface" parent="." instance=ExtResource("5_xk53c")]
 
 [node name="BottomPanel" type="Panel" parent="UserInterface"]
-offset_top = 448.0
-offset_right = 640.0
-offset_bottom = 480.0
+offset_top = 503.0
+offset_right = 960.0
+offset_bottom = 542.0
 theme = ExtResource("6_um6vy")
 metadata/_edit_lock_ = true
 
 [node name="PlayerHealthLabel" type="Label" parent="UserInterface/BottomPanel"]
+visible = false
 layout_mode = 0
 offset_left = 8.0
 offset_top = 8.0
@@ -79,7 +84,6 @@ offset_bottom = 24.0
 theme = ExtResource("6_um6vy")
 text = "Life: "
 vertical_alignment = 1
-metadata/_edit_lock_ = true
 
 [node name="EnemyHealthLabel" type="Label" parent="UserInterface/BottomPanel"]
 visible = false
@@ -91,7 +95,6 @@ offset_bottom = 24.0
 theme = ExtResource("6_um6vy")
 text = "Enemy life: "
 vertical_alignment = 1
-metadata/_edit_lock_ = true
 
 [node name="GoldLabel" type="Label" parent="UserInterface/BottomPanel"]
 unique_name_in_owner = true
@@ -103,35 +106,11 @@ offset_right = 144.0
 offset_bottom = 22.0
 text = "Gold: "
 
-[node name="ShowInventoryButton" type="Button" parent="UserInterface/BottomPanel"]
-layout_mode = 1
-anchors_preset = -1
-anchor_top = -14.0
-anchor_bottom = -14.0
-offset_left = 574.0
-offset_top = 455.0
-offset_right = 636.0
-offset_bottom = 477.0
-focus_mode = 0
-text = "Inventory"
-script = ExtResource("12_atq6x")
-
-[node name="ShowStatsButton" type="Button" parent="UserInterface/BottomPanel"]
-layout_mode = 0
-offset_left = 504.0
-offset_top = 7.0
-offset_right = 572.0
-offset_bottom = 29.0
-focus_mode = 0
-text = "Statistics
-"
-script = ExtResource("16_f7nf7")
-
 [node name="ExpBar" type="TextureProgressBar" parent="UserInterface/BottomPanel"]
 unique_name_in_owner = true
 layout_mode = 0
 offset_top = -9.0
-offset_right = 640.0
+offset_right = 960.0
 offset_bottom = 7.0
 value = 100.0
 nine_patch_stretch = true
@@ -142,34 +121,67 @@ texture_under = ExtResource("16_tu51r")
 texture_over = ExtResource("15_0fgbi")
 texture_progress = ExtResource("18_e6jkb")
 tint_under = Color(1, 1, 1, 0.422)
+metadata/_edit_lock_ = true
 
 [node name="ExpLabel" type="Label" parent="UserInterface/BottomPanel/ExpBar"]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 296.0
-offset_top = 14.0
-offset_right = 336.0
-offset_bottom = 27.7
-text = "TEST "
+offset_left = 420.0
+offset_top = 9.0
+offset_right = 526.0
+offset_bottom = 37.0
+theme_override_font_sizes/font_size = 36
+text = "EXP LABEL
+"
 horizontal_alignment = 1
 vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UserInterface/BottomPanel"]
+layout_mode = 0
+offset_left = 603.0
+offset_top = 5.0
+offset_right = 959.0
+offset_bottom = 41.0
+
+[node name="ShowInventoryButton" type="Button" parent="UserInterface/BottomPanel/HBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 32
+text = "Inventory"
+script = ExtResource("12_atq6x")
+
+[node name="ToggleAncestryButton" type="Button" parent="UserInterface/BottomPanel/HBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 32
+text = "Ancestry
+"
+script = ExtResource("19_7i6u3")
+
+[node name="ShowStatsButton" type="Button" parent="UserInterface/BottomPanel/HBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 32
+text = "Statistics
+"
+script = ExtResource("16_f7nf7")
 
 [node name="TopPanel" type="Panel" parent="UserInterface"]
-offset_right = 640.0
+offset_right = 960.0
 offset_bottom = 32.0
 theme = ExtResource("6_um6vy")
 metadata/_edit_lock_ = true
 
 [node name="WaveCounterLabel" type="Label" parent="UserInterface/TopPanel"]
 layout_mode = 0
-offset_left = 272.0
-offset_right = 372.0
+offset_left = 420.0
+offset_right = 520.0
 offset_bottom = 32.0
 theme = ExtResource("6_um6vy")
 theme_override_font_sizes/font_size = 32
 text = "Wave: 0/0"
 vertical_alignment = 1
-metadata/_edit_lock_ = true
 
 [node name="TotalKillsCounterLabel" type="Label" parent="UserInterface/TopPanel"]
 layout_mode = 0
@@ -180,13 +192,22 @@ offset_bottom = 24.0
 theme = ExtResource("6_um6vy")
 text = "BLABLA "
 vertical_alignment = 1
-metadata/_edit_lock_ = true
 
 [node name="Inventory" parent="UserInterface" instance=ExtResource("12_1swpu")]
 unique_name_in_owner = true
+offset_left = 1.0
 offset_top = 32.0
+offset_right = 1.0
 offset_bottom = 32.0
 
 [node name="Statistics" parent="UserInterface" instance=ExtResource("21_v8o2f")]
 unique_name_in_owner = true
-metadata/_edit_lock_ = true
+offset_left = 584.0
+offset_right = 584.0
+
+[node name="Ancestry" parent="UserInterface" instance=ExtResource("22_2cq8c")]
+unique_name_in_owner = true
+offset_left = 258.0
+offset_top = 32.0
+offset_right = 258.0
+offset_bottom = 32.0

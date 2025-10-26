@@ -6,20 +6,17 @@ namespace Characters;
 
 public partial class Player : CharacterBody2D
 {
-	private float DamageAmount = 1;
-	private Camera2D camera2D;
+	// private Camera2D camera2D;
 	private AnimatedSprite2D animatedSprite2D;
 	private HealthNode healthNode;
 	private Area2D area2D;
 	private Timer attackTimer;
 
 	private bool enemyInRange = false;
-	private static Vector2 offsetVector = new Vector2(224, -183);
 
 	public override void _Ready()
 	{
 		AddToGroup("player");
-		camera2D = GetNode<Camera2D>("Camera2D");
 		healthNode = GetNode<HealthNode>("HealthNode");
 		animatedSprite2D = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 
@@ -28,11 +25,15 @@ public partial class Player : CharacterBody2D
 	}
 
 	private void OnAttackTimerTimeout()
-    {
-        if (!enemyInRange) return;
+	{
+		if (!enemyInRange) return;
 
+		if (animatedSprite2D.Animation == "attack1" && animatedSprite2D.IsPlaying())
+			return; // Don't start another attack while one is in progress
+
+		animatedSprite2D.SpeedScale = DamageManager.Instance.GetPlayerAttackSpeed();
 		animatedSprite2D.Play("attack1");
-    }
+	}
     
     private void OnFrameChanged()
     {
@@ -43,16 +44,17 @@ public partial class Player : CharacterBody2D
             {
                 if (body is CharacterBody2D target && body.IsInGroup("enemy"))
                 {
-					DamageManager.ApplyDamage(this, target, DamageAmount);
+					DamageManager.Instance.ApplyDamage(this, target, DamageManager.Instance.GetPlayerDamage());
                 }
             }
         }
     }
     
     private void OnAnimatedSprite2DAnimationFinished()
-    {
+	{
         if (animatedSprite2D.Animation == "attack1")
-        {
+		{
+			animatedSprite2D.SpeedScale = 1.0f;
             animatedSprite2D.Play("idle");
             attackTimer.Start();
         }
@@ -73,6 +75,8 @@ public partial class Player : CharacterBody2D
         if (node2D is Enemy enemy)
 		{
 			enemyInRange = false;
+			// change this to movement speed later, so that it doesnt look like the player is slidng
+			animatedSprite2D.SpeedScale = 1.0f;
 			animatedSprite2D.Play("run");
 			attackTimer.Stop();
 		}
@@ -84,7 +88,6 @@ public partial class Player : CharacterBody2D
 		{
 			Velocity = new Vector2((float)GlobalSettings.PlayerMovementSpeed, Velocity.Y);
 			MoveAndSlide();
-			camera2D.GlobalPosition = (GlobalPosition + offsetVector).Round();
 		}
 	}
 }

@@ -16,9 +16,14 @@ public partial class UIManager : Node
     public static UIManager Instance { get; private set; }
 
     private Label playerHealthLabel;
+    private Label enemyHealthLabel;
+
+    // stats tab
     private Label playerLifeLabel;
     private Label enemyLifeLabel;
-    private Label enemyHealthLabel;
+    private Label playerAttackDamageLabel;
+    private Label playerAttackSpeedLabel;
+
     private Label waveCounterLabel;
     private Label totalKillsCounterLabel;
     private Label goldLabel;
@@ -39,6 +44,8 @@ public partial class UIManager : Node
         var statsNode = GetNode("/root/Main/UserInterface/Statistics");
         playerLifeLabel = statsNode.GetNode<Label>("%PlayerLifeLabel");
         enemyLifeLabel = statsNode.GetNode<Label>("%EnemyLifeLabel");
+        playerAttackDamageLabel = statsNode.GetNode<Label>("%PlayerAttackDamageLabel");
+        playerAttackSpeedLabel = statsNode.GetNode<Label>("%PlayerAttackSpeedLabel");
 
         DamageManager.Instance.DamageDealt += DisplayDamageNumber;
     }
@@ -89,6 +96,39 @@ public partial class UIManager : Node
         // QueueFree when done
         tween.TweenCallback(Callable.From(() => goldCoin.QueueFree()));
     }
+
+    public void UpdatePlayerAttackDamage(float playerDamage)
+    {
+        playerAttackDamageLabel.Text = $"{playerDamage}";
+    }
+
+    public void UpdatePlayerAttackSpeed(float attackSpeed)
+    {
+        playerAttackSpeedLabel.Text = $"{attackSpeed:F2}";
+    }
+
+    public void UpdatePlayerHealth(float newPlayerHealth, float playerMaxHealth)
+    {
+        playerHealthLabel.Text = $"Life: {newPlayerHealth}";
+        playerLifeLabel.Text = $"{newPlayerHealth} / {playerMaxHealth}";
+    }
+
+    public void UpdateEnemyHealth(float newEnemyHealth, float enemyMaxHealth)
+    {
+        enemyHealthLabel.Text = $"Enemy life: {newEnemyHealth}";
+        enemyLifeLabel.Text = $"{newEnemyHealth} / {enemyMaxHealth}";
+    }
+
+    public void UpdateWaveCounter(int changeWaveValue)
+    {
+        waveCounterLabel.Text = $"Wave: {changeWaveValue} / {WaveManager.Instance.maxWave}";
+    }
+
+    public void UpdateTotalKillsCounter(int totalKills)
+    {
+        totalKillsCounterLabel.Text = $"Total kills: {totalKills}";
+    }
+
 
     private void DisplayDamageNumber(CharacterBody2D source, CharacterBody2D target, float damageAmount)
     {
@@ -148,25 +188,6 @@ public partial class UIManager : Node
         tween.Finished += () => number.QueueFree();
     }
 
-    public void UpdatePlayerHealth(float newPlayerHealth, float playerMaxHealth)
-    {
-        playerHealthLabel.Text = $"Life: {newPlayerHealth}";
-        playerLifeLabel.Text = $"{newPlayerHealth} / {playerMaxHealth}";
-    }
 
-    public void UpdateEnemyHealth(float newEnemyHealth, float enemyMaxHealth)
-    {
-        enemyHealthLabel.Text = $"Enemy life: {newEnemyHealth}";
-        enemyLifeLabel.Text = enemyMaxHealth.ToString();
-    }
 
-    public void UpdateWaveCounter(int changeWaveValue)
-    {
-        waveCounterLabel.Text = $"Wave: {changeWaveValue} / {WaveManager.Instance.maxWave}";
-    }
-
-    public void UpdateTotalKillsCounter(int totalKills)
-    {
-        totalKillsCounterLabel.Text = $"Total kills: {totalKills}";
-    }
 }

@@ -179,9 +179,9 @@ radius = 88.0
 height = 176.0
 
 [node name="MeeleeSkeleton" type="CharacterBody2D"]
+position = Vector2(0, 1)
 collision_layer = 2
 script = ExtResource("1_uedg7")
-metadata/_edit_lock_ = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(6, -36)
@@ -210,7 +210,7 @@ shape = SubResource("CapsuleShape2D_p3dhf")
 wait_time = 1.2
 
 [node name="HealthNode" parent="." instance=ExtResource("5_q2trx")]
-maxHealth = 1.0
+maxHealth = 100000.0
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 visible = false

@@ -29,7 +29,6 @@ public partial class MeeleeSkeleton : Enemy
     private void OnAttackTimerTimeout()
     {
         if (!playerInRange) return;
-
         animatedSprite2D.Play("attack1");
     }
     
@@ -42,7 +41,8 @@ public partial class MeeleeSkeleton : Enemy
             {
                 if (body is Player player)
                 {
-                    DamageManager.ApplyDamage(this, player, DamageAmount);
+                    // also make this damageamount come from the damagemanager
+                    DamageManager.Instance.ApplyDamage(this, player, DamageAmount);
                 }
             }
         }
@@ -71,18 +71,20 @@ public partial class MeeleeSkeleton : Enemy
         }
     }
     
-    protected override void OnDeath(CharacterBody2D characterBody2D)
+    private void OnDeath(CharacterBody2D characterBody2D)
     {
-        base.OnDeath(characterBody2D);
-
-        animatedSprite2D.Play("death"); // your death animation name
+        attackTimer.Stop();
+        
+        var collision = GetNode<CollisionShape2D>("CollisionShape2D");
+        collision.Disabled = true;
 
         SetPhysicsProcess(false);
         SetProcess(false);
+        playerInRange = false;
 
-        var collision = GetNode<CollisionShape2D>("CollisionShape2D");
-        collision.Disabled = true;
-    }
+        animatedSprite2D.Play("death");
+    }   
+
     
     public override void _PhysicsProcess(double delta)
     {

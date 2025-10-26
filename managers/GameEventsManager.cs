@@ -18,8 +18,9 @@ public partial class GameEventsManager : Node
 	[Export] 
 	private PackedScene meeleeSkeletonScene;
 
-	[Export] 
-	private Vector2 enemySpawnPosition = new Vector2(504, 424);
+	[Export]
+	private Vector2 enemySpawnPosition = new Vector2(736, 481);
+	
 
     public static GameEventsManager Instance { get; private set; }
 
@@ -43,15 +44,38 @@ public partial class GameEventsManager : Node
         await ToSignal(GetTree(), "process_frame"); // Wait one frame
 
         UpdateUI();
-        // UIManager.Instance.UpdateGoldLabel(GoldManager.Instance.goldValue);
     }
 
     private void OnPlayerStatUpgraded(string statName)
-    {
-		if (statName == "Life")
-		{
-			playerHealth.IncreaseMaxHealth((float)4);
-		}
+	{	
+		// TODO: make all of these scale somehow, do some testing to see how it fits with exp gain
+		switch (statName)
+			{
+				case "Life":
+					playerHealth.IncreaseMaxHealth(4f);
+					break;
+
+				case "AttackDamage":
+					DamageManager.Instance.SetPlayerDamage(1f);
+					break;
+
+				case "AttackSpeed":
+					// percentage increase of attackspeed, is usefull other places also
+					DamageManager.Instance.SetPlayerAttackSpeed(1f);
+					break;
+
+				// case "MovementSpeed":
+				// 	player.IncreaseMovementSpeed(10f);
+				// 	break;
+
+				// case "EnemyWeakness":
+				// 	enemyHealth.DecreaseMaxHealth(3f);
+				// 	break;
+
+				default:
+					GD.Print("Unknown stat upgrade: " + statName);
+					break;
+			}
 
 		UpdateUI();
     }
@@ -63,7 +87,9 @@ public partial class GameEventsManager : Node
         UIManager.Instance.UpdateEnemyHealth(enemyHealth.currentHealth, enemyHealth.maxHealth);
         UIManager.Instance.UpdateWaveCounter(WaveManager.Instance.currentWave);
         UIManager.Instance.UpdateTotalKillsCounter(KillTracker.Instance.GetTotalKills());
-        UIManager.Instance.UpdateExpUI(ExperienceManger.Instance.currentExp, ExperienceManger.Instance.maxExp);
+		UIManager.Instance.UpdateExpUI(ExperienceManger.Instance.currentExp, ExperienceManger.Instance.maxExp);
+		UIManager.Instance.UpdatePlayerAttackDamage(DamageManager.Instance.GetPlayerDamage());
+		UIManager.Instance.UpdatePlayerAttackSpeed(DamageManager.Instance.GetPlayerAttackSpeed());
     }
 
 
@@ -77,8 +103,8 @@ public partial class GameEventsManager : Node
 		// change this to not just instantiate some Meeleskeleton, but rather the enemy for that place or a random one maybe
 		var newEnemy = meeleeSkeletonScene.Instantiate<MeeleeSkeleton>();
 		// also, find another way to do this than using the player pos
-		float offset = player.Position.X + 100;
-		newEnemy.GlobalPosition = new Vector2(enemySpawnPosition.X + offset, newEnemy.GlobalPosition.Y + 423);
+		float offset = player.Position.X;
+		newEnemy.GlobalPosition = new Vector2(enemySpawnPosition.X + offset, newEnemy.GlobalPosition.Y + 481);
 
 		AddChild(newEnemy);
 
