@@ -7,4 +7,4 @@
 - add skill to the game (more attacks)
 - add crit, add player stats (movement speed), monster movement speed
 - What makes my game fun?
--
+- Add particles to the players attack B-)

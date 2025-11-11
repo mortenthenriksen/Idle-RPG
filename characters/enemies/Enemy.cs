@@ -15,7 +15,6 @@ public abstract partial class Enemy : CharacterBody2D
 
         var healthNode = GetNode<HealthNode>("HealthNode");
         healthNode.HealthChanged += OnHealthChanged;
-        // healthNode.Died += OnDeath;
         healthBar.Value = healthNode.maxHealth;
         healthBar.MaxValue = healthNode.maxHealth;
     }
@@ -25,9 +24,4 @@ public abstract partial class Enemy : CharacterBody2D
         if (healthBar != null)
             healthBar.Value = newHealth;
     }
-    
-    // protected virtual void OnDeath(CharacterBody2D characterBody2D)
-    // {
-    //     healthBar.Visible = false;
-    // }
 }

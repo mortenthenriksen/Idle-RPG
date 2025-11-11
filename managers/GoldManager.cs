@@ -18,7 +18,7 @@ public partial class GoldManager : Node
         goldValue = 0;
     }
 
-    public void GetGoldFromEnemy(Enemy characterBody2D)
+    public void GetGoldFromEnemy(CharacterBody2D characterBody2D)
     {
         goldValue += 10;
     }

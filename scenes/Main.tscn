@@ -13,7 +13,7 @@
 [ext_resource type="Script" path="res://managers/KillTracker.cs" id="7_858o5"]
 [ext_resource type="Script" path="res://managers/GameEventsManager.cs" id="7_ncrx3"]
 [ext_resource type="Script" path="res://managers/GoldManager.cs" id="9_rpnlx"]
-[ext_resource type="Script" path="res://managers/ExperienceManger.cs" id="11_sbfnc"]
+[ext_resource type="Script" path="res://managers/ExperienceManager.cs" id="11_sbfnc"]
 [ext_resource type="PackedScene" uid="uid://bcrj5p7y4eawc" path="res://inventory/Inventory.tscn" id="12_1swpu"]
 [ext_resource type="Script" path="res://scenes/ui/ShowInventoryButton.cs" id="12_atq6x"]
 [ext_resource type="Texture2D" uid="uid://b3b1nio3bd1pp" path="res://assets/UI/HUD/Pixel Health Bar/Bar/empty health bar.png" id="15_0fgbi"]
@@ -126,16 +126,15 @@ metadata/_edit_lock_ = true
 [node name="ExpLabel" type="Label" parent="UserInterface/BottomPanel/ExpBar"]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 420.0
-offset_top = 9.0
-offset_right = 526.0
-offset_bottom = 37.0
-theme_override_font_sizes/font_size = 36
+offset_left = 403.0
+offset_top = 14.0
+offset_right = 456.0
+offset_bottom = 28.0
+scale = Vector2(2, 2)
 text = "EXP LABEL
 "
 horizontal_alignment = 1
 vertical_alignment = 1
-metadata/_edit_lock_ = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="UserInterface/BottomPanel"]
 layout_mode = 0
@@ -199,11 +198,13 @@ offset_left = 1.0
 offset_top = 32.0
 offset_right = 1.0
 offset_bottom = 32.0
+metadata/_edit_lock_ = true
 
 [node name="Statistics" parent="UserInterface" instance=ExtResource("21_v8o2f")]
 unique_name_in_owner = true
 offset_left = 584.0
 offset_right = 584.0
+metadata/_edit_lock_ = true
 
 [node name="Ancestry" parent="UserInterface" instance=ExtResource("22_2cq8c")]
 unique_name_in_owner = true
@@ -211,3 +212,4 @@ offset_left = 258.0
 offset_top = 32.0
 offset_right = 258.0
 offset_bottom = 32.0
+metadata/_edit_lock_ = true

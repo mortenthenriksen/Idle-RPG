@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://dia4df047bi02"]
+[gd_scene load_steps=49 format=3 uid="uid://dia4df047bi02"]
 
 [ext_resource type="Script" path="res://characters/player/Player.cs" id="1_d6upt"]
 [ext_resource type="Texture2D" uid="uid://c7sv47skjfbvv" path="res://assets/characters/player/Knight 2D Pixel Art/Sprites/without_outline/IDLE.png" id="2_5hrbd"]
@@ -7,32 +7,33 @@
 [ext_resource type="Texture2D" uid="uid://d1xhbchf51qln" path="res://assets/characters/player/Knight 2D Pixel Art/Sprites/without_outline/ATTACK 2.png" id="3_8wrb7"]
 [ext_resource type="Texture2D" uid="uid://cu301ruhnpdce" path="res://assets/characters/player/Knight 2D Pixel Art/Sprites/without_outline/ATTACK 3.png" id="4_d0le6"]
 [ext_resource type="PackedScene" uid="uid://omp0jrbimtfm" path="res://characters/components/HealthNode.tscn" id="4_vqo02"]
+[ext_resource type="Texture2D" uid="uid://b6t0fugcx2ddu" path="res://assets/characters/player/Knight 2D Pixel Art/Sprites/without_outline/all_sprites_smaller.png" id="8_t1ym5"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2gqiw"]
 radius = 23.0
 height = 64.0
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_u81o6"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_op68e"]
 atlas = ExtResource("2_scsko")
 region = Rect2(0, 0, 96, 84)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_jaevo"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_4ogbm"]
 atlas = ExtResource("2_scsko")
 region = Rect2(96, 0, 96, 84)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_q8dfx"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_07cw0"]
 atlas = ExtResource("2_scsko")
 region = Rect2(192, 0, 96, 84)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_pj4v1"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ll7h4"]
 atlas = ExtResource("2_scsko")
 region = Rect2(288, 0, 96, 84)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_mqahx"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_1kcs2"]
 atlas = ExtResource("2_scsko")
 region = Rect2(384, 0, 96, 84)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_fbm1i"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_8gvec"]
 atlas = ExtResource("2_scsko")
 region = Rect2(480, 0, 96, 84)
 
@@ -144,22 +145,22 @@ region = Rect2(672, 0, 96, 84)
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_u81o6")
+"texture": SubResource("AtlasTexture_op68e")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_jaevo")
+"texture": SubResource("AtlasTexture_4ogbm")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_q8dfx")
+"texture": SubResource("AtlasTexture_07cw0")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_pj4v1")
+"texture": SubResource("AtlasTexture_ll7h4")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_mqahx")
+"texture": SubResource("AtlasTexture_1kcs2")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_fbm1i")
+"texture": SubResource("AtlasTexture_8gvec")
 }],
 "loop": false,
 "name": &"attack1",
@@ -259,7 +260,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_xjmyf")
 }],
-"loop": true,
+"loop": false,
 "name": &"run",
 "speed": 10.0
 }]
@@ -267,6 +268,91 @@ animations = [{
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_wpgj4"]
 radius = 38.0
 height = 112.0
+
+[sub_resource type="Animation" id="Animation_e2bf0"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_l3g6w"]
+resource_name = "attack1"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0333333, 0.0666667, 0.1, 0.133333),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 2, 3, 4, 5]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.166667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&""],
+"method": &"OnAttackAnimationFinished"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_xgkgm"]
+resource_name = "idle"
+length = 0.21
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0333333, 0.0666667, 0.1, 0.133333, 0.166667, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [36, 37, 38, 39, 40, 41, 42]
+}
+
+[sub_resource type="Animation" id="Animation_k2he0"]
+resource_name = "run"
+length = 0.2667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0333333, 0.0666667, 0.1, 0.133333, 0.166667, 0.2, 0.233333),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [48, 49, 50, 51, 52, 53, 54, 55]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hq8m2"]
+_data = {
+"RESET": SubResource("Animation_e2bf0"),
+"attack1": SubResource("Animation_l3g6w"),
+"idle": SubResource("Animation_xgkgm"),
+"run": SubResource("Animation_k2he0")
+}
 
 [node name="Player" type="CharacterBody2D"]
 collision_mask = 2
@@ -279,12 +365,14 @@ shape = SubResource("CapsuleShape2D_2gqiw")
 metadata/_edit_lock_ = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+visible = false
 position = Vector2(0.999992, -32)
 scale = Vector2(1.7, 1.7)
 sprite_frames = SubResource("SpriteFrames_kqghi")
 animation = &"run"
 autoplay = "run"
-metadata/_edit_lock_ = true
+frame = 7
+frame_progress = 1.0
 
 [node name="HealthNode" parent="." instance=ExtResource("4_vqo02")]
 maxHealth = 20.0
@@ -301,12 +389,25 @@ shape = SubResource("CapsuleShape2D_wpgj4")
 
 [node name="AttackTimer" type="Timer" parent="."]
 unique_name_in_owner = true
-wait_time = 0.2
 one_shot = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(216, -208)
 process_callback = 0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true
+libraries = {
+"": SubResource("AnimationLibrary_hq8m2")
+}
+speed_scale = 0.4
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(4.17233e-06, -35)
+scale = Vector2(1.7, 1.7)
+texture = ExtResource("8_t1ym5")
+hframes = 12
+vframes = 10
 
 [connection signal="input_event" from="." to="." method="OnInputEvent"]
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="OnAnimatedSprite2DAnimationFinished"]

@@ -23,6 +23,8 @@ public partial class UIManager : Node
     private Label enemyLifeLabel;
     private Label playerAttackDamageLabel;
     private Label playerAttackSpeedLabel;
+    private Label playerMovementSpeedLabel;
+    private Label skillPointsLabel;
 
     private Label waveCounterLabel;
     private Label totalKillsCounterLabel;
@@ -40,14 +42,28 @@ public partial class UIManager : Node
         goldLabel = GetNode<Label>("%GoldLabel");
         expBar = GetNode<TextureProgressBar>("%ExpBar");
         expLabel = GetNode<Label>("%ExpLabel");
-        
+
         var statsNode = GetNode("/root/Main/UserInterface/Statistics");
         playerLifeLabel = statsNode.GetNode<Label>("%PlayerLifeLabel");
         enemyLifeLabel = statsNode.GetNode<Label>("%EnemyLifeLabel");
         playerAttackDamageLabel = statsNode.GetNode<Label>("%PlayerAttackDamageLabel");
         playerAttackSpeedLabel = statsNode.GetNode<Label>("%PlayerAttackSpeedLabel");
+        playerMovementSpeedLabel = statsNode.GetNode<Label>("%PlayerMovementSpeedLabel");
+        skillPointsLabel = statsNode.GetNode<Label>("%SkillPointsLabel");
 
         DamageManager.Instance.DamageDealt += DisplayDamageNumber;
+    }
+    
+    public void UpdateSkillPointsUI(int amount)
+    {
+        if (amount == 0)
+        {
+            skillPointsLabel.Visible = false;
+        } else
+        {
+            skillPointsLabel.Visible = true;
+            skillPointsLabel.Text = $"Points: {amount}";
+        }
     }
 
     public void UpdateExpUI(ulong expValue, ulong maxExp)
@@ -97,6 +113,12 @@ public partial class UIManager : Node
         tween.TweenCallback(Callable.From(() => goldCoin.QueueFree()));
     }
 
+    public void UpdatePlayerHealth(float newPlayerHealth, float playerMaxHealth)
+    {
+        playerHealthLabel.Text = $"Life: {newPlayerHealth}";
+        playerLifeLabel.Text = $"{newPlayerHealth} / {playerMaxHealth}";
+    }
+
     public void UpdatePlayerAttackDamage(float playerDamage)
     {
         playerAttackDamageLabel.Text = $"{playerDamage}";
@@ -107,11 +129,11 @@ public partial class UIManager : Node
         playerAttackSpeedLabel.Text = $"{attackSpeed:F2}";
     }
 
-    public void UpdatePlayerHealth(float newPlayerHealth, float playerMaxHealth)
+    public void UpdatePlayerMovementSpeed(float playerMovementSpeed)
     {
-        playerHealthLabel.Text = $"Life: {newPlayerHealth}";
-        playerLifeLabel.Text = $"{newPlayerHealth} / {playerMaxHealth}";
+        playerMovementSpeedLabel.Text = $"{playerMovementSpeed:F0}%";
     }
+
 
     public void UpdateEnemyHealth(float newEnemyHealth, float enemyMaxHealth)
     {
@@ -146,45 +168,73 @@ public partial class UIManager : Node
         number.AddThemeFontSizeOverride("font_size", 32);
         AddChild(number);
 
-        // 🔹 Calculate direction away from attacker
-        var direction = (targetPosition - sourcePosition).Normalized();
-        if (direction == Vector2.Zero)
-            direction = Vector2.Up; // fallback if they overlap
+        // set up RNG
+        Random rng = new Random();
 
-        // 🔹 Add a small random offset for variety
-        Random random = new Random();
-        float horizontalJitter = (float)(random.NextDouble() * 0.4 - 0.2f); // small random rotation
-        direction = direction.Rotated(horizontalJitter);
-        
-        // 🔹 Define movement target (flies away + slightly upward)
-        float distance = 50f;
-        Vector2 targetOffset = direction * distance - new Vector2(0, 30);
+        // --- BASE DIRECTION (away from attacker)
+        Vector2 baseDir = (targetPosition - sourcePosition).Normalized();
+        if (baseDir == Vector2.Zero)
+            baseDir = Vector2.Up;
+
+        // --- ANGLE JITTER
+        // randomly rotate +/- ~20 degrees so they don't stack
+        float angleJitterDeg = (float)(rng.NextDouble() * 40.0 - 20.0); // [-20, +20]
+        float angleJitterRad = Mathf.DegToRad(angleJitterDeg);
+
+        Vector2 dirJittered = baseDir.Rotated(angleJitterRad).Normalized();
+
+        // --- DISTANCE VARIATION
+        // how far it flies out from the hit point (in pixels)
+        // e.g. between 35 and 70
+        float dist = Mathf.Lerp(35f, 70f, (float)rng.NextDouble());
+
+        // --- EXTRA UPWARD POP (varies so some float higher)
+        float extraUp = Mathf.Lerp(10f, 40f, (float)rng.NextDouble());
+
+        // final movement offset
+        Vector2 targetOffset = dirJittered * dist - new Vector2(0, extraUp);
+
+        // --- TIMING VARIATION
+        // so not all numbers animate/fade at the exact same rate
+        float moveTime = Mathf.Lerp(0.22f, 0.35f, (float)rng.NextDouble());
+        float fadeTime = Mathf.Lerp(0.45f, 0.6f, (float)rng.NextDouble());
+
+        // --- SCALE "POP" VARIATION
+        float startScale = Mathf.Lerp(0.7f, 0.9f, (float)rng.NextDouble());
+        float overshootScale = startScale + Mathf.Lerp(0.3f, 0.5f, (float)rng.NextDouble()); // e.g. 1.1 - 1.4 total
+        float popTime = 0.08f;
+        float settleTime = 0.08f;
+
+        // initialize scale
+        number.Scale = new Vector2(startScale, startScale);
 
         // Create tween
         var tween = GetTree().CreateTween();
         tween.SetParallel(true);
 
-        // Move diagonally away from attacker and slightly up
-        tween.TweenProperty(number, "position", number.Position + targetOffset, 0.3f)
+        // MOVE (diagonal drift away from attacker + float up)
+        tween.TweenProperty(number, "position", number.Position + targetOffset, moveTime)
             .SetEase(Tween.EaseType.Out)
             .SetTrans(Tween.TransitionType.Sine);
 
-        // Fade out while moving
-        tween.TweenProperty(number, "modulate:a", 0, 0.6f)
+        // FADE
+        tween.TweenProperty(number, "modulate:a", 0, fadeTime)
             .SetEase(Tween.EaseType.In)
             .SetTrans(Tween.TransitionType.Sine);
 
-        // Slight "pop" scale effect before fading
-        number.Scale = new Vector2(0.7f, 0.7f);
-        tween.TweenProperty(number, "scale", new Vector2(1.2f, 1.2f), 0.1f)
+        // POP: scale up fast then settle
+        // we chain these sequentially (not parallel)
+        var popTween = GetTree().CreateTween();
+        popTween.TweenProperty(number, "scale", new Vector2(overshootScale, overshootScale), popTime)
             .SetEase(Tween.EaseType.Out)
             .SetTrans(Tween.TransitionType.Sine);
-        tween.TweenProperty(number, "scale", new Vector2(1f, 1f), 0.1f)
-            .SetEase(Tween.EaseType.In)
-            .SetTrans(Tween.TransitionType.Sine)
-            .SetDelay(0.1f);
 
-        // Cleanup when finished
+        popTween.TweenProperty(number, "scale", new Vector2(1f, 1f), settleTime)
+            .SetEase(Tween.EaseType.In)
+            .SetTrans(Tween.TransitionType.Sine);
+
+        // CLEANUP
+        // when the *fade/move* tween is done, kill the label
         tween.Finished += () => number.QueueFree();
     }
 

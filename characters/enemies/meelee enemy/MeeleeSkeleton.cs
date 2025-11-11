@@ -9,6 +9,7 @@ public partial class MeeleeSkeleton : Enemy
 {
     private float DamageAmount = 1;
     private bool playerInRange = false;
+    private bool hasSpawned = false;
 
     private Area2D area2D;
     private AnimatedSprite2D animatedSprite2D;
@@ -24,6 +25,9 @@ public partial class MeeleeSkeleton : Enemy
         area2D = GetNode<Area2D>("Area2D");
         healthNode = GetNode<HealthNode>("HealthNode");
         healthNode.Died += OnDeath;
+        healthNode.HealthChanged += OnHealthChanged;
+
+        animatedSprite2D.Play("spawn");
     }
 
     private void OnAttackTimerTimeout()
@@ -31,9 +35,21 @@ public partial class MeeleeSkeleton : Enemy
         if (!playerInRange) return;
         animatedSprite2D.Play("attack1");
     }
+
+    private void OnHealthChanged(float newHealth, float maxHealth)
+    {
+        if (newHealth > 0)
+        {
+            var hurtColor = new Color("#de2200");
+            animatedSprite2D.Modulate = hurtColor;
+        }
+    }
     
     private void OnFrameChanged()
     {
+        var regularColor = new Color("#FFFFFF");
+        animatedSprite2D.Modulate = regularColor;
+
         if (animatedSprite2D.Animation == "attack1" && animatedSprite2D.Frame == 6)
         {
             var bodies = area2D.GetOverlappingBodies();
@@ -58,6 +74,11 @@ public partial class MeeleeSkeleton : Enemy
         if (animatedSprite2D.Animation == "death")
         {
             QueueFree();
+        }
+        if (animatedSprite2D.Animation == "spawn")
+        {
+            hasSpawned = true;
+            animatedSprite2D.Play("run");
         }
     }
 
@@ -88,7 +109,7 @@ public partial class MeeleeSkeleton : Enemy
     
     public override void _PhysicsProcess(double delta)
     {
-        if (!playerInRange)
+        if (!playerInRange && hasSpawned)
         {
             Velocity = new Vector2((float)GlobalSettings.MeeleeEnemyMovementSpeed, Velocity.Y);
             MoveAndSlide();

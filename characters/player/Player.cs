@@ -6,88 +6,128 @@ namespace Characters;
 
 public partial class Player : CharacterBody2D
 {
-	// private Camera2D camera2D;
+	[Export]
+	private float animationPlayerSpeedScale = 0.35f;
+
+	private float basePlayerMovementSpeed = 85.0f;
+	private float totalMovementBonus = 0f; // cumulative percent bonus (e.g. 0.2 = +20%)
+	private float playerMovementSpeed;
+
 	private AnimatedSprite2D animatedSprite2D;
+	private AnimationPlayer animationPlayer;
 	private HealthNode healthNode;
-	private Area2D area2D;
-	private Timer attackTimer;
+    private Area2D area2D;
+    private float attacksPerSecond;
 
 	private bool enemyInRange = false;
+
+	// manual attack timer variables
+	private float attackCooldown = 0.0f;   // time since last attack
+	private float attackInterval = 1.0f;   // seconds between attacks (updated dynamically)
 
 	public override void _Ready()
 	{
 		AddToGroup("player");
 		healthNode = GetNode<HealthNode>("HealthNode");
 		animatedSprite2D = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
-
+		animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 		area2D = GetNode<Area2D>("Area2D");
-		attackTimer = GetNode<Timer>("AttackTimer");
+		playerMovementSpeed = basePlayerMovementSpeed;
+		animationPlayer.SpeedScale = animationPlayerSpeedScale;
+		animationPlayer.AnimationFinished += OnAttackAnimationFinished;
 	}
 
-	private void OnAttackTimerTimeout()
-	{
-		if (!enemyInRange) return;
-
-		if (animatedSprite2D.Animation == "attack1" && animatedSprite2D.IsPlaying())
-			return; // Don't start another attack while one is in progress
-
-		animatedSprite2D.SpeedScale = DamageManager.Instance.GetPlayerAttackSpeed();
-		animatedSprite2D.Play("attack1");
-	}
-    
-    private void OnFrameChanged()
+    public override void _PhysicsProcess(double delta)
     {
-        if (animatedSprite2D.Animation == "attack1" && animatedSprite2D.Frame == 4)
+        if (!enemyInRange && !(animationPlayer.CurrentAnimation == "attack1"))
         {
-            var bodies = area2D.GetOverlappingBodies();
-            foreach (var body in bodies)
-            {
-                if (body is CharacterBody2D target && body.IsInGroup("enemy"))
-                {
-					DamageManager.Instance.ApplyDamage(this, target, DamageManager.Instance.GetPlayerDamage());
-                }
-            }
+            Velocity = new Vector2(playerMovementSpeed, Velocity.Y);
+            MoveAndSlide();
+
+            if (animationPlayer.CurrentAnimation != "run")
+                animationPlayer.Play("run");
+
+            return;
         }
     }
-    
-    private void OnAnimatedSprite2DAnimationFinished()
+
+    public override void _Process(double delta)
+    {
+        if (!enemyInRange)
+            return;
+
+        // Get attack speed from DamageManager
+        attacksPerSecond = DamageManager.Instance.GetPlayerAttackSpeed();
+        attackInterval = 1f / attacksPerSecond;
+
+        attackCooldown += (float)delta;
+
+        while (attackCooldown >= attackInterval)
+        {
+            attackCooldown -= attackInterval;
+            StartAttack();
+            DealDamage();
+        }
+    }
+
+	public void IncreaseMovementSpeed(float percentageIncrease)
 	{
-        if (animatedSprite2D.Animation == "attack1")
+		totalMovementBonus += percentageIncrease; // e.g. +0.05 for +5%
+		playerMovementSpeed = basePlayerMovementSpeed * (1 + totalMovementBonus);
+
+		animationPlayerSpeedScale = 0.35f * (1 + totalMovementBonus);
+		animationPlayer.SpeedScale = animationPlayerSpeedScale;
+	}
+
+	private void StartAttack()
+	{
+		if (attacksPerSecond < 5)
 		{
-			animatedSprite2D.SpeedScale = 1.0f;
-            animatedSprite2D.Play("idle");
-            attackTimer.Start();
+			animationPlayer.SpeedScale = attacksPerSecond;
+		}
+		else
+        {
+            animationPlayer.SpeedScale = attacksPerSecond*5;
         }
-    }
+		animationPlayer.Play("attack1");
+	}
+
+	private void OnAttackAnimationFinished(StringName animName)
+	{
+        animationPlayer.SpeedScale = animationPlayerSpeedScale;
+		animationPlayer.Play("idle");
+	}
+
+	// this method can be called via a call track in AnimationPlayer
+	private void DealDamage()
+	{
+		var bodies = area2D.GetOverlappingBodies();
+		foreach (var body in bodies)
+		{
+			if (body is CharacterBody2D target && body.IsInGroup("enemy"))
+			{
+				DamageManager.Instance.ApplyDamage(this, target, DamageManager.Instance.GetPlayerDamage());
+			}
+		}
+	}
 
 	private void OnArea2DBodyEntered(Node2D node2D)
 	{
-		if (node2D is Enemy enemy)
+		if (node2D is Enemy)
 		{
-			enemyInRange = true;
-			animatedSprite2D.Play("idle");
-			attackTimer.Start();
+            enemyInRange = true;
+            animationPlayer.Play("idle");
 		}
 	}
-	
+
 	private void OnArea2DBodyExited(Node2D node2D)
-    {
-        if (node2D is Enemy enemy)
+	{
+		if (node2D is Enemy)
 		{
 			enemyInRange = false;
-			// change this to movement speed later, so that it doesnt look like the player is slidng
-			animatedSprite2D.SpeedScale = 1.0f;
-			animatedSprite2D.Play("run");
-			attackTimer.Stop();
-		}
-    }
-
-	public override void _PhysicsProcess(double delta)
-	{
-		if (!enemyInRange)
-		{
-			Velocity = new Vector2((float)GlobalSettings.PlayerMovementSpeed, Velocity.Y);
-			MoveAndSlide();
 		}
 	}
+
+	public float GetPlayerMovementSpeed() => playerMovementSpeed;
+	public float GetPlayerBaseMovementSpeed() => basePlayerMovementSpeed;
 }

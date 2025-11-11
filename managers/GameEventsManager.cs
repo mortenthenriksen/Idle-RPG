@@ -21,7 +21,6 @@ public partial class GameEventsManager : Node
 	[Export]
 	private Vector2 enemySpawnPosition = new Vector2(736, 481);
 	
-
     public static GameEventsManager Instance { get; private set; }
 
 	public async override void _Ready()
@@ -47,7 +46,8 @@ public partial class GameEventsManager : Node
     }
 
     private void OnPlayerStatUpgraded(string statName)
-	{	
+	{
+		ExperienceManager.Instance.DecreaseUnspentSkillPoints();
 		// TODO: make all of these scale somehow, do some testing to see how it fits with exp gain
 		switch (statName)
 			{
@@ -56,17 +56,17 @@ public partial class GameEventsManager : Node
 					break;
 
 				case "AttackDamage":
-					DamageManager.Instance.SetPlayerDamage(1f);
+					DamageManager.Instance.IncreasePlayerDamage(1f);
 					break;
 
 				case "AttackSpeed":
 					// percentage increase of attackspeed, is usefull other places also
-					DamageManager.Instance.SetPlayerAttackSpeed(1f);
+					DamageManager.Instance.IncreasePlayerAttackSpeed(1f);
 					break;
 
-				// case "MovementSpeed":
-				// 	player.IncreaseMovementSpeed(10f);
-				// 	break;
+				case "MovementSpeed":
+					player.IncreaseMovementSpeed(0.10f);
+					break;
 
 				// case "EnemyWeakness":
 				// 	enemyHealth.DecreaseMaxHealth(3f);
@@ -87,23 +87,29 @@ public partial class GameEventsManager : Node
         UIManager.Instance.UpdateEnemyHealth(enemyHealth.currentHealth, enemyHealth.maxHealth);
         UIManager.Instance.UpdateWaveCounter(WaveManager.Instance.currentWave);
         UIManager.Instance.UpdateTotalKillsCounter(KillTracker.Instance.GetTotalKills());
-		UIManager.Instance.UpdateExpUI(ExperienceManger.Instance.currentExp, ExperienceManger.Instance.maxExp);
+		UIManager.Instance.UpdateExpUI((ulong)ExperienceManager.Instance.currentExp, (ulong)ExperienceManager.Instance.GetExpRequiredForNextLevel());
 		UIManager.Instance.UpdatePlayerAttackDamage(DamageManager.Instance.GetPlayerDamage());
 		UIManager.Instance.UpdatePlayerAttackSpeed(DamageManager.Instance.GetPlayerAttackSpeed());
+		UIManager.Instance.UpdateSkillPointsUI(ExperienceManager.Instance.GetUnspentSkillPoints());
+
+		float playerMovementSpeed = player.GetPlayerMovementSpeed();
+		float basePlayerMovementSpeed = player.GetPlayerBaseMovementSpeed();
+		float movementSpeedPercentage = playerMovementSpeed / basePlayerMovementSpeed * 100; 
+		UIManager.Instance.UpdatePlayerMovementSpeed(movementSpeedPercentage);
     }
 
 
-    private void OnEnemyDied(Enemy enemy)
+    private void OnEnemyDied(CharacterBody2D enemy)
 	{
 		WaveManager.Instance.IncreaseWaveCounter();
 		KillTracker.Instance.IncreaseKillTracker(enemy);
 		GoldManager.Instance.GetGoldFromEnemy(enemy);
-		ExperienceManger.Instance.GainExp(enemy);
+		ExperienceManager.Instance.AddExp(enemy);
 
 		// change this to not just instantiate some Meeleskeleton, but rather the enemy for that place or a random one maybe
 		var newEnemy = meeleeSkeletonScene.Instantiate<MeeleeSkeleton>();
 		// also, find another way to do this than using the player pos
-		float offset = player.Position.X;
+		float offset = player.Position.X - 400;
 		newEnemy.GlobalPosition = new Vector2(enemySpawnPosition.X + offset, newEnemy.GlobalPosition.Y + 481);
 
 		AddChild(newEnemy);
@@ -119,6 +125,9 @@ public partial class GameEventsManager : Node
     private void OnPlayerDied(CharacterBody2D characterBody2D)
     {
 		GD.Print("Player died!");
+		playerHealth.ResetHealth();
+		
+		UIManager.Instance.UpdatePlayerHealth(playerHealth.currentHealth, playerHealth.maxHealth);
     }
 
     private void OnPlayerHealthChanged(float newHealth, float maxHealth)
