@@ -44,7 +44,7 @@ public partial class MeeleeSkeleton : Enemy
             animatedSprite2D.Modulate = hurtColor;
         }
     }
-    // testing email, again 
+    // testing email, again, for the last time
     private void OnFrameChanged()
     {
         var regularColor = new Color("#FFFFFF");
