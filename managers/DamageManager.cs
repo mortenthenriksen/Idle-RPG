@@ -1,22 +1,26 @@
 using Godot;
 using Components;
 using Characters;
+using Autoload;
 
 namespace Managers;
 
 public partial class DamageManager : Node
 {
     [Signal]
-    public delegate void DamageDealtEventHandler(CharacterBody2D soruce, CharacterBody2D target, float DamageAmount);
+    public delegate void DamageDealtEventHandler(CharacterBody2D source, CharacterBody2D target, float DamageAmount);
+
+    [Signal]
+    public delegate void AttackBlockedEventHandler(CharacterBody2D source, CharacterBody2D target);
+
+    private float playerDamage;
+    private float basePlayerDamage = 1;
 
     public static DamageManager Instance { get; private set; }
-
     private Enemy enemy;
-
-    private float playerDamage = 1;
     private Player player;
     private Timer playerAttackTimer;
-
+    
     private float baseAttackWaitTime = 0.75f;       
     private float totalAttackSpeedBonus = 0f;    
 
@@ -28,26 +32,33 @@ public partial class DamageManager : Node
         player = GetNode<Player>("/root/Main/Player");
         enemy = GetTree().GetFirstNodeInGroup("enemy") as Enemy;
 
+        playerDamage = basePlayerDamage;
+
         playerAttackTimer = player.GetNode<Timer>("AttackTimer");
         playerAttackTimer.WaitTime = baseAttackWaitTime;
     }
 
     public void ApplyDamage(CharacterBody2D source, CharacterBody2D target, float damage)
     {
-        if (target == null || !IsInstanceValid(target))
-            return;
-
         var healthNode = target.GetNodeOrNull<HealthNode>("HealthNode");
-        if (healthNode == null || healthNode.IsDead)
+        if (player.GetIsBlocking())
+        {
+            EmitSignal("AttackBlocked", source, target);
             return;
-
+        }
         healthNode.ApplyDamage(damage);
         EmitSignal("DamageDealt", source, target, damage);
     }
 
-    public void IncreasePlayerDamage(float increaseDamageValue)
+    public void AdditiveIncreasePlayerDamage(float increaseDamageValue)
     {
-        playerDamage += increaseDamageValue;
+        basePlayerDamage += increaseDamageValue;
+        playerDamage = basePlayerDamage;
+    }
+
+    public void MultiplicativeIncreasePlayerDamage(float increaseDamageValue)
+    {
+        playerDamage = basePlayerDamage * increaseDamageValue;
     }
 
     public void IncreasePlayerAttackSpeed(float percentageIncrease)
@@ -61,5 +72,8 @@ public partial class DamageManager : Node
 
     public float GetPlayerDamage() => playerDamage;
     public float GetPlayerAttackSpeed() => (float)(1 / playerAttackTimer.WaitTime);
+
+
+
 }
 

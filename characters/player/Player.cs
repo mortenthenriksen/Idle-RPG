@@ -1,3 +1,5 @@
+using System;
+using System.Runtime.CompilerServices;
 using Components;
 using Godot;
 using Managers;
@@ -13,13 +15,13 @@ public partial class Player : CharacterBody2D
 	private float totalMovementBonus = 0f; // cumulative percent bonus (e.g. 0.2 = +20%)
 	private float playerMovementSpeed;
 
-	private AnimatedSprite2D animatedSprite2D;
 	private AnimationPlayer animationPlayer;
 	private HealthNode healthNode;
     private Area2D area2D;
     private float attacksPerSecond;
 
 	private bool enemyInRange = false;
+	private bool isBlocking = false;
 
 	// manual attack timer variables
 	private float attackCooldown = 0.0f;   // time since last attack
@@ -29,17 +31,16 @@ public partial class Player : CharacterBody2D
 	{
 		AddToGroup("player");
 		healthNode = GetNode<HealthNode>("HealthNode");
-		animatedSprite2D = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 		animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 		area2D = GetNode<Area2D>("Area2D");
 		playerMovementSpeed = basePlayerMovementSpeed;
 		animationPlayer.SpeedScale = animationPlayerSpeedScale;
-		animationPlayer.AnimationFinished += OnAttackAnimationFinished;
+		animationPlayer.AnimationFinished += OnAnimationFinished;
 	}
 
     public override void _PhysicsProcess(double delta)
     {
-        if (!enemyInRange && !(animationPlayer.CurrentAnimation == "attack1"))
+        if (!enemyInRange && !(animationPlayer.CurrentAnimation == "attack1") && !isBlocking)
         {
             Velocity = new Vector2(playerMovementSpeed, Velocity.Y);
             MoveAndSlide();
@@ -51,18 +52,29 @@ public partial class Player : CharacterBody2D
         }
     }
 
+    public override void _Input(InputEvent @event)
+    {
+        if (Input.IsActionPressed("block"))
+		{
+			animationPlayer.SpeedScale = animationPlayerSpeedScale;
+			animationPlayer.Play("block");
+			isBlocking = true;
+		}
+    }
+
+
     public override void _Process(double delta)
     {
         if (!enemyInRange)
             return;
 
-        // Get attack speed from DamageManager
+	
         attacksPerSecond = DamageManager.Instance.GetPlayerAttackSpeed();
         attackInterval = 1f / attacksPerSecond;
 
         attackCooldown += (float)delta;
 
-        while (attackCooldown >= attackInterval)
+        while (attackCooldown >= attackInterval && !isBlocking)
         {
             attackCooldown -= attackInterval;
             StartAttack();
@@ -83,7 +95,7 @@ public partial class Player : CharacterBody2D
 	{
 		if (attacksPerSecond < 5)
 		{
-			animationPlayer.SpeedScale = attacksPerSecond;
+			animationPlayer.SpeedScale = attacksPerSecond / 2;
 		}
 		else
         {
@@ -92,13 +104,18 @@ public partial class Player : CharacterBody2D
 		animationPlayer.Play("attack1");
 	}
 
-	private void OnAttackAnimationFinished(StringName animName)
+	private void OnAnimationFinished(StringName animName)
 	{
         animationPlayer.SpeedScale = animationPlayerSpeedScale;
 		animationPlayer.Play("idle");
+		if (animName == "block")
+		{
+			isBlocking = false;
+			// resets attack cooldown after block
+			attackCooldown = 0f;
+		}
 	}
 
-	// this method can be called via a call track in AnimationPlayer
 	private void DealDamage()
 	{
 		var bodies = area2D.GetOverlappingBodies();
@@ -130,4 +147,5 @@ public partial class Player : CharacterBody2D
 
 	public float GetPlayerMovementSpeed() => playerMovementSpeed;
 	public float GetPlayerBaseMovementSpeed() => basePlayerMovementSpeed;
+	public bool GetIsBlocking() => isBlocking;
 }

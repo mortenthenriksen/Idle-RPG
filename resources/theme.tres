@@ -1,7 +1,7 @@
 [gd_resource type="Theme" load_steps=4 format=3 uid="uid://dtwfjgidd1q24"]
 
 [ext_resource type="Texture2D" uid="uid://d3fnfeqjx2xwe" path="res://assets/UI/inventory/ItemSlot.png" id="1_2qykc"]
-[ext_resource type="FontFile" uid="uid://sctiqlw5t0xg" path="res://resources/fonts/Kubasta.ttf" id="2_vignp"]
+[ext_resource type="FontFile" uid="uid://dj2ahde40vnev" path="res://resources/fonts/m5x7.ttf" id="2_whhjo"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_risim"]
 texture = ExtResource("1_2qykc")
@@ -12,5 +12,5 @@ texture_margin_bottom = 3.40666
 region_rect = Rect2(-0.069294, -0.140824, 34.0476, 34.1957)
 
 [resource]
-default_font = ExtResource("2_vignp")
+default_font = ExtResource("2_whhjo")
 Panel/styles/panel = SubResource("StyleBoxTexture_risim")

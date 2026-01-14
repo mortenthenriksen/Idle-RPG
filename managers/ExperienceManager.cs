@@ -7,12 +7,15 @@ public partial class ExperienceManager : Node
 {
     public static ExperienceManager Instance { get; private set; }
 
-    [Export] public float baseExp = 10f;          // EXP to go from level 1 -> 2
-    [Export] public float growthFactor = 1.18f;   
+    [Export] 
+    public float baseExp = 33f;          // EXP to go from level 1 -> 2
+    [Export] 
+    public float growthFactor = 1.18f;   
+    [Export]
+    public int unspentSkillPoints;
 
     public int currentLevel { get; private set; } = 1;
-    public float currentExp { get; private set; } = 0f;
-    private int unspentSkillPoints;
+    public double currentExp { get; private set; } = 0f;
 
     public override void _Ready()
     {
@@ -29,19 +32,21 @@ public partial class ExperienceManager : Node
     public void AddExp(CharacterBody2D enemy)
     {   
         currentExp += GetExperinceFromEnemyDead(enemy);
-
+        var requiredExp = Math.Floor(GetExpRequiredForNextLevel());
         // loop because you might gain multiple levels at once if you kill a boss etc.
-        while (currentExp >= GetExpRequiredForNextLevel())
+        while (currentExp >= requiredExp)
         {
-            currentExp -= GetExpRequiredForNextLevel();
+            currentExp -= requiredExp;
             LevelUp();
         }
     }
 
-    private float GetExperinceFromEnemyDead(CharacterBody2D enemy)
+    private double GetExperinceFromEnemyDead(CharacterBody2D enemy)
     {
-        // change this to increase exponentially also i think
-        return 10;
+        var baseExpFromEnemy = 4;
+        var linearIncrease = 1.03 * WaveManager.Instance.waveDifficulty;
+        var exp = baseExpFromEnemy + linearIncrease;
+        return exp;
     }
 
 
@@ -51,10 +56,7 @@ public partial class ExperienceManager : Node
 
         unspentSkillPoints += 3;
 
-        // // optional: auto-scale enemy waves here
-        // WaveManager.Instance.OnPlayerLevelUp(CurrentLevel);
-
-        // optional: update UI
+        // TODO: make the exp not rely on ulong, but rather use one that can handle even larger
         UIManager.Instance.UpdateExpUI((ulong)currentExp, (ulong)GetExpRequiredForNextLevel());
     }
 

@@ -113,10 +113,9 @@ public partial class UIManager : Node
         tween.TweenCallback(Callable.From(() => goldCoin.QueueFree()));
     }
 
-    public void UpdatePlayerHealth(float newPlayerHealth, float playerMaxHealth)
+    public void UpdatePlayerHealth(double newPlayerHealth, double playerMaxHealth)
     {
-        playerHealthLabel.Text = $"Life: {newPlayerHealth}";
-        playerLifeLabel.Text = $"{newPlayerHealth} / {playerMaxHealth}";
+        playerLifeLabel.Text = $"{(int)newPlayerHealth} / {(int)playerMaxHealth}";
     }
 
     public void UpdatePlayerAttackDamage(float playerDamage)
@@ -135,10 +134,9 @@ public partial class UIManager : Node
     }
 
 
-    public void UpdateEnemyHealth(float newEnemyHealth, float enemyMaxHealth)
+    public void UpdateEnemyHealth(double newEnemyHealth, double enemyMaxHealth)
     {
-        enemyHealthLabel.Text = $"Enemy life: {newEnemyHealth}";
-        enemyLifeLabel.Text = $"{newEnemyHealth} / {enemyMaxHealth}";
+        enemyLifeLabel.Text = $"{(int)newEnemyHealth} / {(int)enemyMaxHealth}";
     }
 
     public void UpdateWaveCounter(int changeWaveValue)

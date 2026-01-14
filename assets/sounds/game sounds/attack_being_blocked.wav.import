@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://b17vuhpco7m6v"
+path="res://.godot/imported/attack_being_blocked.wav-818d4a35d02a8483a17b2d8e3be74e19.sample"
+
+[deps]
+
+source_file="res://assets/sounds/game sounds/attack_being_blocked.wav"
+dest_files=["res://.godot/imported/attack_being_blocked.wav-818d4a35d02a8483a17b2d8e3be74e19.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

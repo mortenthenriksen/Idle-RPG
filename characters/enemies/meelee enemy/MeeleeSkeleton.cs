@@ -1,4 +1,3 @@
-using Autoload;
 using Components;
 using Godot;
 using Managers;
@@ -44,7 +43,6 @@ public partial class MeeleeSkeleton : Enemy
             animatedSprite2D.Modulate = hurtColor;
         }
     }
-    // testing email, again, for the last time
     private void OnFrameChanged()
     {
         var regularColor = new Color("#FFFFFF");
@@ -57,7 +55,6 @@ public partial class MeeleeSkeleton : Enemy
             {
                 if (body is Player player)
                 {
-                    // also make this damageamount come from the damagemanager
                     DamageManager.Instance.ApplyDamage(this, player, DamageAmount);
                 }
             }

@@ -1,4 +1,3 @@
-using Characters;
 using Godot;
 using System.Collections.Generic;
 
@@ -7,8 +6,8 @@ namespace Components
     public partial class HealthNode : Node
     {
         [Export]
-        public float maxHealth = 100;
-        public float currentHealth { get; private set; }
+        public double maxHealth = 100;
+        public double currentHealth;
         public bool IsDead => currentHealth <= 0;
 
         [Signal]
@@ -47,7 +46,7 @@ namespace Components
                     EmitSignal(SignalName.DPSUpdated, owner, dps);
                     if (owner.Name != "Player")
                     {
-                        GD.Print($"[DPS] {GetParent().Name} taking {dps:F1} DPS");
+                        // GD.Print($"[DPS] {GetParent().Name} taking {dps:F1} DPS");
                     }
                 }
             }

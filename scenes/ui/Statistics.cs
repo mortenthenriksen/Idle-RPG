@@ -48,7 +48,7 @@ public partial class Statistics : Control
     {
         if (!HasUnspentSkillPoints())
             return;
-        EmitSignal(SignalName.PlayerStatUpgraded, "AttackDamage");
+        EmitSignal(SignalName.PlayerStatUpgraded, "AttackDamageAdditive");
     }
 
     private void OnPlayerAttackSpeedButtonPressed()

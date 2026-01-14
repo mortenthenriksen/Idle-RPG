@@ -8,3 +8,4 @@
 - add crit, add player stats (movement speed), monster movement speed
 - What makes my game fun?
 - Add particles to the players attack B-)
+- Make the player allowed to spawn bosses all the time? but they still increase in difficulty maybe

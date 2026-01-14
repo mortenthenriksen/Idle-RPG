@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://brxidvw03agql"]
+
+[ext_resource type="Texture2D" uid="uid://uoyk3mckcs88" path="res://assets/items/gold_armour_chest.png" id="1_ioocs"]
+
+[node name="Item" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_ioocs")

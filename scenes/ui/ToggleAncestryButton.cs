@@ -5,7 +5,7 @@ namespace UI;
 public partial class ToggleAncestryButton : Button
 {
     private Ancestry ancestry;
-    private bool isVisble = false;
+    private bool isVisble = true;
 
     public override void _Ready()
     {

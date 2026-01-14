@@ -1,7 +1,10 @@
+using System;
+using System.Collections.Generic;
 using Characters;
 using Components;
 using Godot;
 using Managers;
+using UI;
 
 namespace Autoload;
 
@@ -12,11 +15,9 @@ public partial class GameEventsManager : Node
 	private MeeleeSkeleton meeleeEnemy;
 	private Player player;
 	private Enemy enemy;
-	private Statistics statistics; 
+	private Statistics statistics;
 	private int increaseWaveValue = 1;
-
-	[Export] 
-	private PackedScene meeleeSkeletonScene;
+	private ulong enemiesKilledThisPrestige = 0;
 
 	[Export]
 	private Vector2 enemySpawnPosition = new Vector2(736, 481);
@@ -33,19 +34,46 @@ public partial class GameEventsManager : Node
         playerHealth.HealthChanged += OnPlayerHealthChanged;
 		playerHealth.Died += OnPlayerDied;
 		
-        enemyHealth = GetNode<HealthNode>("/root/Main/MeeleeEnemy/HealthNode");
-        enemyHealth.HealthChanged += OnEnemyHealthChanged;
-		enemyHealth.Died += OnEnemyDied;
-
 		statistics = GetNode<Statistics>("/root/Main/UserInterface/Statistics");
-		statistics.PlayerStatUpgraded += OnPlayerStatUpgraded;
+		statistics.PlayerStatUpgraded += OnPlayerSkillPointUsed;
 
-        await ToSignal(GetTree(), "process_frame"); // Wait one frame
+		DamageManager.Instance.AttackBlocked += OnAttackBlocked;
 
+		await ToSignal(GetTree(), "process_frame"); // Wait one frame
+
+		SpawnEnemy();
         UpdateUI();
     }
 
-    private void OnPlayerStatUpgraded(string statName)
+    private void OnAttackBlocked(CharacterBody2D source, CharacterBody2D target)
+    {
+        TemporaryBuffsForPlayer("AttackDamageMultiplicative", 2);
+    }
+
+	private void TemporaryBuffsForPlayer(string statName, float value)
+	{
+		switch (statName)
+		{
+			case "AttackDamageMultiplicative":
+				DamageManager.Instance.MultiplicativeIncreasePlayerDamage(value);
+				break;
+
+			default:
+				GD.Print("Unknown temp buff: " + statName);
+				break;
+		}	
+		UpdateUI();
+	}
+
+	private void StatsGainedFromAncestry()
+	{
+		// casting type just to be nice
+		Dictionary<string, (float, int, int)> ancestryDict = Ancestry.Instance.GetAncestryDict();
+
+	}
+	
+	// could also add value param here, so that GameEventManager isnt responsible for this
+    private void OnPlayerSkillPointUsed(string statName)
 	{
 		ExperienceManager.Instance.DecreaseUnspentSkillPoints();
 		// TODO: make all of these scale somehow, do some testing to see how it fits with exp gain
@@ -55,8 +83,8 @@ public partial class GameEventsManager : Node
 					playerHealth.IncreaseMaxHealth(4f);
 					break;
 
-				case "AttackDamage":
-					DamageManager.Instance.IncreasePlayerDamage(1f);
+				case "AttackDamageAdditive":
+					DamageManager.Instance.AdditiveIncreasePlayerDamage(1f);
 					break;
 
 				case "AttackSpeed":
@@ -68,10 +96,6 @@ public partial class GameEventsManager : Node
 					player.IncreaseMovementSpeed(0.10f);
 					break;
 
-				// case "EnemyWeakness":
-				// 	enemyHealth.DecreaseMaxHealth(3f);
-				// 	break;
-
 				default:
 					GD.Print("Unknown stat upgrade: " + statName);
 					break;
@@ -79,7 +103,6 @@ public partial class GameEventsManager : Node
 
 		UpdateUI();
     }
-
 
     private void UpdateUI()
     {
@@ -98,28 +121,33 @@ public partial class GameEventsManager : Node
 		UIManager.Instance.UpdatePlayerMovementSpeed(movementSpeedPercentage);
     }
 
-
-    private void OnEnemyDied(CharacterBody2D enemy)
+	private void SpawnEnemy()
 	{
+		// change this to not just instantiate some Meeleskeleton, but rather the enemy for that place or a random one maybe
+		// var newEnemy = ResourceLoader.Load<PackedScene>("res://characters/enemies/meelee enemy/SlimeBoss.tscn").Instantiate<SlimeBoss>();
+		var newEnemy = ResourceLoader.Load<PackedScene>("res://characters/enemies/meelee enemy/MeeleeSkeleton.tscn").Instantiate<MeeleeSkeleton>();
+		// also, find another way to do this than using the player pos
+		float offset = player.Position.X - 500;
+		newEnemy.GlobalPosition = new Vector2(enemySpawnPosition.X + offset, newEnemy.GlobalPosition.Y + 481);
+
+		AddChild(newEnemy);
+
+		enemyHealth = newEnemy.GetNode<HealthNode>("HealthNode");
+		enemyHealth.HealthChanged += OnEnemyHealthChanged;
+		enemyHealth.Died += OnEnemyDied;
+	}
+
+	private void OnEnemyDied(CharacterBody2D enemy)
+	{	
 		WaveManager.Instance.IncreaseWaveCounter();
 		KillTracker.Instance.IncreaseKillTracker(enemy);
 		GoldManager.Instance.GetGoldFromEnemy(enemy);
 		ExperienceManager.Instance.AddExp(enemy);
 
-		// change this to not just instantiate some Meeleskeleton, but rather the enemy for that place or a random one maybe
-		var newEnemy = meeleeSkeletonScene.Instantiate<MeeleeSkeleton>();
-		// also, find another way to do this than using the player pos
-		float offset = player.Position.X - 400;
-		newEnemy.GlobalPosition = new Vector2(enemySpawnPosition.X + offset, newEnemy.GlobalPosition.Y + 481);
-
-		AddChild(newEnemy);
-
-		var newEnemyHealth = newEnemy.GetNode<HealthNode>("HealthNode");
-		newEnemyHealth.HealthChanged += OnEnemyHealthChanged;
-		newEnemyHealth.Died += OnEnemyDied;
+		SpawnEnemy();
 
 		UpdateUI();
-    }
+	}
 
 
     private void OnPlayerDied(CharacterBody2D characterBody2D)
@@ -135,8 +163,9 @@ public partial class GameEventsManager : Node
 		UIManager.Instance.UpdatePlayerHealth(newHealth, maxHealth);
     }
 
-    private void OnEnemyHealthChanged(float newHealth, float maxHealth)
-    {
+	private void OnEnemyHealthChanged(float newHealth, float maxHealth)
+	{
 		UIManager.Instance.UpdateEnemyHealth(newHealth, maxHealth);
-    }
+	}
+
 }

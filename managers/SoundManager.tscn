@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://bunytm4c8r6b0"]
+
+[ext_resource type="Script" path="res://managers/SoundManager.cs" id="1_go7qr"]
+[ext_resource type="AudioStream" uid="uid://b17vuhpco7m6v" path="res://assets/sounds/game sounds/attack_being_blocked.wav" id="2_7ar63"]
+
+[node name="SoundManager" type="Node"]
+script = ExtResource("1_go7qr")
+
+[node name="DamageBlockedSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_7ar63")
