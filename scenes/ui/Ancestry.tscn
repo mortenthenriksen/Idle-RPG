@@ -43,7 +43,7 @@ offset_right = 325.0
 offset_bottom = 288.0
 theme = ExtResource("1_5opkg")
 theme_override_styles/panel = SubResource("StyleBoxTexture_u51f2")
-scroll_vertical = 158
+scroll_vertical = 100
 horizontal_scroll_mode = 3
 vertical_scroll_mode = 3
 
@@ -320,7 +320,7 @@ custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 theme = ExtResource("1_5opkg")
 
-[node name="TextureRectAncestry" type="TextureRect" parent="MainPanel/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer/Panel"]
+[node name="AD1339_1" type="TextureRect" parent="MainPanel/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer/Panel"]
 layout_mode = 0
 offset_left = 2.0
 offset_top = 3.0
@@ -349,7 +349,7 @@ custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 theme = ExtResource("1_5opkg")
 
-[node name="TextureRect" type="TextureRect" parent="MainPanel/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer/Panel2"]
+[node name="AD1339_2" type="TextureRect" parent="MainPanel/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer/Panel2"]
 layout_mode = 0
 offset_left = 2.0
 offset_top = 3.0
@@ -364,7 +364,7 @@ custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 theme = ExtResource("1_5opkg")
 
-[node name="TextureRect" type="TextureRect" parent="MainPanel/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer/Panel3"]
+[node name="AD1339_3" type="TextureRect" parent="MainPanel/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer/Panel3"]
 layout_mode = 0
 offset_left = 2.0
 offset_top = 3.0
@@ -378,7 +378,7 @@ custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 theme = ExtResource("1_5opkg")
 
-[node name="TextureRect" type="TextureRect" parent="MainPanel/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer/Panel4"]
+[node name="AD1339_4" type="TextureRect" parent="MainPanel/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer/Panel4"]
 layout_mode = 0
 offset_left = 2.0
 offset_top = 3.0

@@ -18,7 +18,6 @@ public partial class SlimeBoss : Enemy
     public override void _Ready()
     {
         base._Ready();
-
         animatedSprite2D = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
         attackTimer = GetNode<Timer>("AttackTimer");
         area2D = GetNode<Area2D>("Area2D");
@@ -55,7 +54,7 @@ public partial class SlimeBoss : Enemy
                 if (body is Player player)
                 {
                     // also make this damageamount come from the damagemanager
-                    DamageManager.Instance.ApplyDamage(this, player, DamageAmount);
+                    DamageManager.Instance.ApplyDamage(this, player);
                 }
             }
         }

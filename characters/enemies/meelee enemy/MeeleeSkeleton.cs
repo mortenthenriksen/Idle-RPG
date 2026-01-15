@@ -6,7 +6,6 @@ namespace Characters;
 
 public partial class MeeleeSkeleton : Enemy
 {
-    private float DamageAmount = 1;
     private bool playerInRange = false;
     private bool hasSpawned = false;
 
@@ -18,7 +17,6 @@ public partial class MeeleeSkeleton : Enemy
     public override void _Ready()
     {
         base._Ready();
-
         animatedSprite2D = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
         attackTimer = GetNode<Timer>("AttackTimer");
         area2D = GetNode<Area2D>("Area2D");
@@ -55,7 +53,7 @@ public partial class MeeleeSkeleton : Enemy
             {
                 if (body is Player player)
                 {
-                    DamageManager.Instance.ApplyDamage(this, player, DamageAmount);
+                    DamageManager.Instance.ApplyDamage(this, player);
                 }
             }
         }

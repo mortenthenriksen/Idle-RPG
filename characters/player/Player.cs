@@ -2,6 +2,7 @@ using System;
 using System.Runtime.CompilerServices;
 using Components;
 using Godot;
+using Helpers;
 using Managers;
 
 namespace Characters;
@@ -29,7 +30,7 @@ public partial class Player : CharacterBody2D
 
 	public override void _Ready()
 	{
-		AddToGroup("player");
+		AddToGroup(Groups.Player);
 		healthNode = GetNode<HealthNode>("HealthNode");
 		animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 		area2D = GetNode<Area2D>("Area2D");
@@ -69,7 +70,7 @@ public partial class Player : CharacterBody2D
             return;
 
 	
-        attacksPerSecond = DamageManager.Instance.GetPlayerAttackSpeed();
+        attacksPerSecond = Statistics.Instance.basePlayerStats[Statistics.Stats.AttackSpeed].GetValue();
         attackInterval = 1f / attacksPerSecond;
 
         attackCooldown += (float)delta;
@@ -123,7 +124,7 @@ public partial class Player : CharacterBody2D
 		{
 			if (body is CharacterBody2D target && body.IsInGroup("enemy"))
 			{
-				DamageManager.Instance.ApplyDamage(this, target, DamageManager.Instance.GetPlayerDamage());
+				DamageManager.Instance.ApplyDamage(this, target);
 			}
 		}
 	}

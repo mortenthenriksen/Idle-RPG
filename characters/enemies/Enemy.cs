@@ -1,6 +1,7 @@
 using System;
 using Components;
 using Godot;
+using Helpers;
 using Managers;
 
 namespace Characters;
@@ -13,7 +14,7 @@ public abstract partial class Enemy : CharacterBody2D
     
     public override void _Ready()
     {
-        AddToGroup("enemy");
+        AddToGroup(Groups.Enemy);
         healthBar = GetNode<ProgressBar>("HealthBar");
         healthNode = GetNode<HealthNode>("HealthNode");
         healthNode.HealthChanged += OnHealthChanged;
