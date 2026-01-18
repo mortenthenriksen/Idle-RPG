@@ -1,6 +1,10 @@
-using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Net.Http.Headers;
+using System.Reflection.Metadata.Ecma335;
+using System.Windows.Markup;
 using Godot;
+using Upgrades;
 
 namespace Upgrades;
 
@@ -15,8 +19,8 @@ public partial class Ancestry : Control
     private ScrollContainer scrollContainer;
 
     // name of the ancestor, stat they give, current level, max level
-    private Dictionary<string, (Enum, float, int, int)> ancestryDict = new Dictionary<string, (Enum,float, int, int)>();
-    private Dictionary<Statistics.Traits, float>  accumulatedAncestorStats = new Dictionary<Statistics.Traits, float>(); 
+    // trait, gained per level, current level, max level
+    private Dictionary<string, (Statistics.Traits, float, float, float)> ancestryDict = new Dictionary<string, (Statistics.Traits,float, float,float)>();
     
 
     public override void _Ready()
@@ -61,56 +65,31 @@ public partial class Ancestry : Control
     private void OnTextureRectGuiInput(TextureRect textureRect, InputEvent input)
     {
         if (input is InputEventMouseButton mouseEvent && mouseEvent.Pressed)
-        {
+        {  
             string nameOfAncestor = textureRect.Name;
-            UpdateAncestryDictValues(nameOfAncestor);
-            UpdateAccumulatedStats();
-            EmitSignal(SignalName.AncestryUpdated, nameOfAncestor);
+            (Statistics.Traits, float, float, float) value = ancestryDict.GetValueOrDefault(nameOfAncestor);
+
+            if (value.Item3 == value.Item4) return;
+
+            value.Item3 += 1;
+            ancestryDict[nameOfAncestor] = value;
+            Statistics.Instance.playerStats[value.Item1].AddIncreased(value.Item2);
+
+            Label label = (Label)textureRect.GetChild(0);
+            label.Text = $"{value.Item3}/{value.Item4}";
+
+            EmitSignal(SignalName.AncestryUpdated, nameOfAncestor);  
         }
     }
 
     private void CreateAncestryDict()
     {
-        ancestryDict.Add("AD1339_1",(Statistics.Traits.Damage,15,1,10));
-        ancestryDict.Add("AD1339_2",(Statistics.Traits.ExperienceGained,20,1,10));
-        ancestryDict.Add("AD1339_3",(Statistics.Traits.Life,100,1,10));
-        ancestryDict.Add("AD1339_4",(Statistics.Traits.MovementSpeed,1,1,10));
-        ancestryDict.Add("AD1339_5",(Statistics.Traits.Damage,10,1,10));
+        ancestryDict.Add("AD1339_1",(Statistics.Traits.Damage, 0.15f,0,10));
+        ancestryDict.Add("AD1339_2",(Statistics.Traits.ExperienceGained,0.05f,0,10));
+        ancestryDict.Add("AD1339_3",(Statistics.Traits.Life,0.05f,0,10));
+        ancestryDict.Add("AD1339_4",(Statistics.Traits.MovementSpeed,0.05f,0,10));
+        ancestryDict.Add("AD1339_5",(Statistics.Traits.AttackSpeed,0.10f,0,10));
     }
 
-    private void UpdateAncestryDictValues(string nameOfAncestor)
-    {
-        (Enum, float, int, int) values = ancestryDict[nameOfAncestor];
-        // max level 
-        if (values.Item3 == values.Item4) return;
-        else
-        {
-            values.Item3 += 1;
-            ancestryDict[nameOfAncestor] = values;
-        }
-        UpdateAccumulatedStats();
-    }
-
-    private Dictionary<Statistics.Traits, float> UpdateAccumulatedStats()
-    {
-        // Initialize a dictionary with 0 for all stats
-        accumulatedAncestorStats = new Dictionary<Statistics.Traits, float>();
-        foreach (Statistics.Traits stat in Enum.GetValues(typeof(Statistics.Traits)))
-        {
-            accumulatedAncestorStats[stat] = 0f;
-        }
-
-        foreach (var entry in ancestryDict.Values)
-        {
-            // Cast the Enum back to our specific Stats type
-            Statistics.Traits statType = (Statistics.Traits)entry.Item1;
-            float value = entry.Item2;
-            int currentLevel = entry.Item3;
-
-            accumulatedAncestorStats[statType] += value * currentLevel;
-        }
-        return accumulatedAncestorStats;
-    }
-
-    public Dictionary<Statistics.Traits, float> GetAncestryDictValues() => accumulatedAncestorStats;
+    public Dictionary<string, (Statistics.Traits, float, float, float)> GetAncestryDict() => ancestryDict;
 }

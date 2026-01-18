@@ -1,4 +1,4 @@
-using System;
+
 using System.Collections.Generic;
 using Characters;
 using Components;
@@ -14,7 +14,6 @@ public partial class GameEventsManager : Node
 	private Vector2 enemySpawnPosition = new Vector2(736, 481);
     
     public static GameEventsManager Instance { get; private set; }
-	private Dictionary<Statistics.Traits, ModifiableStat> playerStats;
 
 	private HealthNode playerHealth;
 	private HealthNode enemyHealth;
@@ -45,8 +44,6 @@ public partial class GameEventsManager : Node
 		Ancestry.Instance.AncestryUpdated += StatsGainedFromAncestry;
 
 		SpawnEnemy();
-		
-		playerStats = statistics.GetBasePlayerStats();
 
         UpdateUI();
 
@@ -67,12 +64,12 @@ public partial class GameEventsManager : Node
 				{
 					blockedDamageBuffIsActive = true;
 
-					playerStats[Statistics.Traits.Damage].AddPercent(value);
+					Statistics.Instance.playerStats[Statistics.Traits.Damage].AddMore(value);
 
 					Timer timer = CreateTempBuffTimer(5.0f);
 
 					timer.Timeout += () => {
-						playerStats[Statistics.Traits.Damage].RemovePercent(value);
+						Statistics.Instance.playerStats[Statistics.Traits.Damage].RemoveMore(value);
 						blockedDamageBuffIsActive = false;
 						timer.QueueFree(); 
 						UpdateUI();
@@ -99,15 +96,7 @@ public partial class GameEventsManager : Node
 
     private void StatsGainedFromAncestry(string nameOfAncestor)
 	{
-		// var accumulatedAncestorStats = Ancestry.Instance.GetAncestryDictValues();
-		// foreach (var kvp in accumulatedAncestorStats)
-		// 	{
-		// 		if (statUpdaters.TryGetValue(kvp.Key, out var updateAction))
-		// 		{
-		// 			updateAction(kvp.Value); 
-		// 			GD.Print($"Applied Ancestry: {kvp.Key} updated by {kvp.Value}");
-		// 		}
-		// 	}
+		// remove some honor used here maybe, or just keep that internally
 		UpdateUI();
 	}
 	
@@ -150,12 +139,12 @@ public partial class GameEventsManager : Node
         UIManager.Instance.UpdateWaveCounter(WaveManager.Instance.currentWave);
         UIManager.Instance.UpdateTotalKillsCounter(KillTracker.Instance.GetTotalKills());
 		UIManager.Instance.UpdateExpUI((ulong)ExperienceManager.Instance.currentExp, (ulong)ExperienceManager.Instance.GetExpRequiredForNextLevel());
-		UIManager.Instance.UpdatePlayerAttackDamage(playerStats[Statistics.Traits.Damage].GetValue());
-		UIManager.Instance.UpdatePlayerAttackSpeed(playerStats[Statistics.Traits.AttackSpeed].GetValue());
+		UIManager.Instance.UpdatePlayerAttackDamage(Statistics.Instance.playerStats[Statistics.Traits.Damage].GetValue());
+		UIManager.Instance.UpdatePlayerAttackSpeed(Statistics.Instance.playerStats[Statistics.Traits.AttackSpeed].GetValue());
 		UIManager.Instance.UpdateSkillPointsUI(ExperienceManager.Instance.GetUnspentSkillPoints());
 
-		var basePlayerMovementSpeed = playerStats[Statistics.Traits.MovementSpeed].BaseValue;
-		var playerMovementSpeed = playerStats[Statistics.Traits.MovementSpeed].GetValue();
+		var basePlayerMovementSpeed = Statistics.Instance.playerStats[Statistics.Traits.MovementSpeed].BaseValue;
+		var playerMovementSpeed = Statistics.Instance.playerStats[Statistics.Traits.MovementSpeed].GetValue();
 		float movementSpeedPercentage = playerMovementSpeed / basePlayerMovementSpeed * 100; 
 		UIManager.Instance.UpdatePlayerMovementSpeed(movementSpeedPercentage);
     }

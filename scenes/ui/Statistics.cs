@@ -15,8 +15,8 @@ public partial class Statistics : Control
     public static Statistics Instance {get; private set;}
 
     public enum Traits {Damage, Life, AttackSpeed, MovementSpeed, ExperienceGained}
-    public Dictionary<Traits, ModifiableStat> basePlayerStats = new();
-    public Dictionary<Traits, ModifiableStat> baseEnemyStats = new();
+    public Dictionary<Traits, ModifiableStat> playerStats = new();
+    public Dictionary<Traits, ModifiableStat> enemyStats = new();
 
     private Button playerLifeButton;
     private Button playerAttackDamageButton;
@@ -36,25 +36,25 @@ public partial class Statistics : Control
         playerAttackDamageButton.Pressed += OnPlayerAttackDamageButtonPressed;
         playerAttackSpeedButton.Pressed += OnPlayerAttackSpeedButtonPressed;
         playerMovementSpeedButton.Pressed += OnPlayerMovementSpeedButtonPressed;
-        CreateBasePlayerStatsDict();
-        CreateBaseEnemyStatsDict();
+        CreateplayerStatsDict();
+        CreateenemyStatsDict();
     }
 
-    private void CreateBasePlayerStatsDict()
+    private void CreateplayerStatsDict()
     {
-        basePlayerStats.Add(Traits.Damage, new ModifiableStat(2));
-        basePlayerStats.Add(Traits.Life, new ModifiableStat(20));
-        basePlayerStats.Add(Traits.AttackSpeed, new ModifiableStat(1.33f));
-        basePlayerStats.Add(Traits.MovementSpeed, new ModifiableStat(85f));
-        basePlayerStats.Add(Traits.ExperienceGained, new ModifiableStat(0f));
+        playerStats.Add(Traits.Damage, new ModifiableStat(2));
+        playerStats.Add(Traits.Life, new ModifiableStat(20));
+        playerStats.Add(Traits.AttackSpeed, new ModifiableStat(1.33f));
+        playerStats.Add(Traits.MovementSpeed, new ModifiableStat(85f));
+        playerStats.Add(Traits.ExperienceGained, new ModifiableStat(0f));
     }
 
-    private void CreateBaseEnemyStatsDict()
+    private void CreateenemyStatsDict()
     {
-        baseEnemyStats.Add(Traits.Damage, new ModifiableStat(1));
-        baseEnemyStats.Add(Traits.Life, new ModifiableStat(10));
-        baseEnemyStats.Add(Traits.AttackSpeed, new ModifiableStat(1.33f));
-        baseEnemyStats.Add(Traits.MovementSpeed, new ModifiableStat(0.85f));
+        enemyStats.Add(Traits.Damage, new ModifiableStat(1));
+        enemyStats.Add(Traits.Life, new ModifiableStat(10));
+        enemyStats.Add(Traits.AttackSpeed, new ModifiableStat(1.33f));
+        enemyStats.Add(Traits.MovementSpeed, new ModifiableStat(0.85f));
     }
     
     private bool HasUnspentSkillPoints()
@@ -90,6 +90,6 @@ public partial class Statistics : Control
         EmitSignal(SignalName.PlayerStatUpgraded, "MovementSpeed");
     }
 
-    public Dictionary<Traits, ModifiableStat> GetBasePlayerStats() => basePlayerStats;
-    public Dictionary<Traits, ModifiableStat> GetBaseEnemyStats() => baseEnemyStats;
+    public Dictionary<Traits, ModifiableStat> GetplayerStats() => playerStats;
+    public Dictionary<Traits, ModifiableStat> GetenemyStats() => enemyStats;
 }

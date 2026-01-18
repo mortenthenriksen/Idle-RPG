@@ -38,7 +38,7 @@ public partial class Player : CharacterBody2D
     {
         if (!enemyInRange && !(animationPlayer.CurrentAnimation == "attack1") && !isBlocking)
         {
-			var playerMovementSpeed = Statistics.Instance.basePlayerStats[Statistics.Traits.MovementSpeed].GetValue();
+			var playerMovementSpeed = Statistics.Instance.playerStats[Statistics.Traits.MovementSpeed].GetValue();
             Velocity = new Vector2(playerMovementSpeed, Velocity.Y);
             MoveAndSlide();
 
@@ -66,7 +66,7 @@ public partial class Player : CharacterBody2D
             return;
 
 	
-        attacksPerSecond = Statistics.Instance.basePlayerStats[Statistics.Traits.AttackSpeed].GetValue();
+        attacksPerSecond = Statistics.Instance.playerStats[Statistics.Traits.AttackSpeed].GetValue();
         attackInterval = 1f / attacksPerSecond;
 
         attackCooldown += (float)delta;
@@ -82,11 +82,11 @@ public partial class Player : CharacterBody2D
 	public void IncreaseMovementSpeed(float percentageIncrease)
 	{
 		
-		var playerMovementSpeed = Statistics.Instance.basePlayerStats[Statistics.Traits.MovementSpeed];
-		playerMovementSpeed.AddPercent(percentageIncrease);
+		var playerMovementSpeed = Statistics.Instance.playerStats[Statistics.Traits.MovementSpeed];
+		playerMovementSpeed.AddIncreased(percentageIncrease);
 		
 		// this is so make the animation fit the movement speed
-		animationPlayerSpeedScale = 0.35f * (1 + playerMovementSpeed.GetPercentages().Sum());
+		animationPlayerSpeedScale = 0.35f * (1 + playerMovementSpeed.GetIncreased().Sum());
 		animationPlayer.SpeedScale = animationPlayerSpeedScale;
 	}
 

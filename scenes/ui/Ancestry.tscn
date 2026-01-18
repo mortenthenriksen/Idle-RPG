@@ -34,6 +34,7 @@ honorOfAncestors = 1000
 layout_mode = 0
 offset_right = 325.0
 offset_bottom = 288.0
+mouse_filter = 2
 theme = ExtResource("1_5opkg")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MainPanel"]
@@ -43,7 +44,7 @@ offset_right = 325.0
 offset_bottom = 288.0
 theme = ExtResource("1_5opkg")
 theme_override_styles/panel = SubResource("StyleBoxTexture_u51f2")
-scroll_vertical = 100
+scroll_vertical = 158
 horizontal_scroll_mode = 3
 vertical_scroll_mode = 3
 
@@ -318,6 +319,7 @@ alignment = 1
 [node name="Panel" type="Panel" parent="MainPanel/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
+mouse_filter = 2
 theme = ExtResource("1_5opkg")
 
 [node name="AD1339_1" type="TextureRect" parent="MainPanel/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer/Panel"]
@@ -335,13 +337,14 @@ theme = ExtResource("1_5opkg")
 texture = ExtResource("5_j2h38")
 script = ExtResource("9_wx586")
 
-[node name="Label" type="Label" parent="MainPanel/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer/Panel"]
+[node name="Label" type="Label" parent="MainPanel/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer/Panel/AD1339_1"]
 layout_mode = 0
-offset_left = 4.0
-offset_top = 27.0
-offset_right = 44.0
-offset_bottom = 40.0
+offset_left = 2.5
+offset_top = 32.5
+offset_right = 30.5
+offset_bottom = 48.5
 theme = ExtResource("1_5opkg")
+theme_override_font_sizes/font_size = 20
 text = "0/10"
 
 [node name="Panel2" type="Panel" parent="MainPanel/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer"]
@@ -359,6 +362,15 @@ scale = Vector2(0.8, 0.8)
 tooltip_text = "This is not custom"
 texture = ExtResource("6_etgnr")
 
+[node name="Label" type="Label" parent="MainPanel/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer/Panel2/AD1339_2"]
+offset_left = 5.0
+offset_top = 32.5
+offset_right = 27.0
+offset_bottom = 45.5
+theme = ExtResource("1_5opkg")
+theme_override_font_sizes/font_size = 16
+text = "0/10"
+
 [node name="Panel3" type="Panel" parent="MainPanel/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
@@ -373,6 +385,15 @@ offset_bottom = 35.0
 scale = Vector2(0.8, 0.8)
 texture = ExtResource("7_ua0xd")
 
+[node name="Label" type="Label" parent="MainPanel/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer/Panel3/AD1339_3"]
+offset_left = 5.0
+offset_top = 32.5
+offset_right = 27.0
+offset_bottom = 45.5
+theme = ExtResource("1_5opkg")
+theme_override_font_sizes/font_size = 16
+text = "0/10"
+
 [node name="Panel4" type="Panel" parent="MainPanel/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
@@ -386,6 +407,15 @@ offset_right = 34.0
 offset_bottom = 35.0
 scale = Vector2(0.8, 0.8)
 texture = ExtResource("8_2quhl")
+
+[node name="Label" type="Label" parent="MainPanel/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer/Panel4/AD1339_4"]
+offset_left = 5.0
+offset_top = 32.5
+offset_right = 27.0
+offset_bottom = 45.5
+theme = ExtResource("1_5opkg")
+theme_override_font_sizes/font_size = 16
+text = "0/10"
 
 [node name="BorderPanel" type="Panel" parent="MainPanel"]
 layout_mode = 0
