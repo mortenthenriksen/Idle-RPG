@@ -18,7 +18,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-GlobalSettings="*res://autoload/GlobalSettings.cs"
+GlobalSettings="*res://helpers/GlobalSettings.cs"
 
 [display]
 

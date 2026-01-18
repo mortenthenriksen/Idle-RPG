@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Godot;
-using static Autoload.GameEventsManager;
-using static Statistics;
 
-namespace UI;
+namespace Upgrades;
 
 public partial class Ancestry : Control
 {
@@ -18,7 +16,7 @@ public partial class Ancestry : Control
 
     // name of the ancestor, stat they give, current level, max level
     private Dictionary<string, (Enum, float, int, int)> ancestryDict = new Dictionary<string, (Enum,float, int, int)>();
-    private Dictionary<Stats, float>  accumulatedAncestorStats = new Dictionary<Stats, float>(); 
+    private Dictionary<Statistics.Traits, float>  accumulatedAncestorStats = new Dictionary<Statistics.Traits, float>(); 
     
 
     public override void _Ready()
@@ -73,11 +71,11 @@ public partial class Ancestry : Control
 
     private void CreateAncestryDict()
     {
-        ancestryDict.Add("AD1339_1",(Stats.Damage,15,1,10));
-        ancestryDict.Add("AD1339_2",(Stats.ExperienceGained,20,1,10));
-        ancestryDict.Add("AD1339_3",(Stats.Life,100,1,10));
-        ancestryDict.Add("AD1339_4",(Stats.MovementSpeed,1,1,10));
-        ancestryDict.Add("AD1339_5",(Stats.Damage,10,1,10));
+        ancestryDict.Add("AD1339_1",(Statistics.Traits.Damage,15,1,10));
+        ancestryDict.Add("AD1339_2",(Statistics.Traits.ExperienceGained,20,1,10));
+        ancestryDict.Add("AD1339_3",(Statistics.Traits.Life,100,1,10));
+        ancestryDict.Add("AD1339_4",(Statistics.Traits.MovementSpeed,1,1,10));
+        ancestryDict.Add("AD1339_5",(Statistics.Traits.Damage,10,1,10));
     }
 
     private void UpdateAncestryDictValues(string nameOfAncestor)
@@ -93,11 +91,11 @@ public partial class Ancestry : Control
         UpdateAccumulatedStats();
     }
 
-    private Dictionary<Stats, float> UpdateAccumulatedStats()
+    private Dictionary<Statistics.Traits, float> UpdateAccumulatedStats()
     {
         // Initialize a dictionary with 0 for all stats
-        accumulatedAncestorStats = new Dictionary<Stats, float>();
-        foreach (Stats stat in Enum.GetValues(typeof(Stats)))
+        accumulatedAncestorStats = new Dictionary<Statistics.Traits, float>();
+        foreach (Statistics.Traits stat in Enum.GetValues(typeof(Statistics.Traits)))
         {
             accumulatedAncestorStats[stat] = 0f;
         }
@@ -105,7 +103,7 @@ public partial class Ancestry : Control
         foreach (var entry in ancestryDict.Values)
         {
             // Cast the Enum back to our specific Stats type
-            Stats statType = (Stats)entry.Item1;
+            Statistics.Traits statType = (Statistics.Traits)entry.Item1;
             float value = entry.Item2;
             int currentLevel = entry.Item3;
 
@@ -114,5 +112,5 @@ public partial class Ancestry : Control
         return accumulatedAncestorStats;
     }
 
-    public Dictionary<Stats, float> GetAncestryDictValues() => accumulatedAncestorStats;
+    public Dictionary<Statistics.Traits, float> GetAncestryDictValues() => accumulatedAncestorStats;
 }

@@ -1,26 +1,22 @@
-using System;
-using System.Runtime.CompilerServices;
+using System.Linq;
 using Components;
 using Godot;
 using Helpers;
 using Managers;
+using Upgrades;
 
-namespace Characters;
+namespace Characters; 
 
 public partial class Player : CharacterBody2D
 {
 	[Export]
 	private float animationPlayerSpeedScale = 0.35f;
 
-	private float basePlayerMovementSpeed = 85.0f;
-	private float totalMovementBonus = 0f; // cumulative percent bonus (e.g. 0.2 = +20%)
-	private float playerMovementSpeed;
-
 	private AnimationPlayer animationPlayer;
 	private HealthNode healthNode;
     private Area2D area2D;
     private float attacksPerSecond;
-
+	
 	private bool enemyInRange = false;
 	private bool isBlocking = false;
 
@@ -34,7 +30,6 @@ public partial class Player : CharacterBody2D
 		healthNode = GetNode<HealthNode>("HealthNode");
 		animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 		area2D = GetNode<Area2D>("Area2D");
-		playerMovementSpeed = basePlayerMovementSpeed;
 		animationPlayer.SpeedScale = animationPlayerSpeedScale;
 		animationPlayer.AnimationFinished += OnAnimationFinished;
 	}
@@ -43,6 +38,7 @@ public partial class Player : CharacterBody2D
     {
         if (!enemyInRange && !(animationPlayer.CurrentAnimation == "attack1") && !isBlocking)
         {
+			var playerMovementSpeed = Statistics.Instance.basePlayerStats[Statistics.Traits.MovementSpeed].GetValue();
             Velocity = new Vector2(playerMovementSpeed, Velocity.Y);
             MoveAndSlide();
 
@@ -70,7 +66,7 @@ public partial class Player : CharacterBody2D
             return;
 
 	
-        attacksPerSecond = Statistics.Instance.basePlayerStats[Statistics.Stats.AttackSpeed].GetValue();
+        attacksPerSecond = Statistics.Instance.basePlayerStats[Statistics.Traits.AttackSpeed].GetValue();
         attackInterval = 1f / attacksPerSecond;
 
         attackCooldown += (float)delta;
@@ -85,10 +81,12 @@ public partial class Player : CharacterBody2D
 
 	public void IncreaseMovementSpeed(float percentageIncrease)
 	{
-		totalMovementBonus += percentageIncrease; // e.g. +0.05 for +5%
-		playerMovementSpeed = basePlayerMovementSpeed * (1 + totalMovementBonus);
-
-		animationPlayerSpeedScale = 0.35f * (1 + totalMovementBonus);
+		
+		var playerMovementSpeed = Statistics.Instance.basePlayerStats[Statistics.Traits.MovementSpeed];
+		playerMovementSpeed.AddPercent(percentageIncrease);
+		
+		// this is so make the animation fit the movement speed
+		animationPlayerSpeedScale = 0.35f * (1 + playerMovementSpeed.GetPercentages().Sum());
 		animationPlayer.SpeedScale = animationPlayerSpeedScale;
 	}
 
@@ -146,7 +144,5 @@ public partial class Player : CharacterBody2D
 		}
 	}
 
-	public float GetPlayerMovementSpeed() => playerMovementSpeed;
-	public float GetPlayerBaseMovementSpeed() => basePlayerMovementSpeed;
 	public bool GetIsBlocking() => isBlocking;
 }

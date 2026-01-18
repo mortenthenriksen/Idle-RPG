@@ -1,9 +1,8 @@
 using Godot;
 using Components;
 using Characters;
-using Autoload;
 using System.Collections.Generic;
-using static Statistics;
+using Upgrades;
 
 namespace Managers;
 
@@ -17,8 +16,8 @@ public partial class DamageManager : Node
 
     public static DamageManager Instance { get; private set; }
 
-    private Dictionary<Stats, ModifiableStat> basePlayerStats;
-    private Dictionary<Stats, ModifiableStat> baseEnemyStats;
+    private Dictionary<Statistics.Traits, ModifiableStat> basePlayerStats;
+    private Dictionary<Statistics.Traits, ModifiableStat> baseEnemyStats;
     
     public async override void _Ready()
     {
@@ -33,7 +32,7 @@ public partial class DamageManager : Node
     public void ApplyDamage(CharacterBody2D source, CharacterBody2D target)
     {
         var attackerStats = GetStatsFor(source);
-        var damageAmount = attackerStats[Stats.Damage].GetValue();
+        var damageAmount = attackerStats[Statistics.Traits.Damage].GetValue();
         var healthNode = target.GetNode<HealthNode>("HealthNode");
         if (target.GetType() == typeof(Player))
         {
@@ -48,7 +47,7 @@ public partial class DamageManager : Node
         EmitSignal("DamageDealt", source, target, damageAmount);
     }
 
-    private Dictionary<Stats, ModifiableStat> GetStatsFor(CharacterBody2D character2d)
+    private Dictionary<Statistics.Traits, ModifiableStat> GetStatsFor(CharacterBody2D character2d)
     {
         // If the unit is the player, return player stats; otherwise, return enemy stats
         if (character2d.IsInGroup("enemy")) return baseEnemyStats;
@@ -58,20 +57,20 @@ public partial class DamageManager : Node
 
     public void AdditiveIncreasePlayerDamage(float increaseDamageValue)
     {
-        var damageStat = basePlayerStats[Stats.Damage];
-        damageStat.AddFlat(1);
+        var damageStat = basePlayerStats[Statistics.Traits.Damage];
+        damageStat.AddFlat(increaseDamageValue);
     }
 
     public void MultiplicativeIncreasePlayerDamage(float increaseDamageValue)
     {
-        var damageStat = basePlayerStats[Stats.Damage];
-        damageStat.AddPercent(1f);
+        var damageStat = basePlayerStats[Statistics.Traits.Damage];
+        damageStat.AddPercent(increaseDamageValue);
     }
 
     public void IncreasePlayerAttackSpeed(float percentageIncrease)
     {
-        var damageStat = basePlayerStats[Stats.Damage];
-        damageStat.RemovePercent(1f);
+        var attackSpeedStat = basePlayerStats[Statistics.Traits.AttackSpeed];
+        attackSpeedStat.AddPercent(percentageIncrease);
     }
 }
 

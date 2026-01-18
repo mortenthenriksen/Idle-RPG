@@ -1,10 +1,10 @@
+using System;
 using System.Collections.Generic;
 using Characters;
 using Components;
 using Godot;
 using Managers;
-using UI;
-using static Statistics;
+using Upgrades;
 
 namespace Autoload;
 
@@ -14,7 +14,7 @@ public partial class GameEventsManager : Node
 	private Vector2 enemySpawnPosition = new Vector2(736, 481);
     
     public static GameEventsManager Instance { get; private set; }
-	private Dictionary<Stats, ModifiableStat> basePlayerStats;
+	private Dictionary<Statistics.Traits, ModifiableStat> playerStats;
 
 	private HealthNode playerHealth;
 	private HealthNode enemyHealth;
@@ -24,6 +24,7 @@ public partial class GameEventsManager : Node
 	private Statistics statistics;
 	private int increaseWaveValue = 1;
 	private ulong enemiesKilledThisPrestige = 0;
+	private bool blockedDamageBuffIsActive;
 
 
 	public async override void _Ready()
@@ -45,7 +46,7 @@ public partial class GameEventsManager : Node
 
 		SpawnEnemy();
 		
-		basePlayerStats = Statistics.Instance.GetBasePlayerStats();
+		playerStats = statistics.GetBasePlayerStats();
 
         UpdateUI();
 
@@ -53,7 +54,7 @@ public partial class GameEventsManager : Node
 
     private void OnAttackBlocked(CharacterBody2D source, CharacterBody2D target)
     {
-        TemporaryBuffsForPlayer("AttackDamageMultiplicative", 2);
+        TemporaryBuffsForPlayer("AttackDamageMultiplicative", 1);
     }
 
 	// make these go away after some time
@@ -62,20 +63,21 @@ public partial class GameEventsManager : Node
 		switch (statName)
 		{
 			case "AttackDamageMultiplicative":
-				DamageManager.Instance.MultiplicativeIncreasePlayerDamage(value);
+				if (!blockedDamageBuffIsActive)
+				{
+					blockedDamageBuffIsActive = true;
 
-				Timer timer = new Timer();
-				AddChild(timer);
-				
-				timer.WaitTime = 5.0f;
-				timer.OneShot = true;
-				timer.Start();
-				
-				timer.Timeout += () => {
-					// GD.Print("Time passed!");
-					// DamageManager.Instance.MultiplicativeIncreasePlayerDamage(1f);
-					timer.QueueFree(); 
-				};
+					playerStats[Statistics.Traits.Damage].AddPercent(value);
+
+					Timer timer = CreateTempBuffTimer(5.0f);
+
+					timer.Timeout += () => {
+						playerStats[Statistics.Traits.Damage].RemovePercent(value);
+						blockedDamageBuffIsActive = false;
+						timer.QueueFree(); 
+						UpdateUI();
+					};
+				}
 				break;
 
 			default:
@@ -85,7 +87,17 @@ public partial class GameEventsManager : Node
 		UpdateUI();
 	}
 
-	private void StatsGainedFromAncestry(string nameOfAncestor)
+    private Timer CreateTempBuffTimer(float buffDurationTime)
+    {
+		Timer timer = new Timer();
+		AddChild(timer);
+		timer.WaitTime = buffDurationTime;
+		timer.OneShot = true;
+		timer.Start();
+		return timer;
+    }
+
+    private void StatsGainedFromAncestry(string nameOfAncestor)
 	{
 		// var accumulatedAncestorStats = Ancestry.Instance.GetAncestryDictValues();
 		// foreach (var kvp in accumulatedAncestorStats)
@@ -116,11 +128,11 @@ public partial class GameEventsManager : Node
 
 				case "AttackSpeed":
 					// percentage increase of attackspeed, is usefull other places also
-					DamageManager.Instance.IncreasePlayerAttackSpeed(10f);
+					DamageManager.Instance.IncreasePlayerAttackSpeed(0.1f);
 					break;
 
 				case "MovementSpeed":
-					player.IncreaseMovementSpeed(0.10f);
+					player.IncreaseMovementSpeed(0.1f);
 					break;
 
 				default:
@@ -138,12 +150,12 @@ public partial class GameEventsManager : Node
         UIManager.Instance.UpdateWaveCounter(WaveManager.Instance.currentWave);
         UIManager.Instance.UpdateTotalKillsCounter(KillTracker.Instance.GetTotalKills());
 		UIManager.Instance.UpdateExpUI((ulong)ExperienceManager.Instance.currentExp, (ulong)ExperienceManager.Instance.GetExpRequiredForNextLevel());
-		UIManager.Instance.UpdatePlayerAttackDamage(basePlayerStats[Stats.Damage].GetValue());
-		UIManager.Instance.UpdatePlayerAttackSpeed(basePlayerStats[Stats.AttackSpeed].GetValue());
+		UIManager.Instance.UpdatePlayerAttackDamage(playerStats[Statistics.Traits.Damage].GetValue());
+		UIManager.Instance.UpdatePlayerAttackSpeed(playerStats[Statistics.Traits.AttackSpeed].GetValue());
 		UIManager.Instance.UpdateSkillPointsUI(ExperienceManager.Instance.GetUnspentSkillPoints());
 
-		float playerMovementSpeed = player.GetPlayerMovementSpeed();
-		float basePlayerMovementSpeed = player.GetPlayerBaseMovementSpeed();
+		var basePlayerMovementSpeed = playerStats[Statistics.Traits.MovementSpeed].BaseValue;
+		var playerMovementSpeed = playerStats[Statistics.Traits.MovementSpeed].GetValue();
 		float movementSpeedPercentage = playerMovementSpeed / basePlayerMovementSpeed * 100; 
 		UIManager.Instance.UpdatePlayerMovementSpeed(movementSpeedPercentage);
     }

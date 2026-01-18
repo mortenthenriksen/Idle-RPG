@@ -1,4 +1,5 @@
 using Godot;
+using Upgrades;
 
 namespace UI;
 
