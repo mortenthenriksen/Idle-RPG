@@ -18,8 +18,7 @@ public partial class Ancestry : Control
     public static Ancestry Instance { get; private set; }
     private ScrollContainer scrollContainer;
 
-    // name of the ancestor, stat they give, current level, max level
-    // trait, gained per level, current level, max level
+    // trait, trait amount per level, current level, max level
     private Dictionary<string, (Statistics.Traits, float, float, float)> ancestryDict = new Dictionary<string, (Statistics.Traits,float, float,float)>();
     
 

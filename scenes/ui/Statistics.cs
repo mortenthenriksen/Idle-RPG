@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Autoload;
+using Characters;
 using Godot;
 using Managers;
 
@@ -7,7 +9,7 @@ namespace Upgrades;
 public partial class Statistics : Control
 {
     [Signal]
-    public delegate void PlayerStatUpgradedEventHandler(string statName);
+    public delegate void PlayerStatUpgradedEventHandler(Traits traits);
 
     [Signal]
     public delegate void EnemyStatUpgradedEventHandler(float newHealth, float maxHealth);
@@ -26,64 +28,68 @@ public partial class Statistics : Control
     public override void _Ready()
     {
         Instance = this;
-        var statsNode = GetNode("/root/Main/UserInterface/Statistics");
-        playerLifeButton = statsNode.GetNode<Button>("%PlayerLifeButton");
-        playerAttackDamageButton = statsNode.GetNode<Button>("%PlayerAttackDamageButton");
-        playerAttackSpeedButton = statsNode.GetNode<Button>("%PlayerAttackSpeedButton");
-        playerMovementSpeedButton = statsNode.GetNode<Button>("%PlayerMovementSpeedButton");
-
-        playerLifeButton.Pressed += OnPlayerLifeButtonPressed;
-        playerAttackDamageButton.Pressed += OnPlayerAttackDamageButtonPressed;
-        playerAttackSpeedButton.Pressed += OnPlayerAttackSpeedButtonPressed;
-        playerMovementSpeedButton.Pressed += OnPlayerMovementSpeedButtonPressed;
-        CreateplayerStatsDict();
-        CreateenemyStatsDict();
+        
+        InitializeStats();
+        SetupButtonMapping();
     }
 
-    private void CreateplayerStatsDict()
+    private void InitializeStats()
     {
-        playerStats.Add(Traits.Damage, new ModifiableStat(2));
-        playerStats.Add(Traits.Life, new ModifiableStat(20));
-        playerStats.Add(Traits.AttackSpeed, new ModifiableStat(1.33f));
-        playerStats.Add(Traits.MovementSpeed, new ModifiableStat(85f));
-        playerStats.Add(Traits.ExperienceGained, new ModifiableStat(0f));
+        // Player
+        playerStats[Traits.Damage] = new ModifiableStat(2);
+        playerStats[Traits.Life] = new ModifiableStat(20);
+        playerStats[Traits.AttackSpeed] = new ModifiableStat(1.33f);
+        playerStats[Traits.MovementSpeed] = new ModifiableStat(85f);
+        playerStats[Traits.ExperienceGained] = new ModifiableStat(0f);
+
+        // Enemy
+        enemyStats[Traits.Damage] = new ModifiableStat(1);
+        enemyStats[Traits.Life] = new ModifiableStat(10);
+        enemyStats[Traits.AttackSpeed] = new ModifiableStat(1.33f);
+        enemyStats[Traits.MovementSpeed] = new ModifiableStat(0.85f);
     }
 
-    private void CreateenemyStatsDict()
+    private void SetupButtonMapping()
     {
-        enemyStats.Add(Traits.Damage, new ModifiableStat(1));
-        enemyStats.Add(Traits.Life, new ModifiableStat(10));
-        enemyStats.Add(Traits.AttackSpeed, new ModifiableStat(1.33f));
-        enemyStats.Add(Traits.MovementSpeed, new ModifiableStat(0.85f));
-    }
-    
-    private bool HasUnspentSkillPoints()
-    {
-        return ExperienceManager.Instance.GetUnspentSkillPoints() > 0;
+        // Map the Unique Name (%) of the button to the Trait it upgrades
+        var buttonMap = new Dictionary<string, Traits>
+        {
+            { "%PlayerLifeButton", Traits.Life },
+            { "%PlayerAttackDamageButton", Traits.Damage },
+            { "%PlayerAttackSpeedButton", Traits.AttackSpeed },
+            { "%PlayerMovementSpeedButton", Traits.MovementSpeed }
+        };
+
+        foreach (var (uniqueName, trait) in buttonMap)
+        {
+            var btn = GetNode<Button>(uniqueName);
+            // Use a lambda to pass the specific trait to a single shared function
+            btn.Pressed += () => HandleUpgradeRequest(trait);
+        }
     }
 
-    private void OnPlayerLifeButtonPressed()
+    private void HandleUpgradeRequest(Traits trait)
     {
-        if (!HasUnspentSkillPoints()) return;
-        EmitSignal(SignalName.PlayerStatUpgraded, "Life");
-    }
+        if (ExperienceManager.Instance.GetUnspentSkillPoints() <= 0) return;
 
-    private void OnPlayerAttackDamageButtonPressed()
-    {
-        if (!HasUnspentSkillPoints()) return;
-        EmitSignal(SignalName.PlayerStatUpgraded, "AttackDamageAdditive");
-    }
+        switch(trait) 
+        {
+            case Traits.Damage:
+                playerStats[trait].AddFlat(1);
+                break;
+            case Traits.AttackSpeed:
+                playerStats[trait].AddIncreased(0.01f);
+                break;
+            case Traits.Life:
+                playerStats[trait].AddFlat(5);
+                break;
+            case Traits.MovementSpeed:
+                var value = 0.01f;
+                playerStats[trait].AddIncreased(value);
 
-    private void OnPlayerAttackSpeedButtonPressed()
-    {
-        if (!HasUnspentSkillPoints()) return;
-        EmitSignal(SignalName.PlayerStatUpgraded, "AttackSpeed");
-    }
-
-    private void OnPlayerMovementSpeedButtonPressed()
-    {
-        if (!HasUnspentSkillPoints()) return;
-        EmitSignal(SignalName.PlayerStatUpgraded, "MovementSpeed");
+                break;
+        }
+        EmitSignal(SignalName.PlayerStatUpgraded, Variant.From(trait));
     }
 
     public Dictionary<Traits, ModifiableStat> GetplayerStats() => playerStats;

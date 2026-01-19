@@ -1,4 +1,5 @@
 using System.Linq;
+using Autoload;
 using Components;
 using Godot;
 using Helpers;
@@ -32,6 +33,7 @@ public partial class Player : CharacterBody2D
 		area2D = GetNode<Area2D>("Area2D");
 		animationPlayer.SpeedScale = animationPlayerSpeedScale;
 		animationPlayer.AnimationFinished += OnAnimationFinished;
+		GameEventsManager.Instance.PlayerMovementSpeedChanged += OnMovementSpeedIncrease;
 	}
 
     public override void _PhysicsProcess(double delta)
@@ -79,9 +81,8 @@ public partial class Player : CharacterBody2D
         }
     }
 
-	public void IncreaseMovementSpeed(float percentageIncrease)
+	public void OnMovementSpeedIncrease(float percentageIncrease)
 	{
-		
 		var playerMovementSpeed = Statistics.Instance.playerStats[Statistics.Traits.MovementSpeed];
 		playerMovementSpeed.AddIncreased(percentageIncrease);
 		

@@ -1,10 +1,12 @@
 
+using System;
 using System.Collections.Generic;
 using Characters;
 using Components;
 using Godot;
 using Managers;
 using Upgrades;
+using static Upgrades.Statistics;
 
 namespace Autoload;
 
@@ -12,6 +14,9 @@ public partial class GameEventsManager : Node
 {
 	[Export]
 	private Vector2 enemySpawnPosition = new Vector2(736, 481);
+
+	[Signal]
+	public delegate void PlayerMovementSpeedChangedEventHandler(float percentageIncrease);
     
     public static GameEventsManager Instance { get; private set; }
 
@@ -38,7 +43,7 @@ public partial class GameEventsManager : Node
 		playerHealth.Died += OnPlayerDied;
 		
 		statistics = GetNode<Statistics>("/root/Main/UserInterface/Statistics");
-		statistics.PlayerStatUpgraded += OnPlayerSkillPointUsed;
+		statistics.PlayerStatUpgraded += StatsGainedFromSkillPoints;
 
 		DamageManager.Instance.AttackBlocked += OnAttackBlocked;
 		Ancestry.Instance.AncestryUpdated += StatsGainedFromAncestry;
@@ -46,8 +51,8 @@ public partial class GameEventsManager : Node
 		SpawnEnemy();
 
         UpdateUI();
+	}
 
-    }
 
     private void OnAttackBlocked(CharacterBody2D source, CharacterBody2D target)
     {
@@ -101,34 +106,15 @@ public partial class GameEventsManager : Node
 	}
 	
 	// could also add value param here, so that GameEventManager isnt responsible for this
-    private void OnPlayerSkillPointUsed(string statName)
+    private void StatsGainedFromSkillPoints(Traits traits)
 	{
-		ExperienceManager.Instance.DecreaseUnspentSkillPoints();
-		// TODO: make all of these scale somehow, do some testing to see how it fits with exp gain
-		switch (statName)
-			{
-				case "Life":
-					playerHealth.IncreaseMaxHealth(4f);
-					break;
-
-				case "AttackDamageAdditive":
-					DamageManager.Instance.AdditiveIncreasePlayerDamage(1f);
-					break;
-
-				case "AttackSpeed":
-					// percentage increase of attackspeed, is usefull other places also
-					DamageManager.Instance.IncreasePlayerAttackSpeed(0.1f);
-					break;
-
-				case "MovementSpeed":
-					player.IncreaseMovementSpeed(0.1f);
-					break;
-
-				default:
-					GD.Print("Unknown stat upgrade: " + statName);
-					break;
-			}
-
+		// fix this spaghette
+        switch(traits) 
+        {
+            case Traits.MovementSpeed:
+                EmitSignal(SignalName.PlayerMovementSpeedChanged);
+                break;
+        }
 		UpdateUI();
     }
 
