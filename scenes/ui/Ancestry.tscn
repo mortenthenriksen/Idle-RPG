@@ -329,20 +329,17 @@ offset_top = 3.0
 offset_right = 34.0
 offset_bottom = 35.0
 scale = Vector2(0.8, 0.8)
-tooltip_text = "You gain 10% 
-more experience
-
-Total: "
+tooltip_text = "TEST"
 theme = ExtResource("1_5opkg")
 texture = ExtResource("5_j2h38")
 script = ExtResource("9_wx586")
 
 [node name="Label" type="Label" parent="MainPanel/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer/Panel/AD1339_1"]
 layout_mode = 0
-offset_left = 2.5
-offset_top = 32.5
-offset_right = 30.5
-offset_bottom = 48.5
+offset_left = 2.25
+offset_top = 33.0
+offset_right = 30.25
+offset_bottom = 49.0
 theme = ExtResource("1_5opkg")
 theme_override_font_sizes/font_size = 20
 text = "0/10"
@@ -361,14 +358,16 @@ offset_bottom = 35.0
 scale = Vector2(0.8, 0.8)
 tooltip_text = "This is not custom"
 texture = ExtResource("6_etgnr")
+script = ExtResource("9_wx586")
 
 [node name="Label" type="Label" parent="MainPanel/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer/Panel2/AD1339_2"]
-offset_left = 5.0
-offset_top = 32.5
-offset_right = 27.0
-offset_bottom = 45.5
+layout_mode = 0
+offset_left = 2.25
+offset_top = 33.0
+offset_right = 30.25
+offset_bottom = 49.0
 theme = ExtResource("1_5opkg")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "0/10"
 
 [node name="Panel3" type="Panel" parent="MainPanel/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer"]
@@ -383,15 +382,18 @@ offset_top = 3.0
 offset_right = 34.0
 offset_bottom = 35.0
 scale = Vector2(0.8, 0.8)
+tooltip_text = "Testing gay"
 texture = ExtResource("7_ua0xd")
+script = ExtResource("9_wx586")
 
 [node name="Label" type="Label" parent="MainPanel/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer/Panel3/AD1339_3"]
-offset_left = 5.0
-offset_top = 32.5
-offset_right = 27.0
-offset_bottom = 45.5
+layout_mode = 0
+offset_left = 2.25
+offset_top = 33.0
+offset_right = 30.25
+offset_bottom = 49.0
 theme = ExtResource("1_5opkg")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "0/10"
 
 [node name="Panel4" type="Panel" parent="MainPanel/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer"]
@@ -407,14 +409,16 @@ offset_right = 34.0
 offset_bottom = 35.0
 scale = Vector2(0.8, 0.8)
 texture = ExtResource("8_2quhl")
+script = ExtResource("9_wx586")
 
 [node name="Label" type="Label" parent="MainPanel/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer/Panel4/AD1339_4"]
-offset_left = 5.0
-offset_top = 32.5
-offset_right = 27.0
-offset_bottom = 45.5
+layout_mode = 0
+offset_left = 2.25
+offset_top = 33.0
+offset_right = 30.25
+offset_bottom = 49.0
 theme = ExtResource("1_5opkg")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "0/10"
 
 [node name="BorderPanel" type="Panel" parent="MainPanel"]

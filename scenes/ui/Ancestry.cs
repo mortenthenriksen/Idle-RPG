@@ -28,7 +28,7 @@ public partial class Ancestry : Control
         Instance = this;
         ConnectSignalsToTextureRects(this);
         scrollContainer = GetNode<ScrollContainer>("MainPanel/ScrollContainer");
-        scrollContainer.SetDeferred("scoll_vertical", 158);
+        scrollContainer.ScrollVertical = 158;
         CreateAncestryDict();
     }
 
@@ -88,7 +88,6 @@ public partial class Ancestry : Control
         ancestryDict.Add("AD1339_2",(Statistics.Traits.ExperienceGained,0.05f,0,10));
         ancestryDict.Add("AD1339_3",(Statistics.Traits.Life,0.05f,0,10));
         ancestryDict.Add("AD1339_4",(Statistics.Traits.MovementSpeed,0.05f,0,10));
-        ancestryDict.Add("AD1339_5",(Statistics.Traits.AttackSpeed,0.10f,0,10));
     }
 
     public Dictionary<string, (Statistics.Traits, float, float, float)> GetAncestryDict() => ancestryDict;

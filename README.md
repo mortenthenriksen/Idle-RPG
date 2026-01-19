@@ -6,6 +6,5 @@
 - Make the inventory :)
 - add skill to the game (more attacks)
 - add crit, add player stats (movement speed), monster movement speed
-- What makes my game fun?
-- Add particles to the players attack B-)
+- What makes my game fun? -> an idle game where you feel incentivized to play duh
 - Make the player allowed to spawn bosses all the time? but they still increase in difficulty maybe

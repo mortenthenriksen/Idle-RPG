@@ -139,8 +139,8 @@ public partial class GameEventsManager : Node
         UIManager.Instance.UpdateWaveCounter(WaveManager.Instance.currentWave);
         UIManager.Instance.UpdateTotalKillsCounter(KillTracker.Instance.GetTotalKills());
 		UIManager.Instance.UpdateExpUI((ulong)ExperienceManager.Instance.currentExp, (ulong)ExperienceManager.Instance.GetExpRequiredForNextLevel());
-		UIManager.Instance.UpdatePlayerAttackDamage(Statistics.Instance.playerStats[Statistics.Traits.Damage].GetValue());
-		UIManager.Instance.UpdatePlayerAttackSpeed(Statistics.Instance.playerStats[Statistics.Traits.AttackSpeed].GetValue());
+		UIManager.Instance.UpdatePlayerAttackDamage((float)Statistics.Instance.playerStats[Statistics.Traits.Damage].GetValue());
+		UIManager.Instance.UpdatePlayerAttackSpeed((float)Statistics.Instance.playerStats[Statistics.Traits.AttackSpeed].GetValue());
 		UIManager.Instance.UpdateSkillPointsUI(ExperienceManager.Instance.GetUnspentSkillPoints());
 
 		var basePlayerMovementSpeed = Statistics.Instance.playerStats[Statistics.Traits.MovementSpeed].BaseValue;

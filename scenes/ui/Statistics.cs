@@ -64,29 +64,25 @@ public partial class Statistics : Control
 
     private void OnPlayerLifeButtonPressed()
     {
-        if (!HasUnspentSkillPoints())
-            return;
+        if (!HasUnspentSkillPoints()) return;
         EmitSignal(SignalName.PlayerStatUpgraded, "Life");
     }
 
     private void OnPlayerAttackDamageButtonPressed()
     {
-        if (!HasUnspentSkillPoints())
-            return;
+        if (!HasUnspentSkillPoints()) return;
         EmitSignal(SignalName.PlayerStatUpgraded, "AttackDamageAdditive");
     }
 
     private void OnPlayerAttackSpeedButtonPressed()
     {
-        if (!HasUnspentSkillPoints())
-            return;
+        if (!HasUnspentSkillPoints()) return;
         EmitSignal(SignalName.PlayerStatUpgraded, "AttackSpeed");
     }
 
     private void OnPlayerMovementSpeedButtonPressed()
     {
-        if (!HasUnspentSkillPoints())
-            return;
+        if (!HasUnspentSkillPoints()) return;
         EmitSignal(SignalName.PlayerStatUpgraded, "MovementSpeed");
     }
 

@@ -10,18 +10,20 @@ public partial class TextureRectAncestry : TextureRect
     public override void _Ready()
     {
         // Make sure this control has tooltip text so the engine requests the custom tooltip.
-        // TooltipText = "Custom tooltip text";
+        TooltipText = "Custom tooltip text";
     }
+
+    [Export] public PackedScene CustomTooltipScene; 
 
     public override Control _MakeCustomTooltip(string text)
     {
         var label = new Label();
-        Dictionary<string, (Statistics.Traits, float, float, float)> ancestryDict = Ancestry.Instance.GetAncestryDict();
-        string textureRectName = this.Name;
-        (Statistics.Traits, float, float, float) value = ancestryDict[textureRectName];
-        label.Text = $"Increases {value.Item1} with {value.Item2 * 100}% \nTotal: {value.Item2 * value.Item3 * 100}%";
+        var ancestryDict = Ancestry.Instance.GetAncestryDict();
+        if (ancestryDict.TryGetValue(this.Name, out var value))
+        {
+            label.Text = $"Increases {value.Item1} with {(int)(value.Item2 * 100)}%\nTotal: {(int)(value.Item2 * value.Item3 * 100)}%";
+        }
+
         return label;
     }
-
-
 }

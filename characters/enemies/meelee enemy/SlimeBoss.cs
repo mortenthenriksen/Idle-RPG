@@ -107,7 +107,7 @@ public partial class SlimeBoss : Enemy
     {
         if (!playerInRange && hasSpawned)
         {
-            Velocity = new Vector2((float)GlobalSettings.MeeleeEnemyMovementSpeed, Velocity.Y);
+            Velocity = new Vector2((float)this.MeeleeEnemyMovementSpeed, Velocity.Y);
             MoveAndSlide();
         }
     }

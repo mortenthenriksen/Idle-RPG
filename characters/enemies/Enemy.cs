@@ -11,6 +11,8 @@ public abstract partial class Enemy : CharacterBody2D
     private ProgressBar healthBar;
     private float healthMultiplier;
     private HealthNode healthNode;
+
+    protected float MeeleeEnemyMovementSpeed = -60.0f;
     
     public override void _Ready()
     {
