@@ -1,10 +1,5 @@
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Net.Http.Headers;
-using System.Reflection.Metadata.Ecma335;
-using System.Windows.Markup;
 using Godot;
-using Upgrades;
 
 namespace Upgrades;
 
@@ -39,7 +34,7 @@ public partial class Ancestry : Control
             {
                 textureRect.MouseEntered += () => OnMouseExitedTextureRect(textureRect);
                 textureRect.MouseExited += () => OnMouseEnteredTextureRect(textureRect);
-                textureRect.GuiInput += (input) => OnTextureRectGuiInput(textureRect, input);  // Add this
+                textureRect.GuiInput += (input) => OnTextureRectGuiInput(textureRect, input);  
             }
             if (child.Name != null)
             {

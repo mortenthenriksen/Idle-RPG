@@ -36,7 +36,7 @@ public partial class Statistics : Control
     private void InitializeStats()
     {
         // Player
-        playerStats[Traits.Damage] = new ModifiableStat(2);
+        playerStats[Traits.Damage] = new ModifiableStat(30);
         playerStats[Traits.Life] = new ModifiableStat(20);
         playerStats[Traits.AttackSpeed] = new ModifiableStat(1.33f);
         playerStats[Traits.MovementSpeed] = new ModifiableStat(85f);

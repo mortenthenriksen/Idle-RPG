@@ -7,7 +7,7 @@ public partial class ToggleStatsButton : Button
 {
 
     private Statistics statistics;
-    private bool isVisble = false;
+    private bool isVisble = true;
 
     public override void _Ready()
     {

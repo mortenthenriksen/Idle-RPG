@@ -16,6 +16,7 @@ theme = ExtResource("1_0u2p3")
 metadata/_edit_lock_ = true
 
 [node name="GridContainer" type="GridContainer" parent="Panel"]
+unique_name_in_owner = true
 layout_mode = 0
 offset_left = 4.0
 offset_top = 180.0
@@ -28,85 +29,169 @@ metadata/_edit_lock_ = true
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 
+[node name="ItemIcon" type="TextureRect" parent="Panel/GridContainer/Slot1"]
+offset_right = 32.0
+offset_bottom = 32.0
+
 [node name="Slot2" type="Panel" parent="Panel/GridContainer"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+
+[node name="ItemIcon" type="TextureRect" parent="Panel/GridContainer/Slot2"]
+offset_right = 32.0
+offset_bottom = 32.0
 
 [node name="Slot3" type="Panel" parent="Panel/GridContainer"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 
+[node name="ItemIcon" type="TextureRect" parent="Panel/GridContainer/Slot3"]
+offset_right = 32.0
+offset_bottom = 32.0
+
 [node name="Slot4" type="Panel" parent="Panel/GridContainer"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+
+[node name="ItemIcon" type="TextureRect" parent="Panel/GridContainer/Slot4"]
+offset_right = 32.0
+offset_bottom = 32.0
 
 [node name="Slot5" type="Panel" parent="Panel/GridContainer"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 
+[node name="ItemIcon" type="TextureRect" parent="Panel/GridContainer/Slot5"]
+offset_right = 32.0
+offset_bottom = 32.0
+
 [node name="Slot6" type="Panel" parent="Panel/GridContainer"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+
+[node name="ItemIcon" type="TextureRect" parent="Panel/GridContainer/Slot6"]
+offset_right = 32.0
+offset_bottom = 32.0
 
 [node name="Slot7" type="Panel" parent="Panel/GridContainer"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 
+[node name="ItemIcon" type="TextureRect" parent="Panel/GridContainer/Slot7"]
+offset_right = 32.0
+offset_bottom = 32.0
+
 [node name="Slot8" type="Panel" parent="Panel/GridContainer"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+
+[node name="ItemIcon" type="TextureRect" parent="Panel/GridContainer/Slot8"]
+offset_right = 32.0
+offset_bottom = 32.0
 
 [node name="Slot9" type="Panel" parent="Panel/GridContainer"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 
+[node name="ItemIcon" type="TextureRect" parent="Panel/GridContainer/Slot9"]
+offset_right = 32.0
+offset_bottom = 32.0
+
 [node name="Slot10" type="Panel" parent="Panel/GridContainer"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+
+[node name="ItemIcon" type="TextureRect" parent="Panel/GridContainer/Slot10"]
+offset_right = 32.0
+offset_bottom = 32.0
 
 [node name="Slot11" type="Panel" parent="Panel/GridContainer"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 
+[node name="ItemIcon" type="TextureRect" parent="Panel/GridContainer/Slot11"]
+offset_right = 32.0
+offset_bottom = 32.0
+
 [node name="Slot12" type="Panel" parent="Panel/GridContainer"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+
+[node name="ItemIcon" type="TextureRect" parent="Panel/GridContainer/Slot12"]
+offset_right = 32.0
+offset_bottom = 32.0
 
 [node name="Slot13" type="Panel" parent="Panel/GridContainer"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 
+[node name="ItemIcon" type="TextureRect" parent="Panel/GridContainer/Slot13"]
+offset_right = 32.0
+offset_bottom = 32.0
+
 [node name="Slot14" type="Panel" parent="Panel/GridContainer"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+
+[node name="ItemIcon" type="TextureRect" parent="Panel/GridContainer/Slot14"]
+offset_right = 32.0
+offset_bottom = 32.0
 
 [node name="Slot15" type="Panel" parent="Panel/GridContainer"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 
+[node name="ItemIcon" type="TextureRect" parent="Panel/GridContainer/Slot15"]
+offset_right = 32.0
+offset_bottom = 32.0
+
 [node name="Slot16" type="Panel" parent="Panel/GridContainer"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+
+[node name="ItemIcon" type="TextureRect" parent="Panel/GridContainer/Slot16"]
+offset_right = 32.0
+offset_bottom = 32.0
 
 [node name="Slot17" type="Panel" parent="Panel/GridContainer"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 
+[node name="ItemIcon" type="TextureRect" parent="Panel/GridContainer/Slot17"]
+offset_right = 32.0
+offset_bottom = 32.0
+
 [node name="Slot18" type="Panel" parent="Panel/GridContainer"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+
+[node name="ItemIcon" type="TextureRect" parent="Panel/GridContainer/Slot18"]
+offset_right = 32.0
+offset_bottom = 32.0
 
 [node name="Slot19" type="Panel" parent="Panel/GridContainer"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 
+[node name="ItemIcon" type="TextureRect" parent="Panel/GridContainer/Slot19"]
+offset_right = 32.0
+offset_bottom = 32.0
+
 [node name="Slot20" type="Panel" parent="Panel/GridContainer"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 
+[node name="ItemIcon" type="TextureRect" parent="Panel/GridContainer/Slot20"]
+offset_right = 32.0
+offset_bottom = 32.0
+
 [node name="Slot21" type="Panel" parent="Panel/GridContainer"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+
+[node name="ItemIcon" type="TextureRect" parent="Panel/GridContainer/Slot21"]
+offset_right = 32.0
+offset_bottom = 32.0
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel"]
 layout_mode = 0
@@ -117,6 +202,7 @@ theme_override_constants/margin_top = 4
 metadata/_edit_lock_ = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="RightVBox" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer"]
@@ -129,10 +215,18 @@ custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 theme = ExtResource("1_0u2p3")
 
+[node name="ItemIcon" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/RightVBox/ShieldSlot"]
+offset_right = 32.0
+offset_bottom = 32.0
+
 [node name="WeaponSlot" type="Panel" parent="Panel/MarginContainer/HBoxContainer/RightVBox"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 theme = ExtResource("1_0u2p3")
+
+[node name="ItemIcon" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/RightVBox/WeaponSlot"]
+offset_right = 32.0
+offset_bottom = 32.0
 
 [node name="MiddleVBox" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer"]
 layout_mode = 2
@@ -142,20 +236,36 @@ custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 theme = ExtResource("1_0u2p3")
 
+[node name="ItemIcon" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/MiddleVBox/HelmetSlot"]
+offset_right = 32.0
+offset_bottom = 32.0
+
 [node name="ArmorSlot" type="Panel" parent="Panel/MarginContainer/HBoxContainer/MiddleVBox"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 theme = ExtResource("1_0u2p3")
+
+[node name="ItemIcon" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/MiddleVBox/ArmorSlot"]
+offset_right = 32.0
+offset_bottom = 32.0
 
 [node name="PantsSlot" type="Panel" parent="Panel/MarginContainer/HBoxContainer/MiddleVBox"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 theme = ExtResource("1_0u2p3")
 
+[node name="ItemIcon" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/MiddleVBox/PantsSlot"]
+offset_right = 32.0
+offset_bottom = 32.0
+
 [node name="BootsSlot" type="Panel" parent="Panel/MarginContainer/HBoxContainer/MiddleVBox"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 theme = ExtResource("1_0u2p3")
+
+[node name="ItemIcon" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/MiddleVBox/BootsSlot"]
+offset_right = 32.0
+offset_bottom = 32.0
 
 [node name="LeftVBox" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer"]
 layout_mode = 2
@@ -167,12 +277,33 @@ custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 theme = ExtResource("1_0u2p3")
 
+[node name="ItemIcon" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/LeftVBox/AmuletSlot"]
+offset_right = 32.0
+offset_bottom = 32.0
+
 [node name="RingSlot1" type="Panel" parent="Panel/MarginContainer/HBoxContainer/LeftVBox"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 theme = ExtResource("1_0u2p3")
 
+[node name="ItemIcon" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/LeftVBox/RingSlot1"]
+offset_right = 32.0
+offset_bottom = 32.0
+
 [node name="RingSlot2" type="Panel" parent="Panel/MarginContainer/HBoxContainer/LeftVBox"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 theme = ExtResource("1_0u2p3")
+
+[node name="ItemIcon" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/LeftVBox/RingSlot2"]
+offset_right = 32.0
+offset_bottom = 32.0
+
+[node name="HoldingDisplay" type="TextureRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = -64.0
+offset_top = 44.0
+offset_right = -32.0
+offset_bottom = 76.0
+mouse_filter = 2

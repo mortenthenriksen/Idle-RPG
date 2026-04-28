@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Godot;
 using Upgrades;
 
@@ -12,8 +11,6 @@ public partial class TextureRectAncestry : TextureRect
         // Make sure this control has tooltip text so the engine requests the custom tooltip.
         TooltipText = "Custom tooltip text";
     }
-
-    [Export] public PackedScene CustomTooltipScene; 
 
     public override Control _MakeCustomTooltip(string text)
     {

@@ -412,7 +412,6 @@ texture = ExtResource("8_2quhl")
 script = ExtResource("9_wx586")
 
 [node name="Label" type="Label" parent="MainPanel/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer/Panel4/AD1339_4"]
-layout_mode = 0
 offset_left = 2.25
 offset_top = 33.0
 offset_right = 30.25

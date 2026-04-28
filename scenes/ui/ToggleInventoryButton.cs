@@ -6,7 +6,7 @@ public partial class ToggleInventoryButton : Button
 {
 
     private Inventory inventory;
-    private bool isVisble = false;
+    private bool isVisble = true;
 
     public override void _Ready()
     {
