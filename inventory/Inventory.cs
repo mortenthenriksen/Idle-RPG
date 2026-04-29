@@ -22,11 +22,11 @@ public partial class Inventory : Control
 		holdingDisplay.Visible = false;
 
 		// Hardcode test items
-		InventoryItems[0] = new Item { ItemName = "Gold Armor", Icon = GD.Load<Texture2D>("res://assets/items/gold_armour_chest.png") };
+		InventoryItems[0] = new Item { ItemName = "Gold Armor", Icon = GD.Load<Texture2D>("res://assets/items/equipment/equipable/gold_armour_chest.png") };
 		
 		// Equip something by default
 		GD.Print("Testing", (int)EquipSlot.Boots);
-		EquipmentItems[(int)EquipSlot.Boots] = new Item { ItemName = "Obsidian Boots", Icon = GD.Load<Texture2D>("res://assets/items/obsidian_boots.png") };
+		EquipmentItems[(int)EquipSlot.Boots] = new Item { ItemName = "Obsidian Boots", Icon = GD.Load<Texture2D>("res://assets/items/equipment/equipable//obsidian_boots.png") };
 
 		SyncInventoryUI();
 		SyncEquipmentUI();

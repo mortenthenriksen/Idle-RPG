@@ -1,26 +1,36 @@
-[gd_scene load_steps=9 format=3 uid="uid://wfhmcrwcplmh"]
+[gd_scene load_steps=9 format=3 uid="uid://bwx7xv411xbpp"]
 
-[ext_resource type="Texture2D" uid="uid://diwxnyo8lsrp6" path="res://assets/dropable/spinning coin.png" id="1_7epp0"]
-[ext_resource type="Script" path="res://scenes/dropable/Coin.cs" id="1_cg20w"]
+[sub_resource type="CSharpScript" id="CSharpScript_5slkb"]
+script/source = "using Godot;
+
+
+public partial class Coin : Node2D
+{
+    
+}
+"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_an2w1"]
+load_path = "res://.godot/imported/spinning coin.png-526c642d62fdf12f13b8df374229918a.ctex"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_s0aos"]
-atlas = ExtResource("1_7epp0")
+atlas = SubResource("CompressedTexture2D_an2w1")
 region = Rect2(0, 0, 20, 18)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_datjp"]
-atlas = ExtResource("1_7epp0")
+atlas = SubResource("CompressedTexture2D_an2w1")
 region = Rect2(21, 0, 20, 18)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_23tqr"]
-atlas = ExtResource("1_7epp0")
+atlas = SubResource("CompressedTexture2D_an2w1")
 region = Rect2(42, 0, 20, 18)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4goyl"]
-atlas = ExtResource("1_7epp0")
+atlas = SubResource("CompressedTexture2D_an2w1")
 region = Rect2(63, 0, 20, 18)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tkwsv"]
-atlas = ExtResource("1_7epp0")
+atlas = SubResource("CompressedTexture2D_an2w1")
 region = Rect2(84, 0, 20, 18)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_gdxwk"]
@@ -47,7 +57,7 @@ animations = [{
 }]
 
 [node name="Coin" type="Node2D"]
-script = ExtResource("1_cg20w")
+script = SubResource("CSharpScript_5slkb")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_gdxwk")

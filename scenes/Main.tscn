@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://c0ju5m2hkncdj"]
+[gd_scene load_steps=32 format=3 uid="uid://c0ju5m2hkncdj"]
 
 [ext_resource type="Script" path="res://scenes/Main.cs" id="1_afkx3"]
 [ext_resource type="PackedScene" uid="uid://dia4df047bi02" path="res://characters/player/Player.tscn" id="3_pnmoo"]
@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://dc4yc7w8kltj2" path="res://scenes/environment/ParallaxBackground.tscn" id="5_te7os"]
 [ext_resource type="PackedScene" uid="uid://osl4kd03veii" path="res://scenes/ui/Userinterface.tscn" id="5_xk53c"]
 [ext_resource type="Script" path="res://managers/WaveManager.cs" id="6_7uq1e"]
-[ext_resource type="PackedScene" uid="uid://wfhmcrwcplmh" path="res://scenes/dropable/Coin.tscn" id="6_p3ie1"]
 [ext_resource type="Theme" uid="uid://dtwfjgidd1q24" path="res://resources/theme.tres" id="6_um6vy"]
 [ext_resource type="Script" path="res://managers/UIManager.cs" id="7_73xji"]
 [ext_resource type="Script" path="res://managers/KillTracker.cs" id="7_858o5"]
@@ -24,6 +23,75 @@
 [ext_resource type="PackedScene" uid="uid://b5h7ndmv1ok8h" path="res://scenes/ui/Statistics.tscn" id="21_v8o2f"]
 [ext_resource type="PackedScene" uid="uid://n4fnjrs3y045" path="res://scenes/ui/Ancestry.tscn" id="22_2cq8c"]
 
+[sub_resource type="CSharpScript" id="CSharpScript_5slkb"]
+script/source = "using Godot;
+
+
+public partial class Coin : Node2D
+{
+    
+}
+"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_an2w1"]
+load_path = "res://.godot/imported/spinning coin.png-526c642d62fdf12f13b8df374229918a.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s0aos"]
+atlas = SubResource("CompressedTexture2D_an2w1")
+region = Rect2(0, 0, 20, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_datjp"]
+atlas = SubResource("CompressedTexture2D_an2w1")
+region = Rect2(21, 0, 20, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_23tqr"]
+atlas = SubResource("CompressedTexture2D_an2w1")
+region = Rect2(42, 0, 20, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4goyl"]
+atlas = SubResource("CompressedTexture2D_an2w1")
+region = Rect2(63, 0, 20, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tkwsv"]
+atlas = SubResource("CompressedTexture2D_an2w1")
+region = Rect2(84, 0, 20, 18)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_gdxwk"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s0aos")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_datjp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_23tqr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4goyl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tkwsv")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[sub_resource type="PackedScene" id="PackedScene_qmt8e"]
+_bundled = {
+"conn_count": 0,
+"conns": PackedInt32Array(),
+"editable_instances": [],
+"names": PackedStringArray("Coin", "Node2D", "script", "AnimatedSprite2D", "AnimatedSprite2D", "sprite_frames", "autoplay", "frame", "frame_progress"),
+"node_count": 2,
+"node_paths": [NodePath(".")],
+"nodes": PackedInt32Array(-1, -1, 1, 0, -1, 1, 2, 0, 0, 1073741824, 0, 4, 3, -1, 4, 5, 1, 6, 2, 7, 3, 8, 4, 0),
+"variants": [SubResource("CSharpScript_5slkb"), SubResource("SpriteFrames_gdxwk"), "default", 4, 1.0],
+"version": 3
+}
+
 [node name="Main" type="Node2D"]
 script = ExtResource("1_afkx3")
 metadata/_edit_lock_ = true
@@ -39,7 +107,7 @@ script = ExtResource("6_7uq1e")
 [node name="UIManager" type="Node" parent="Managers"]
 script = ExtResource("7_73xji")
 pixelKubastaFontTheme = ExtResource("6_um6vy")
-coinPackedScene = ExtResource("6_p3ie1")
+coinPackedScene = SubResource("PackedScene_qmt8e")
 
 [node name="KillTracker" type="Node" parent="Managers"]
 script = ExtResource("7_858o5")

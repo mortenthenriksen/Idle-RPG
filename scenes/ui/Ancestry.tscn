@@ -44,7 +44,7 @@ offset_right = 325.0
 offset_bottom = 288.0
 theme = ExtResource("1_5opkg")
 theme_override_styles/panel = SubResource("StyleBoxTexture_u51f2")
-scroll_vertical = 158
+scroll_vertical = 100
 horizontal_scroll_mode = 3
 vertical_scroll_mode = 3
 
@@ -412,6 +412,7 @@ texture = ExtResource("8_2quhl")
 script = ExtResource("9_wx586")
 
 [node name="Label" type="Label" parent="MainPanel/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer/Panel4/AD1339_4"]
+layout_mode = 0
 offset_left = 2.25
 offset_top = 33.0
 offset_right = 30.25

@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://ckfeeckg6otx8"]
+[gd_scene load_steps=53 format=3 uid="uid://ckfeeckg6otx8"]
 
 [ext_resource type="Script" path="res://characters/enemies/meelee enemy/MeeleeSkeleton.cs" id="1_uedg7"]
 [ext_resource type="Texture2D" uid="uid://de4r3fjxukjdv" path="res://assets/characters/enemies/Monsters_Creatures_Fantasy/Skeleton/Walk.png" id="1_uel88"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://ieuelrpck5oy" path="res://assets/characters/enemies/Monsters_Creatures_Fantasy/Skeleton/Idle.png" id="3_00o1q"]
 [ext_resource type="Texture2D" uid="uid://bf6vnmq1nk0xu" path="res://assets/characters/enemies/Monsters_Creatures_Fantasy/Skeleton/Death.png" id="3_j25h4"]
 [ext_resource type="PackedScene" uid="uid://omp0jrbimtfm" path="res://characters/components/HealthNode.tscn" id="5_q2trx"]
+[ext_resource type="Texture2D" uid="uid://bo0inwteayqv3" path="res://assets/effects/blood/1_100x100px.png" id="7_jdhnh"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8eir4"]
 atlas = ExtResource("2_72q0w")
@@ -211,6 +212,133 @@ height = 80.0
 radius = 88.0
 height = 176.0
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_subbq"]
+atlas = ExtResource("7_jdhnh")
+region = Rect2(100, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jot8s"]
+atlas = ExtResource("7_jdhnh")
+region = Rect2(200, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t22do"]
+atlas = ExtResource("7_jdhnh")
+region = Rect2(300, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xxbho"]
+atlas = ExtResource("7_jdhnh")
+region = Rect2(400, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pt3ls"]
+atlas = ExtResource("7_jdhnh")
+region = Rect2(500, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hhwd8"]
+atlas = ExtResource("7_jdhnh")
+region = Rect2(0, 100, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gwfo2"]
+atlas = ExtResource("7_jdhnh")
+region = Rect2(100, 100, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cdtdr"]
+atlas = ExtResource("7_jdhnh")
+region = Rect2(200, 100, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g81if"]
+atlas = ExtResource("7_jdhnh")
+region = Rect2(300, 100, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_48r05"]
+atlas = ExtResource("7_jdhnh")
+region = Rect2(400, 100, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6nfbd"]
+atlas = ExtResource("7_jdhnh")
+region = Rect2(500, 100, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1pjda"]
+atlas = ExtResource("7_jdhnh")
+region = Rect2(0, 200, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l7lvi"]
+atlas = ExtResource("7_jdhnh")
+region = Rect2(100, 200, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c7fvc"]
+atlas = ExtResource("7_jdhnh")
+region = Rect2(200, 200, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jnagm"]
+atlas = ExtResource("7_jdhnh")
+region = Rect2(300, 200, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6qwkj"]
+atlas = ExtResource("7_jdhnh")
+region = Rect2(400, 200, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lvbyd"]
+atlas = ExtResource("7_jdhnh")
+region = Rect2(500, 200, 100, 100)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_qv5l5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_subbq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jot8s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t22do")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xxbho")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pt3ls")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hhwd8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gwfo2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cdtdr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g81if")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_48r05")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6nfbd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1pjda")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l7lvi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c7fvc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jnagm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6qwkj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lvbyd")
+}],
+"loop": false,
+"name": &"blood",
+"speed": 24.0
+}]
+
 [node name="MeeleeSkeleton" type="CharacterBody2D"]
 position = Vector2(0, 1)
 collision_layer = 2
@@ -220,7 +348,8 @@ script = ExtResource("1_uedg7")
 position = Vector2(4, -39)
 scale = Vector2(1.45, 1.45)
 sprite_frames = SubResource("SpriteFrames_kyiot")
-animation = &"spawn"
+animation = &"run"
+frame_progress = 0.586707
 flip_h = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -242,7 +371,7 @@ shape = SubResource("CapsuleShape2D_p3dhf")
 wait_time = 1.2
 
 [node name="HealthNode" parent="." instance=ExtResource("5_q2trx")]
-maxHealth = 20.0
+maxHealth = 10.0
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 visible = false
@@ -253,6 +382,14 @@ offset_right = 30.0
 offset_bottom = -79.0
 rounded = true
 show_percentage = false
+
+[node name="AnimatedSprite2D2" type="AnimatedSprite2D" parent="."]
+position = Vector2(6, -31)
+rotation = -0.523598
+sprite_frames = SubResource("SpriteFrames_qv5l5")
+animation = &"blood"
+frame = 16
+frame_progress = 1.0
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="OnAnimatedSprite2DAnimationFinished"]
 [connection signal="frame_changed" from="AnimatedSprite2D" to="." method="OnFrameChanged"]

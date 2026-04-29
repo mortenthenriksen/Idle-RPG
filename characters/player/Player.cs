@@ -13,9 +13,13 @@ public partial class Player : CharacterBody2D
 	[Export]
 	private float animationPlayerSpeedScale = 0.35f;
 
+	[Export]
+    private float cameraSmoothing = 10f;
+
 	private AnimationPlayer animationPlayer;
 	private HealthNode healthNode;
     private Area2D area2D;
+	private Camera2D camera2D;
     private float attacksPerSecond;
 	
 	private bool enemyInRange = false;
@@ -31,6 +35,7 @@ public partial class Player : CharacterBody2D
 		healthNode = GetNode<HealthNode>("HealthNode");
 		animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 		area2D = GetNode<Area2D>("Area2D");
+		camera2D = GetNode<Camera2D>("Camera2D");
 		animationPlayer.SpeedScale = animationPlayerSpeedScale;
 		animationPlayer.AnimationFinished += OnAnimationFinished;
 		GameEventsManager.Instance.PlayerMovementSpeedChanged += OnMovementSpeedIncrease;
@@ -45,22 +50,13 @@ public partial class Player : CharacterBody2D
             MoveAndSlide();
 
             if (animationPlayer.CurrentAnimation != "run")
+			{
                 animationPlayer.Play("run");
+			}
 
             return;
         }
     }
-
-    public override void _Input(InputEvent @event)
-    {
-        if (Input.IsActionPressed("block"))
-		{
-			animationPlayer.SpeedScale = animationPlayerSpeedScale;
-			animationPlayer.Play("block");
-			isBlocking = true;
-		}
-    }
-
 
     public override void _Process(double delta)
     {
@@ -79,6 +75,17 @@ public partial class Player : CharacterBody2D
             StartAttack();
             DealDamage();
         }
+
+    }
+
+	public override void _Input(InputEvent @event)
+    {
+        if (Input.IsActionPressed("block"))
+		{
+			animationPlayer.SpeedScale = animationPlayerSpeedScale;
+			animationPlayer.Play("block");
+			isBlocking = true;
+		}
     }
 
 	public void OnMovementSpeedIncrease(float percentageIncrease)

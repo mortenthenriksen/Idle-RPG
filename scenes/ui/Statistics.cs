@@ -44,7 +44,7 @@ public partial class Statistics : Control
 
         // Enemy
         enemyStats[Traits.Damage] = new ModifiableStat(1);
-        enemyStats[Traits.Life] = new ModifiableStat(10);
+        enemyStats[Traits.Life] = new ModifiableStat(10000000000);
         enemyStats[Traits.AttackSpeed] = new ModifiableStat(1.33f);
         enemyStats[Traits.MovementSpeed] = new ModifiableStat(0.85f);
     }
@@ -78,7 +78,7 @@ public partial class Statistics : Control
                 playerStats[trait].AddFlat(1);
                 break;
             case Traits.AttackSpeed:
-                playerStats[trait].AddIncreased(0.01f);
+                playerStats[trait].AddIncreased(1f);
                 break;
             case Traits.Life:
                 playerStats[trait].AddFlat(5);
