@@ -36,7 +36,7 @@ public partial class Statistics : Control
     private void InitializeStats()
     {
         // Player
-        playerStats[Traits.Damage] = new ModifiableStat(30);
+        playerStats[Traits.Damage] = new ModifiableStat(1);
         playerStats[Traits.Life] = new ModifiableStat(20);
         playerStats[Traits.AttackSpeed] = new ModifiableStat(1.33f);
         playerStats[Traits.MovementSpeed] = new ModifiableStat(85f);
@@ -44,7 +44,7 @@ public partial class Statistics : Control
 
         // Enemy
         enemyStats[Traits.Damage] = new ModifiableStat(1);
-        enemyStats[Traits.Life] = new ModifiableStat(10000000000);
+        enemyStats[Traits.Life] = new ModifiableStat(100);
         enemyStats[Traits.AttackSpeed] = new ModifiableStat(1.33f);
         enemyStats[Traits.MovementSpeed] = new ModifiableStat(0.85f);
     }
@@ -68,6 +68,7 @@ public partial class Statistics : Control
         }
     }
 
+    // this upgrades the skill points
     private void HandleUpgradeRequest(Traits trait)
     {
         if (ExperienceManager.Instance.GetUnspentSkillPoints() <= 0) return;
@@ -78,7 +79,7 @@ public partial class Statistics : Control
                 playerStats[trait].AddFlat(1);
                 break;
             case Traits.AttackSpeed:
-                playerStats[trait].AddIncreased(1f);
+                playerStats[trait].AddIncreased(100f);
                 break;
             case Traits.Life:
                 playerStats[trait].AddFlat(5);

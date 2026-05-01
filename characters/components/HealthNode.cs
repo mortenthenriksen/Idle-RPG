@@ -6,7 +6,7 @@ namespace Components
     public partial class HealthNode : Node
     {
         [Export]
-        public double maxHealth = 100;
+        public double maxHealth = 100000000000;
         public double currentHealth;
         public bool IsDead => currentHealth <= 0;
 
@@ -46,7 +46,7 @@ namespace Components
                     EmitSignal(SignalName.DPSUpdated, owner, dps);
                     if (owner.Name != "Player")
                     {
-                        // GD.Print($"[DPS] {GetParent().Name} taking {dps:F1} DPS");
+                        GD.Print($"[DPS] {GetParent().Name} taking {dps:F1} DPS");
                     }
                 }
             }

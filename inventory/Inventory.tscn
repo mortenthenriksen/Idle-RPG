@@ -264,12 +264,12 @@ layout_mode = 0
 offset_right = 32.0
 offset_bottom = 32.0
 
-[node name="ArmorSlot" type="Panel" parent="Panel/MarginContainer/HBoxContainer/MiddleVBox"]
+[node name="ChestSlot" type="Panel" parent="Panel/MarginContainer/HBoxContainer/MiddleVBox"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 theme = ExtResource("1_0u2p3")
 
-[node name="ItemIcon" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/MiddleVBox/ArmorSlot"]
+[node name="ItemIcon" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/MiddleVBox/ChestSlot"]
 layout_mode = 0
 offset_right = 32.0
 offset_bottom = 32.0
@@ -309,31 +309,33 @@ layout_mode = 0
 offset_right = 32.0
 offset_bottom = 32.0
 
-[node name="RingSlot1" type="Panel" parent="Panel/MarginContainer/HBoxContainer/LeftVBox"]
+[node name="GlovesSlot" type="Panel" parent="Panel/MarginContainer/HBoxContainer/LeftVBox"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 theme = ExtResource("1_0u2p3")
 
-[node name="ItemIcon" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/LeftVBox/RingSlot1"]
+[node name="ItemIcon" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/LeftVBox/GlovesSlot"]
 layout_mode = 0
 offset_right = 32.0
 offset_bottom = 32.0
 
-[node name="RingSlot2" type="Panel" parent="Panel/MarginContainer/HBoxContainer/LeftVBox"]
+[node name="RingSlot" type="Panel" parent="Panel/MarginContainer/HBoxContainer/LeftVBox"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 theme = ExtResource("1_0u2p3")
 
-[node name="ItemIcon" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/LeftVBox/RingSlot2"]
+[node name="ItemIcon" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/LeftVBox/RingSlot"]
 layout_mode = 0
 offset_right = 32.0
 offset_bottom = 32.0
 
 [node name="HoldingDisplay" type="TextureRect" parent="."]
 unique_name_in_owner = true
+z_index = 10
 layout_mode = 0
 offset_left = -64.0
 offset_top = 44.0
 offset_right = -32.0
 offset_bottom = 76.0
+rotation = -0.00775835
 mouse_filter = 2

@@ -4,279 +4,270 @@ namespace Inventory;
 
 public partial class Inventory : Control
 {
-	private Item holdingItem = null;
-	private Item[] InventoryItems = new Item[21];
-	public enum EquipSlot { Shield, Weapon, Helmet, Armor, Pants, Boots, Amulet, Ring1, Ring2 }
-	private Item[] EquipmentItems = new Item[9]; // Matches the 5 slots in your image
-	
-	private PackedScene itemScene; 
-	private TextureRect holdingDisplay;
+    private Item holdingItem = null;
+    private Item[] InventoryItems = new Item[21];
+    private Item[] EquipmentItems = new Item[9];
 
-	public override void _Ready()
-	{
-		// Connect signals to both containers
-		ConnectSignalsToInventorySlots(GetNode<GridContainer>("%GridContainer"));
-		ConnectSignalsToInventorySlots(GetNode<HBoxContainer>("%HBoxContainer"));
+    public enum EquipSlot { Shield, Weapon, Helmet, Chest, Pants, Boots, Amulet, Gloves, Ring }
 
-		holdingDisplay = GetNode<TextureRect>("%HoldingDisplay");
-		holdingDisplay.Visible = false;
+    private static readonly string[] EquipSlotNodeNames =
+        { "ShieldSlot", "WeaponSlot", "HelmetSlot", "ChestSlot", "PantsSlot", "BootsSlot", "AmuletSlot", "GlovesSlot", "RingSlot" };
 
-		// Hardcode test items
-		InventoryItems[0] = new Item { ItemName = "Gold Armor", Icon = GD.Load<Texture2D>("res://assets/items/equipment/equipable/gold_armour_chest.png") };
-		
-		// Equip something by default
-		GD.Print("Testing", (int)EquipSlot.Boots);
-		EquipmentItems[(int)EquipSlot.Boots] = new Item { ItemName = "Obsidian Boots", Icon = GD.Load<Texture2D>("res://assets/items/equipment/equipable//obsidian_boots.png") };
+    private ItemTooltip _tooltip;
+    private TextureRect holdingDisplay;
 
-		SyncInventoryUI();
-		SyncEquipmentUI();
-	}
+    // ─────────────────────────────────────────────
+    // Lifecycle
+    // ─────────────────────────────────────────────
 
-	public override void _Process(double delta)
-	{
-		// If we are holding something, make the display follow the mouse
-		if (holdingItem != null)
-		{
-			holdingDisplay.GlobalPosition = GetGlobalMousePosition() + new Vector2(3, 3);
-		}
-	}
-
-	private void PrintChildren(Node node)
+    public override void _Ready()
     {
-		foreach (var child in node.GetChildren())
-		{
-			if (node.Name != "GridContainer")
-            {
-				GD.Print(child.Name);
-				if (child.Name != null)
-				{
-					PrintChildren(child);
-				}
-            }
-        }
+        ConnectSignalsToInventorySlots(GetNode<GridContainer>("%GridContainer"));
+        ConnectSignalsToInventorySlots(GetNode<HBoxContainer>("%HBoxContainer"));
+
+        holdingDisplay = GetNode<TextureRect>("%HoldingDisplay");
+        holdingDisplay.Visible = false;
+
+        var tooltipScene = GD.Load<PackedScene>("res://scenes/ui/ItemTooltip.tscn");
+        _tooltip = tooltipScene.Instantiate<ItemTooltip>();
+        AddChild(_tooltip);
+        _tooltip.Hide();
+
+        InventoryItems[0] = ItemDatabaseManager.Instance.CreateItem("wooden_gloves_type6_tier1");
+        InventoryItems[3] = ItemDatabaseManager.Instance.CreateItem("wooden_gloves_type1_tier1");
+
+        SyncInventoryUI();
+        SyncEquipmentUI();
     }
 
-	private void SyncInventoryUI()
-	{
-		var grid = GetNode<GridContainer>("%GridContainer");
-		
-		// Loop through your data array (size 21)
-		for (int i = 0; i < InventoryItems.Length; i++)
-		{
-			var slotNode = grid.GetChild(i);
-			UpdateSlotVisual(slotNode, InventoryItems[i]);
-		}
-	}
+    public override void _Process(double delta)
+    {
+        if (holdingItem != null)
+            holdingDisplay.GlobalPosition = GetGlobalMousePosition() + new Vector2(3, 3);
+    }
 
-	private void UpdateSlotVisual(Node slotNode, Item item)
-	{
-		// Find the icon display inside the slot
-		var textureRect = slotNode.GetNode<TextureRect>("ItemIcon");
+    // ─────────────────────────────────────────────
+    // Slot signals
+    // ─────────────────────────────────────────────
 
-		if (item != null && item.Icon != null)
-		{
-			textureRect.Texture = item.Icon;
-			textureRect.Visible = true;
-		}
-		else
-		{
-			textureRect.Texture = null;
-			textureRect.Visible = false;
-		}
-	}
-
-	private void ConnectSignalsToInventorySlots(Node parent)
-	{
-		foreach (var child in parent.GetChildren())
-		{
-			if (child is Control slot && slot.Name.ToString().Contains("Slot"))
-			{
-				slot.GuiInput += (inputEvent) => OnSlotGuiInput(inputEvent, slot);
-				GD.Print(slot.Name);
-			}
-			if (child.GetChildCount() > 0)
-			{
-				ConnectSignalsToInventorySlots(child);
-			}
-		}
-	}
-
-	private void OnSlotGuiInput(InputEvent @event, Node slot)
-	{
-		if (@event is InputEventMouseButton mb && mb.Pressed && mb.ButtonIndex == MouseButton.Left)
+    private void ConnectSignalsToInventorySlots(Node parent)
+    {
+        foreach (var child in parent.GetChildren())
         {
-            GetItemAtSlot(slot);
+            if (child is Control slot && slot.Name.ToString().Contains("Slot"))
+            {
+                slot.GuiInput += (inputEvent) => OnSlotGuiInput(inputEvent, slot);
+
+                string slotName = slot.Name.ToString();
+                slot.MouseEntered += () =>
+                {
+                    var item = GetItemForSlot(slotName);
+                    if (item != null && holdingItem == null)
+                        _tooltip.ShowTooltip(item, slot.GlobalPosition);
+                };
+                slot.MouseExited += () => _tooltip.Hide();
+            }
+
+            if (child.GetChildCount() > 0)
+                ConnectSignalsToInventorySlots(child);
         }
     }
 
-	private void GetItemAtSlot(Node slot)
-{
-    string nodeName = slot.Name.ToString();
-    Item[] targetArray = null;
-    int index = -1;
-
-    // --- IDENTIFY THE SLOT ---
-    if (nodeName.StartsWith("Slot") && int.TryParse(nodeName.Replace("Slot", ""), out int slotNum))
+    private void OnSlotGuiInput(InputEvent @event, Node slot)
     {
-        targetArray = InventoryItems;
-        index = slotNum - 1;
+        if (@event is InputEventMouseButton mb && mb.Pressed && mb.ButtonIndex == MouseButton.Left)
+            GetItemAtSlot(slot);
     }
-    else
+
+    // ─────────────────────────────────────────────
+    // Item interaction
+    // ─────────────────────────────────────────────
+
+    private void GetItemAtSlot(Node slot)
     {
-        targetArray = EquipmentItems;
+        string nodeName = slot.Name.ToString();
+        if (!ResolveSlot(nodeName, out var targetArray, out int index)) return;
+
+        // CASE 1: Pickup
+        if (holdingItem == null && targetArray[index] != null)
+        {
+            holdingItem = targetArray[index];
+            targetArray[index] = null;
+            _tooltip.Hide();
+            AnimateItemToMouse(slot, holdingItem.Icon);
+        }
+        // CASE 2 & 3: Place / Swap
+        else if (holdingItem != null)
+        {
+            string requiredSlot = GetRequiredSlotType(nodeName);
+            if (requiredSlot != null && holdingItem.Slot != requiredSlot)
+            {
+                GD.Print($"Cannot place {holdingItem.ItemName} in {nodeName} — requires {requiredSlot}");
+                return;
+            }
+
+            Item itemToDrop = holdingItem;
+            holdingItem = targetArray[index]; // null if empty, swapped item if occupied
+            targetArray[index] = itemToDrop;
+
+            AnimateItemToSlot(slot, itemToDrop.Icon);
+            UpdateMouseCursorIcon();
+        }
+    }
+
+    // Resolves a slot node name to its array + index. Returns false if invalid.
+    private bool ResolveSlot(string nodeName, out Item[] array, out int index)
+    {
+        if (nodeName.StartsWith("Slot") && int.TryParse(nodeName.Replace("Slot", ""), out int slotNum))
+        {
+            array = InventoryItems;
+            index = slotNum - 1;
+            return true;
+        }
+
+        array = EquipmentItems;
         index = nodeName switch
         {
-            "ShieldSlot" => (int)EquipSlot.Shield,
-            "WeaponSlot" => (int)EquipSlot.Weapon,
-            "HelmetSlot" => (int)EquipSlot.Helmet,
-            "ArmorSlot"  => (int)EquipSlot.Armor,
-            "PantsSlot"  => (int)EquipSlot.Pants,
-            "BootsSlot"  => (int)EquipSlot.Boots,
-            "AmuletSlot" => (int)EquipSlot.Amulet,
-            "Ring1Slot"  => (int)EquipSlot.Ring1,
-            "Ring2Slot"  => (int)EquipSlot.Ring2,
-            _ => -1
+            "ShieldSlot"  => (int)EquipSlot.Shield,
+            "WeaponSlot"  => (int)EquipSlot.Weapon,
+            "HelmetSlot"  => (int)EquipSlot.Helmet,
+            "ChestSlot"   => (int)EquipSlot.Chest,
+            "PantsSlot"   => (int)EquipSlot.Pants,
+            "BootsSlot"   => (int)EquipSlot.Boots,
+            "AmuletSlot"  => (int)EquipSlot.Amulet,
+            "GlovesSlot"  => (int)EquipSlot.Gloves,
+            "RingSlot"    => (int)EquipSlot.Ring,
+            _             => -1
+        };
+
+        return index != -1;
+    }
+
+    private Item GetItemForSlot(string nodeName)
+    {
+        ResolveSlot(nodeName, out var array, out int index);
+        return index >= 0 ? array[index] : null;
+    }
+
+    private string GetRequiredSlotType(string nodeName)
+    {
+        return nodeName switch
+        {
+            "ShieldSlot"  => "Shield",
+            "WeaponSlot"  => "Weapon",
+            "HelmetSlot"  => "Helmet",
+            "ChestSlot"   => "Chest",
+            "PantsSlot"   => "Pants",
+            "BootsSlot"   => "Boots",
+            "AmuletSlot"  => "Amulet",
+            "GlovesSlot"  => "Gloves",
+            "RingSlot"    => "Ring",
+            _             => null
         };
     }
 
-    if (index == -1 || targetArray == null) return;
+    // ─────────────────────────────────────────────
+    // UI sync
+    // ─────────────────────────────────────────────
 
-    // --- CASE 1: PICKUP ---
-    if (holdingItem == null && targetArray[index] != null)
+    private void SyncInventoryUI()
     {
-        Item itemToPick = targetArray[index];
-        holdingItem = itemToPick;
-        targetArray[index] = null;
-
-        // Animate from Slot to Mouse
-        AnimateItemToMouse(slot, itemToPick.Icon);
+        var grid = GetNode<GridContainer>("%GridContainer");
+        for (int i = 0; i < InventoryItems.Length; i++)
+            UpdateSlotVisual(grid.GetChild(i), InventoryItems[i]);
     }
-    // --- CASE 2 & 3: PLACE / SWAP ---
-    else if (holdingItem != null)
+
+    private void SyncEquipmentUI()
     {
-        Item itemToDrop = holdingItem;
-
-        if (targetArray[index] == null) {
-            targetArray[index] = itemToDrop;
-            holdingItem = null;
+        Node equipRoot = GetNode<HBoxContainer>("%HBoxContainer");
+        for (int i = 0; i < EquipmentItems.Length; i++)
+        {
+            Node slotNode = equipRoot.FindChild(EquipSlotNodeNames[i], true, false);
+            if (slotNode != null)
+                UpdateSlotVisual(slotNode, EquipmentItems[i]);
         }
-        else {
-            Item temp = targetArray[index];
-            targetArray[index] = itemToDrop;
-            holdingItem = temp;
-        }
+    }
 
-        AnimateItemToSlot(slot, itemToDrop.Icon);
-        UpdateMouseCursorIcon(); 
+    private void UpdateSlotVisual(Node slotNode, Item item)
+    {
+        var textureRect = slotNode.GetNode<TextureRect>("ItemIcon");
+        if (item != null && item.Icon != null)
+        {
+            textureRect.Texture = item.Icon;
+            textureRect.Visible = true;
+        }
+        else
+        {
+            textureRect.Texture = null;
+            textureRect.Visible = false;
+        }
+    }
+
+    private void UpdateMouseCursorIcon()
+    {
+        holdingDisplay.Texture  = holdingItem?.Icon;
+        holdingDisplay.Visible  = holdingItem != null;
+    }
+
+    // ─────────────────────────────────────────────
+    // Animations
+    // ─────────────────────────────────────────────
+
+    private void AnimateItemToSlot(Node slotNode, Texture2D texture)
+    {
+        var textureRect = slotNode.GetNode<TextureRect>("ItemIcon");
+
+        TextureRect ghost = CreateGhost(texture, textureRect.Size);
+        ghost.GlobalPosition = GetGlobalMousePosition();
+        textureRect.Visible = false;
+
+        var tween = GetTree().CreateTween();
+        tween.Parallel().TweenProperty(ghost, "global_position", textureRect.GlobalPosition, 0.1f)
+            .SetTrans(Tween.TransitionType.Quad).SetEase(Tween.EaseType.Out);
+
+        tween.Finished += () =>
+        {
+            textureRect.Texture = texture;
+            textureRect.Visible = true;
+            ghost.QueueFree();
+        };
+    }
+
+    private void AnimateItemToMouse(Node slotNode, Texture2D texture)
+    {
+        var textureRect = slotNode.GetNodeOrNull<TextureRect>("ItemIcon");
+        if (textureRect == null) return;
+
+        TextureRect ghost = CreateGhost(texture, textureRect.Size);
+        ghost.MouseFilter = MouseFilterEnum.Ignore;
+        ghost.GlobalPosition = textureRect.GlobalPosition;
+
+        textureRect.Visible = false;
+        holdingDisplay.Visible = false;
+
+        var tween = GetTree().CreateTween();
+        tween.TweenProperty(ghost, "global_position", GetGlobalMousePosition() + new Vector2(3, 3), 0.05f)
+            .SetTrans(Tween.TransitionType.Quad).SetEase(Tween.EaseType.Out);
+
+        tween.Finished += () =>
+        {
+            ghost.QueueFree();
+            UpdateMouseCursorIcon();
+            SyncInventoryUI();
+            SyncEquipmentUI();
+        };
+    }
+
+    private TextureRect CreateGhost(Texture2D texture, Vector2 size)
+    {
+        var ghost = new TextureRect
+        {
+            Texture     = texture,
+            ExpandMode  = TextureRect.ExpandModeEnum.IgnoreSize,
+            StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered,
+            Size        = size
+        };
+        AddChild(ghost);
+        return ghost;
     }
 }
-
-	private void SyncEquipmentUI()
-	{
-		// We search the Equipment side of your UI
-		Node equipRoot = GetNode<HBoxContainer>("%HBoxContainer");
-		
-		// Map the Enum back to the Node Names
-		string[] slotNames = { "ShieldSlot", "WeaponSlot", "HelmetSlot", "ArmorSlot", "PantsSlot", "BootsSlot", "AmuletSlot", "Ring1Slot", "Ring2Slot" };
-
-		for (int i = 0; i < EquipmentItems.Length; i++)
-		{
-			// Find the node by name inside the equipment container
-			// 'true' allows recursive search since they are nested in VBoxes
-			Node slotNode = equipRoot.FindChild(slotNames[i], true, false);
-			
-			if (slotNode != null)
-			{
-				UpdateSlotVisual(slotNode, EquipmentItems[i]);
-			}
-		}
-	}
-
-	private void AnimateItemToSlot(Node slotNode, Texture2D texture)
-	{
-		var textureRect = slotNode.GetNode<TextureRect>("ItemIcon");
-		
-		// 1. Create a "Ghost" icon for the animation
-		TextureRect ghost = new TextureRect();
-		ghost.Texture = texture;
-		ghost.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
-		ghost.StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered;
-		ghost.Size = textureRect.Size;
-		
-		// 2. Add it to the UI (ensure it's on top of everything)
-		AddChild(ghost);
-		ghost.GlobalPosition = GetGlobalMousePosition();
-
-		// Hide the real icon while the ghost is moving
-		textureRect.Visible = false;
-
-		// 3. Create the Tween
-		Tween tween = GetTree().CreateTween();
-		
-		// Move to slot and fade in/out slightly for effect
-		tween.Parallel().TweenProperty(ghost, "global_position", textureRect.GlobalPosition, 0.1f)
-			.SetTrans(Tween.TransitionType.Quad)
-			.SetEase(Tween.EaseType.Out);
-			
-		// 4. When finished, show the real icon and delete the ghost
-		tween.Finished += () => {
-			textureRect.Texture = texture;
-			textureRect.Visible = true;
-			ghost.QueueFree();
-		};
-	}
-
-	private void AnimateItemToMouse(Node slotNode, Texture2D texture)
-	{
-		var textureRect = slotNode.GetNodeOrNull<TextureRect>("ItemIcon");
-		if (textureRect == null) return;
-
-		// 1. Create Ghost
-		TextureRect ghost = new TextureRect();
-		ghost.Texture = texture;
-		ghost.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
-		ghost.StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered;
-		ghost.Size = textureRect.Size;
-		ghost.MouseFilter = MouseFilterEnum.Ignore;
-		
-		// Add to the main Inventory node so it stays on top of UI
-		AddChild(ghost);
-		ghost.GlobalPosition = textureRect.GlobalPosition;
-
-		// Hide real slot icon immediately
-		textureRect.Visible = false;
-		// Keep holding display hidden until ghost arrives to prevent "double icons"
-		holdingDisplay.Visible = false;
-
-		// 2. The Tween
-		// Target position is Mouse + your (3, 3) offset
-		Vector2 targetPos = GetGlobalMousePosition() + new Vector2(3, 3);
-		
-		Tween tween = GetTree().CreateTween();
-		tween.TweenProperty(ghost, "global_position", targetPos, 0.05f)
-			.SetTrans(Tween.TransitionType.Quad)
-			.SetEase(Tween.EaseType.Out);
-
-		// 3. Handover
-		tween.Finished += () => {
-			ghost.QueueFree();
-			UpdateMouseCursorIcon(); // Shows the actual holdingDisplay
-			SyncInventoryUI();
-			SyncEquipmentUI();
-		};
-}
-
-	private void UpdateMouseCursorIcon()
-	{
-		if (holdingItem != null)
-		{
-			holdingDisplay.Texture = holdingItem.Icon;
-			holdingDisplay.Visible = true;
-		}
-		else
-		{
-			holdingDisplay.Visible = false;
-		}
-	}
-}
-
