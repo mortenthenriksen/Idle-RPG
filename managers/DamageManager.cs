@@ -40,7 +40,7 @@ public partial class DamageManager : Node
             if (player.GetIsBlocking())
             {
                 EmitSignal("AttackBlocked", source, target);
-                return;   
+                return;
             }
         }
         healthNode.ApplyDamage(damageAmount);

@@ -17,6 +17,7 @@ public partial class Player : CharacterBody2D
     private float cameraSmoothing = 10f;
 
 	private AnimationPlayer animationPlayer;
+	private Sprite2D sprite2d;
 	private HealthNode healthNode;
     private Area2D area2D;
 	private Camera2D camera2D;
@@ -24,16 +25,17 @@ public partial class Player : CharacterBody2D
 	
 	private bool enemyInRange = false;
 	private bool isBlocking = false;
+	private bool isAutoPlay = true;
 
-	// manual attack timer variables
-	private float attackCooldown = 0.0f;   // time since last attack
-	private float attackInterval = 1.0f;   // seconds between attacks (updated dynamically)
+	private float attackCooldown = 0.0f;
+	private float attackInterval = 1.0f;
 
 	public override void _Ready()
 	{
 		AddToGroup(Groups.Player);
-		healthNode = GetNode<HealthNode>("HealthNode");
 		animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
+		sprite2d = GetNode<Sprite2D>("Sprite2D");
+		healthNode = GetNode<HealthNode>("HealthNode");
 		area2D = GetNode<Area2D>("Area2D");
 		camera2D = GetNode<Camera2D>("Camera2D");
 		animationPlayer.SpeedScale = animationPlayerSpeedScale;
@@ -41,59 +43,107 @@ public partial class Player : CharacterBody2D
 		GameEventsManager.Instance.PlayerMovementSpeedChanged += OnMovementSpeedIncrease;
 	}
 
-    public override void _PhysicsProcess(double delta)
-    {
-        if (!enemyInRange && !(animationPlayer.CurrentAnimation == "attack1") && !isBlocking)
-        {
-			var playerMovementSpeed = Statistics.Instance.playerStats[Statistics.Traits.MovementSpeed].GetValue();
-            Velocity = new Vector2(playerMovementSpeed, Velocity.Y);
-            MoveAndSlide();
+	public override void _PhysicsProcess(double delta)
+	{
+		if (Input.IsActionJustPressed("toggle_autoplay"))
+			isAutoPlay = !isAutoPlay;
 
-            if (animationPlayer.CurrentAnimation != "run")
-			{
-                animationPlayer.Play("run");
-			}
+		if (isAutoPlay)
+			HandleAutoPlay();
+		else
+			HandleManualControl();
 
-            return;
-        }
-    }
+		MoveAndSlide();
+	}
 
-    public override void _Process(double delta)
-    {
-        if (!enemyInRange)
-            return;
+	private void HandleAutoPlay()
+	{
+		if (enemyInRange || animationPlayer.CurrentAnimation == "attack1" || isBlocking)
+		{
+			Velocity = new Vector2(0, Velocity.Y);
+			return;
+		}
 
-	
-        attacksPerSecond = Statistics.Instance.playerStats[Statistics.Traits.AttackSpeed].GetValue();
-        attackInterval = 1f / attacksPerSecond;
+		var speed = Statistics.Instance.playerStats[Statistics.Traits.MovementSpeed].GetValue();
+		Velocity = new Vector2(speed, Velocity.Y);
 
-        attackCooldown += (float)delta;
+		if (animationPlayer.CurrentAnimation != "run")
+			animationPlayer.Play("run");
+	}
 
-        while (attackCooldown >= attackInterval && !isBlocking)
-        {
-            attackCooldown -= attackInterval;
-            StartAttack();
-            DealDamage();
-        }
+	private void HandleManualControl()
+	{
+		if (isBlocking || animationPlayer.CurrentAnimation == "attack1")
+		{
+			Velocity = new Vector2(0, Velocity.Y);
+			return;
+		}
 
-    }
+		var speed = Statistics.Instance.playerStats[Statistics.Traits.MovementSpeed].GetValue();
+		float moveX = 0f;
+
+		if (Input.IsActionPressed("move_right"))
+		{
+			moveX = speed;
+			sprite2d.FlipH = false;
+			
+		}
+		else if (Input.IsActionPressed("move_left"))
+		{
+			sprite2d.FlipH = true;
+			moveX = -speed;
+		}
+
+
+		Velocity = new Vector2(moveX, Velocity.Y);
+
+		if (enemyInRange)
+			return;
+
+		if (moveX != 0)
+		{
+			if (animationPlayer.CurrentAnimation != "run")
+				animationPlayer.Play("run");
+		}
+		else
+		{
+			if (animationPlayer.CurrentAnimation != "idle")
+				animationPlayer.Play("idle");
+		}
+	}
+
+	public override void _Process(double delta)
+	{
+		if (!enemyInRange)
+			return;
+
+		attacksPerSecond = Statistics.Instance.playerStats[Statistics.Traits.AttackSpeed].GetValue();
+		attackInterval = 1f / attacksPerSecond;
+		attackCooldown += (float)delta;
+
+		while (attackCooldown >= attackInterval && !isBlocking)
+		{
+			attackCooldown -= attackInterval;
+			StartAttack();
+			DealDamage();
+		}
+	}
 
 	public override void _Input(InputEvent @event)
-    {
-        if (Input.IsActionPressed("block"))
+	{
+		if (@event.IsActionPressed("block"))
 		{
 			animationPlayer.SpeedScale = animationPlayerSpeedScale;
 			animationPlayer.Play("block");
 			isBlocking = true;
 		}
-    }
+	}
 
 	public void OnMovementSpeedIncrease(float percentageIncrease)
 	{
 		var playerMovementSpeed = Statistics.Instance.playerStats[Statistics.Traits.MovementSpeed];
 		playerMovementSpeed.AddIncreased(percentageIncrease);
 		
-		// this is so make the animation fit the movement speed
 		animationPlayerSpeedScale = 0.35f * (1 + playerMovementSpeed.GetIncreased().Sum());
 		animationPlayer.SpeedScale = animationPlayerSpeedScale;
 	}
@@ -101,13 +151,10 @@ public partial class Player : CharacterBody2D
 	private void StartAttack()
 	{
 		if (attacksPerSecond < 5)
-		{
 			animationPlayer.SpeedScale = attacksPerSecond / 2;
-		}
 		else
-        {
-            animationPlayer.SpeedScale = attacksPerSecond*5;
-        }
+			animationPlayer.SpeedScale = attacksPerSecond * 5;
+
 		animationPlayer.Play("attack1");
 	}
 
@@ -118,7 +165,7 @@ public partial class Player : CharacterBody2D
 		if (animName == "block")
 		{
 			isBlocking = false;
-			attackCooldown = attackInterval; // ← was 0f, now fires immediately after block
+			attackCooldown = attackInterval;
 		}
 	}
 
@@ -128,9 +175,7 @@ public partial class Player : CharacterBody2D
 		foreach (var body in bodies)
 		{
 			if (body is CharacterBody2D target && body.IsInGroup("enemy"))
-			{
 				DamageManager.Instance.ApplyDamage(this, target);
-			}
 		}
 	}
 
@@ -138,18 +183,17 @@ public partial class Player : CharacterBody2D
 	{
 		if (node2D is Enemy)
 		{
-            enemyInRange = true;
-            animationPlayer.Play("idle");
+			enemyInRange = true;
+			animationPlayer.Play("idle");
 		}
 	}
 
 	private void OnArea2DBodyExited(Node2D node2D)
 	{
 		if (node2D is Enemy)
-		{
 			enemyInRange = false;
-		}
 	}
 
 	public bool GetIsBlocking() => isBlocking;
+	public bool GetIsAutoPlay() => isAutoPlay;
 }

@@ -15,7 +15,7 @@ public partial class WaveManager : Node
     {
         Instance = this;
         currentWave = 0;
-        maxWave = 1;
+        maxWave = 5;
         waveDifficulty = 0;
     }
 

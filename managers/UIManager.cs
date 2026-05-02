@@ -28,7 +28,6 @@ public partial class UIManager : Node
 
     private Label waveCounterLabel;
     private Label totalKillsCounterLabel;
-    private Label goldLabel;
     private TextureProgressBar expBar;
     private Label expLabel;
 
@@ -39,7 +38,6 @@ public partial class UIManager : Node
         enemyHealthLabel = GetNode<Label>("/root/Main/UserInterface/BottomPanel/EnemyHealthLabel");
         waveCounterLabel = GetNode<Label>("/root/Main/UserInterface/TopPanel/WaveCounterLabel");
         totalKillsCounterLabel = GetNode<Label>("/root/Main/UserInterface/TopPanel/TotalKillsCounterLabel");
-        goldLabel = GetNode<Label>("%GoldLabel");
         expBar = GetNode<TextureProgressBar>("%ExpBar");
         expLabel = GetNode<Label>("%ExpLabel");
 
@@ -72,45 +70,6 @@ public partial class UIManager : Node
         expBar.MaxValue = maxExp;
 
         expLabel.Text = $"{expValue} / {maxExp}";
-    }
-
-    public void UpdateGoldUI(Vector2 positionEnemy, ulong goldValue)
-    {
-        goldLabel.Text = $"Gold: {goldValue}";
-
-        DisplayGoldCoin(positionEnemy);
-    }
-
-    private void DisplayGoldCoin(Vector2 positionEnemy)
-    {
-        // Instantiate coin
-        var goldCoin = coinPackedScene.Instantiate<Node2D>();
-        goldCoin.GlobalPosition = positionEnemy;
-        AddChild(goldCoin);
-
-        // Create a tween for animation
-        var tween = GetTree().CreateTween();
-        tween.SetEase(Tween.EaseType.Out);
-        tween.SetTrans(Tween.TransitionType.Quad);
-
-        // Animate upward jump
-        Vector2 startPos = goldCoin.GlobalPosition;
-        Vector2 peakPos = startPos + new Vector2(0, -40); // move up 40px
-
-        tween.TweenProperty(goldCoin, "global_position", peakPos, 0.3f);
-
-        // Bounce down slightly
-        tween.TweenProperty(goldCoin, "global_position", startPos + new Vector2(0, -10), 0.25f);
-
-
-        // Fade out before removing
-        if (goldCoin is CanvasItem canvasItem)
-        {
-            tween.Parallel().TweenProperty(canvasItem, "modulate:a", 0f, 0.4f);
-        }
-
-        // QueueFree when done
-        tween.TweenCallback(Callable.From(() => goldCoin.QueueFree()));
     }
 
     public void UpdatePlayerHealth(double newPlayerHealth, double playerMaxHealth)

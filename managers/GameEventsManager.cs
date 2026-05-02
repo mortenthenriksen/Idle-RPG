@@ -1,6 +1,4 @@
 
-using System;
-using System.Collections.Generic;
 using Characters;
 using Components;
 using Godot;
@@ -57,12 +55,9 @@ public partial class GameEventsManager : Node
 	private void OnAttackBlocked(CharacterBody2D source, CharacterBody2D target)
 	{
 		TemporaryBuffsForPlayer("AttackDamageMultiplicative", 1);
-
 		if (source is MeeleeSkeleton skeleton)
 		{
-			// +1 if enemy is to the right of player, -1 if to the left
-			float dir = source.GlobalPosition.X > target.GlobalPosition.X ? 1f : -1f;
-			skeleton.Knockback(dir);
+			
 		}
 	}
 
@@ -162,7 +157,6 @@ public partial class GameEventsManager : Node
 	{	
 		WaveManager.Instance.IncreaseWaveCounter();
 		KillTracker.Instance.IncreaseKillTracker(enemy);
-		GoldManager.Instance.GetGoldFromEnemy(enemy);
 		ExperienceManager.Instance.AddExp(enemy);
 
 		SpawnEnemy();

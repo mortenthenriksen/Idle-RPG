@@ -10,7 +10,6 @@
 [ext_resource type="Script" path="res://managers/UIManager.cs" id="7_73xji"]
 [ext_resource type="Script" path="res://managers/KillTracker.cs" id="7_858o5"]
 [ext_resource type="Script" path="res://managers/GameEventsManager.cs" id="7_ncrx3"]
-[ext_resource type="Script" path="res://managers/GoldManager.cs" id="9_rpnlx"]
 [ext_resource type="Script" path="res://managers/ItemDatabaseManager.cs" id="11_5x3sm"]
 [ext_resource type="PackedScene" uid="uid://bunytm4c8r6b0" path="res://managers/SoundManager.tscn" id="11_qxir3"]
 [ext_resource type="Script" path="res://managers/ExperienceManager.cs" id="11_sbfnc"]
@@ -23,6 +22,7 @@
 [ext_resource type="Script" path="res://scenes/ui/ToggleStatsButton.cs" id="19_jsbwf"]
 [ext_resource type="PackedScene" uid="uid://b5h7ndmv1ok8h" path="res://scenes/ui/Statistics.tscn" id="21_v8o2f"]
 [ext_resource type="PackedScene" uid="uid://n4fnjrs3y045" path="res://scenes/ui/Ancestry.tscn" id="22_2cq8c"]
+[ext_resource type="PackedScene" uid="uid://ba6wwuu6crodm" path="res://characters/player/MouseClicker.tscn" id="23_6rihw"]
 
 [sub_resource type="CSharpScript" id="CSharpScript_5slkb"]
 script/source = "using Godot;
@@ -116,9 +116,6 @@ script = ExtResource("7_858o5")
 [node name="GameEventsManager" type="Node" parent="Managers"]
 script = ExtResource("7_ncrx3")
 
-[node name="GoldManager" type="Node" parent="Managers"]
-script = ExtResource("9_rpnlx")
-
 [node name="ExperienceManager" type="Node" parent="Managers"]
 script = ExtResource("11_sbfnc")
 unspentSkillPoints = 100
@@ -166,16 +163,6 @@ offset_bottom = 24.0
 theme = ExtResource("6_um6vy")
 text = "Enemy life: "
 vertical_alignment = 1
-
-[node name="GoldLabel" type="Label" parent="UserInterface/BottomPanel"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 0
-offset_left = 104.0
-offset_top = 8.0
-offset_right = 144.0
-offset_bottom = 22.0
-text = "Gold: "
 
 [node name="ExpBar" type="TextureProgressBar" parent="UserInterface/BottomPanel"]
 unique_name_in_owner = true
@@ -290,3 +277,5 @@ offset_top = 32.0
 offset_right = 258.0
 offset_bottom = 32.0
 metadata/_edit_lock_ = true
+
+[node name="MouseClicker" parent="." instance=ExtResource("23_6rihw")]

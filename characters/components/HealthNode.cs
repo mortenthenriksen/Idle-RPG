@@ -7,9 +7,10 @@ namespace Components;
 public partial class HealthNode : Node
 {
     [Export]
-    public double maxHealth = 100000000000;
+    public double maxHealth = 100;
     public double currentHealth;
     public bool IsDead => currentHealth <= 0;
+    private bool isDying = false; 
 
     [Signal]
     public delegate void HealthChangedEventHandler(float newHealth, float maxHealth);
@@ -55,6 +56,8 @@ public partial class HealthNode : Node
 
     public void ApplyDamage(float amount)
     {
+        if (isDying) return;
+
         currentHealth -= amount;
 
         // Record damage timestamp
@@ -65,6 +68,7 @@ public partial class HealthNode : Node
 
         if (currentHealth <= 0)
         {
+            isDying = true; 
             var owner = GetParent<CharacterBody2D>();
             EmitSignal(SignalName.Died, owner);
         }
@@ -88,6 +92,7 @@ public partial class HealthNode : Node
     public void ResetHealth()
     {
         currentHealth = maxHealth;
+        isDying = false;
     }
 
     public void IncreaseCurrentHealth(float value)

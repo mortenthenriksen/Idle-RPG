@@ -349,21 +349,18 @@ position = Vector2(4, -39)
 scale = Vector2(1.45, 1.45)
 sprite_frames = SubResource("SpriteFrames_kyiot")
 animation = &"run"
-frame_progress = 0.586707
+frame_progress = 0.467035
 flip_h = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
 position = Vector2(1, -36)
 shape = SubResource("CapsuleShape2D_ya7m6")
 metadata/_edit_lock_ = true
 
 [node name="Area2D" type="Area2D" parent="."]
-visible = false
 collision_layer = 8
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-visible = false
 position = Vector2(0, -31)
 shape = SubResource("CapsuleShape2D_p3dhf")
 
@@ -371,7 +368,7 @@ shape = SubResource("CapsuleShape2D_p3dhf")
 wait_time = 1.2
 
 [node name="HealthNode" parent="." instance=ExtResource("5_q2trx")]
-maxHealth = 1e+12
+maxHealth = 11.0
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 visible = false
@@ -384,6 +381,7 @@ rounded = true
 show_percentage = false
 
 [node name="AnimatedSprite2D2" type="AnimatedSprite2D" parent="."]
+visible = false
 position = Vector2(6, -31)
 rotation = -0.523598
 sprite_frames = SubResource("SpriteFrames_qv5l5")
@@ -394,4 +392,5 @@ frame_progress = 1.0
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="OnAnimatedSprite2DAnimationFinished"]
 [connection signal="frame_changed" from="AnimatedSprite2D" to="." method="OnFrameChanged"]
 [connection signal="body_entered" from="Area2D" to="." method="OnArea2DBodyEntered"]
+[connection signal="body_exited" from="Area2D" to="." method="OnArea2DBodyExited"]
 [connection signal="timeout" from="AttackTimer" to="." method="OnAttackTimerTimeout"]
