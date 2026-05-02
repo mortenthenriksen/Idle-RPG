@@ -31,16 +31,16 @@ public partial class ItemDatabaseManager : Node
             var template = new Item
             {
                 ItemName   = cols[1],
-                Icon       = GD.Load<Texture2D>(cols[2]),
-                Slot       = cols[3],
+                Slot       = cols[2],             
+                Icon       = GD.Load<Texture2D>(cols[3]),  
                 DamageMin  = float.Parse(cols[4]),
                 DamageMax  = float.Parse(cols[5]),
-                DefenseMin = float.Parse(cols[6]),
-                DefenseMax = float.Parse(cols[7]),
-                LifeMin  = float.Parse(cols[8]),
-                LifeMax  = float.Parse(cols[9]),
-                MovementSpeedMin   = float.Parse(cols[10]),
-                MovementSpeedMax   = float.Parse(cols[11]),
+                LifeMin    = float.Parse(cols[6]),
+                LifeMax    = float.Parse(cols[7]),
+                DefenseMin = float.Parse(cols[8]),
+                DefenseMax = float.Parse(cols[9]),
+                MovementSpeedMin = float.Parse(cols[10]),
+                MovementSpeedMax = float.Parse(cols[11]),
             };
 
             _templates[cols[1]] = template;

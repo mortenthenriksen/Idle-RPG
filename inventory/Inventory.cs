@@ -1,10 +1,13 @@
 using Godot;
-
+using Upgrades;
+using Managers;
+using Components;
 namespace Inventory;
 
 public partial class Inventory : Control
 {
     private Item holdingItem = null;
+    // item arrays
     private Item[] InventoryItems = new Item[21];
     private Item[] EquipmentItems = new Item[9];
 
@@ -13,7 +16,7 @@ public partial class Inventory : Control
     private static readonly string[] EquipSlotNodeNames =
         { "ShieldSlot", "WeaponSlot", "HelmetSlot", "ChestSlot", "PantsSlot", "BootsSlot", "AmuletSlot", "GlovesSlot", "RingSlot" };
 
-    private ItemTooltip _tooltip;
+    private ItemTooltip toolTip;
     private TextureRect holdingDisplay;
 
     // ─────────────────────────────────────────────
@@ -29,12 +32,14 @@ public partial class Inventory : Control
         holdingDisplay.Visible = false;
 
         var tooltipScene = GD.Load<PackedScene>("res://scenes/ui/ItemTooltip.tscn");
-        _tooltip = tooltipScene.Instantiate<ItemTooltip>();
-        AddChild(_tooltip);
-        _tooltip.Hide();
+        toolTip = tooltipScene.Instantiate<ItemTooltip>();
+        AddChild(toolTip);
+        toolTip.Hide();
 
-        InventoryItems[0] = ItemDatabaseManager.Instance.CreateItem("wooden_gloves_type6_tier1");
-        InventoryItems[3] = ItemDatabaseManager.Instance.CreateItem("wooden_gloves_type1_tier1");
+        FillInventoryWithTestItems();
+        
+		foreach (var item in EquipmentItems)
+			ApplyItemStats(item);
 
         SyncInventoryUI();
         SyncEquipmentUI();
@@ -63,9 +68,9 @@ public partial class Inventory : Control
                 {
                     var item = GetItemForSlot(slotName);
                     if (item != null && holdingItem == null)
-                        _tooltip.ShowTooltip(item, slot.GlobalPosition);
+                        toolTip.ShowTooltip(item, slot.GlobalPosition);
                 };
-                slot.MouseExited += () => _tooltip.Hide();
+                slot.MouseExited += () => toolTip.Hide();
             }
 
             if (child.GetChildCount() > 0)
@@ -88,27 +93,48 @@ public partial class Inventory : Control
         string nodeName = slot.Name.ToString();
         if (!ResolveSlot(nodeName, out var targetArray, out int index)) return;
 
-        // CASE 1: Pickup
-        if (holdingItem == null && targetArray[index] != null)
-        {
-            holdingItem = targetArray[index];
-            targetArray[index] = null;
-            _tooltip.Hide();
-            AnimateItemToMouse(slot, holdingItem.Icon);
-        }
-        // CASE 2 & 3: Place / Swap
+        // CASE 1: PICKUP — removing from equipment
+		if (holdingItem == null && targetArray[index] != null)
+		{
+			Item itemToPick = targetArray[index];
+
+			if (IsEquipmentArray(targetArray))
+				RemoveItemStats(itemToPick);
+
+			holdingItem = itemToPick;
+			targetArray[index] = null;
+			AnimateItemToMouse(slot, itemToPick.Icon);
+		}
+		// CASE 2 & 3: PLACE / SWAP
         else if (holdingItem != null)
         {
-            string requiredSlot = GetRequiredSlotType(nodeName);
-            if (requiredSlot != null && holdingItem.Slot != requiredSlot)
+            Item itemToDrop = holdingItem;
+            bool targetIsEquip = IsEquipmentArray(targetArray);
+
+            if (targetIsEquip)
             {
-                GD.Print($"Cannot place {holdingItem.ItemName} in {nodeName} — requires {requiredSlot}");
-                return;
+                string requiredSlot = GetRequiredSlotType(slot.Name.ToString());
+                if (requiredSlot != null && itemToDrop.Slot != requiredSlot)
+                    return; 
             }
 
-            Item itemToDrop = holdingItem;
-            holdingItem = targetArray[index]; // null if empty, swapped item if occupied
-            targetArray[index] = itemToDrop;
+            if (targetArray[index] == null)
+            {
+                if (targetIsEquip) ApplyItemStats(itemToDrop);
+                targetArray[index] = itemToDrop;
+                holdingItem = null;
+            }
+            else
+            {
+                Item displaced = targetArray[index];
+                if (targetIsEquip)
+                {
+                    RemoveItemStats(displaced);
+                    ApplyItemStats(itemToDrop);
+                }
+                targetArray[index] = itemToDrop;
+                holdingItem = displaced;
+            }
 
             AnimateItemToSlot(slot, itemToDrop.Icon);
             UpdateMouseCursorIcon();
@@ -140,6 +166,7 @@ public partial class Inventory : Control
             _             => -1
         };
 
+        // checking if a valid index was found, if not then index = -1, which then returns false
         return index != -1;
     }
 
@@ -166,9 +193,110 @@ public partial class Inventory : Control
         };
     }
 
+	private void ApplyItemStats(Item item)
+	{
+		if (item == null) return;
+		var stats = Statistics.Instance.playerStats;
+
+		if (item.Damage        != 0) stats[Statistics.Traits.Damage].AddFlat(item.Damage);
+		if (item.MovementSpeed != 0) stats[Statistics.Traits.MovementSpeed].AddFlat(item.MovementSpeed);
+		if (item.Life != 0)
+		{
+			stats[Statistics.Traits.Life].AddFlat(item.Life);
+			var healthNode = GetPlayerHealthNode();
+			if (healthNode != null)
+			{
+				healthNode.IncreaseMaxHealth(item.Life);
+				healthNode.IncreaseCurrentHealth(item.Life); 
+			}
+		}
+
+		RefreshStatsUI();
+	}
+
+	private void RemoveItemStats(Item item)
+	{
+		if (item == null) return;
+		var stats = Statistics.Instance.playerStats;
+
+		if (item.Damage        != 0) stats[Statistics.Traits.Damage].AddFlat(-item.Damage);
+		if (item.MovementSpeed != 0) stats[Statistics.Traits.MovementSpeed].AddFlat(-item.MovementSpeed);
+		if (item.Life != 0)
+		{
+			stats[Statistics.Traits.Life].AddFlat(-item.Life);
+			var healthNode = GetPlayerHealthNode();
+			if (healthNode != null)
+			{
+				healthNode.IncreaseMaxHealth(-item.Life);
+				healthNode.IncreaseCurrentHealth(0); // forces clamp + UI update
+			}
+		}
+
+		RefreshStatsUI();
+	}
+
+	private HealthNode GetPlayerHealthNode()
+	{
+		var player = GetTree().GetFirstNodeInGroup("player");
+		return player?.GetNodeOrNull<HealthNode>("HealthNode");
+	}
+
+	private bool IsEquipmentArray(Item[] array) => array == EquipmentItems;
+
+    private void FillInventoryWithTestItems()
+    {
+        var testItems = new[]
+        {
+            // Mix of slots and type levels for variety
+            "wooden_gloves_type1_tier1",
+            "wooden_gloves_type6_tier1",
+            "wooden_helm_type7_tier1", 
+            "wooden_pants_type8_tier1",
+            "wooden_chest_type6_tier1",
+            "wooden_boots_type2_tier1"
+            // add more item IDs from your CSV here
+        };
+
+        int slot = 0;
+        foreach (var itemId in testItems)
+        {
+            if (slot >= InventoryItems.Length) break;
+
+            // Skip already occupied slots
+            while (slot < InventoryItems.Length && InventoryItems[slot] != null)
+                slot++;
+
+            if (slot >= InventoryItems.Length) break;
+
+            var item = ItemDatabaseManager.Instance.CreateItem(itemId);
+            if (item != null)
+                InventoryItems[slot++] = item;
+        }
+    }
     // ─────────────────────────────────────────────
     // UI sync
     // ─────────────────────────────────────────────
+	private void RefreshStatsUI()
+	{
+		if (UIManager.Instance == null || Statistics.Instance == null) return;
+
+		var stats = Statistics.Instance.playerStats;
+
+		UIManager.Instance.UpdatePlayerAttackDamage(
+			(float)stats[Statistics.Traits.Damage].GetValue());
+		UIManager.Instance.UpdatePlayerAttackSpeed(
+			(float)stats[Statistics.Traits.AttackSpeed].GetValue());
+
+		// Match GameEventsManager: show as % of base
+		var baseSpeed = stats[Statistics.Traits.MovementSpeed].BaseValue;
+		var currentSpeed = (float)stats[Statistics.Traits.MovementSpeed].GetValue();
+		UIManager.Instance.UpdatePlayerMovementSpeed(currentSpeed / baseSpeed * 100f);
+
+		// Update health display with the actual HealthNode values
+		var healthNode = GetPlayerHealthNode();
+		if (healthNode != null)
+			UIManager.Instance.UpdatePlayerHealth(healthNode.currentHealth, healthNode.maxHealth);
+	}
 
     private void SyncInventoryUI()
     {
@@ -182,6 +310,8 @@ public partial class Inventory : Control
         Node equipRoot = GetNode<HBoxContainer>("%HBoxContainer");
         for (int i = 0; i < EquipmentItems.Length; i++)
         {
+            // to find the nodes, it uses FindChild(node, recursive, not owned only), so it works
+            // even with nodes that are not directly children
             Node slotNode = equipRoot.FindChild(EquipSlotNodeNames[i], true, false);
             if (slotNode != null)
                 UpdateSlotVisual(slotNode, EquipmentItems[i]);

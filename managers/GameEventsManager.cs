@@ -54,10 +54,17 @@ public partial class GameEventsManager : Node
 	}
 
 
-    private void OnAttackBlocked(CharacterBody2D source, CharacterBody2D target)
-    {
-        TemporaryBuffsForPlayer("AttackDamageMultiplicative", 1);
-    }
+	private void OnAttackBlocked(CharacterBody2D source, CharacterBody2D target)
+	{
+		TemporaryBuffsForPlayer("AttackDamageMultiplicative", 1);
+
+		if (source is MeeleeSkeleton skeleton)
+		{
+			// +1 if enemy is to the right of player, -1 if to the left
+			float dir = source.GlobalPosition.X > target.GlobalPosition.X ? 1f : -1f;
+			skeleton.Knockback(dir);
+		}
+	}
 
 	// make these go away after some time
 	private void TemporaryBuffsForPlayer(string statName, float value)

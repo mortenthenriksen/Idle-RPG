@@ -113,13 +113,12 @@ public partial class Player : CharacterBody2D
 
 	private void OnAnimationFinished(StringName animName)
 	{
-        animationPlayer.SpeedScale = animationPlayerSpeedScale;
+		animationPlayer.SpeedScale = animationPlayerSpeedScale;
 		animationPlayer.Play("idle");
 		if (animName == "block")
 		{
 			isBlocking = false;
-			// resets attack cooldown after block
-			attackCooldown = 0f;
+			attackCooldown = attackInterval; // ← was 0f, now fires immediately after block
 		}
 	}
 

@@ -19,6 +19,7 @@ public partial class ItemTooltip : PanelContainer
         _defense  = GetNode<Label>("%DefenseLabel");
         _life   = GetNode<Label>("%LifeLabel");
         _movementSpeed    = GetNode<Label>("%MovementSpeedLabel");
+
     }
 
     public void ShowTooltip(Item item, Vector2 position)
@@ -31,7 +32,7 @@ public partial class ItemTooltip : PanelContainer
         SetStatLabel(_life,  "Health",  item.Life,  item.LifeMin,  item.LifeMax);
         SetStatLabel(_movementSpeed,   "Speed",   item.MovementSpeed,   item.MovementSpeedMin,   item.MovementSpeedMax);
 
-        GlobalPosition = position + new Vector2(10, 10);
+        GlobalPosition = position + new Vector2(8, 8);
         Visible = true;
     }
 

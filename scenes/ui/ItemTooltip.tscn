@@ -1,15 +1,26 @@
-[gd_scene load_steps=3 format=3 uid="uid://gapmbpvckyy"]
+[gd_scene load_steps=5 format=3 uid="uid://gapmbpvckyy"]
 
 [ext_resource type="Script" path="res://inventory/ItemTooltip.cs" id="1_go84f"]
+[ext_resource type="Texture2D" uid="uid://d3fnfeqjx2xwe" path="res://assets/UI/inventory/ItemSlot.png" id="1_hyrpi"]
 [ext_resource type="FontFile" uid="uid://sctiqlw5t0xg" path="res://resources/fonts/Kubasta.ttf" id="2_ay3ig"]
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xbs0n"]
+texture = ExtResource("1_hyrpi")
+texture_margin_left = 3.47681
+texture_margin_top = 5.36513
+texture_margin_right = 3.24909
+texture_margin_bottom = 3.40666
+region_rect = Rect2(-0.069294, -0.140824, 34.0476, 34.1957)
+
 [node name="ItemTooltip" type="PanelContainer"]
+z_index = 10
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_xbs0n")
 script = ExtResource("1_go84f")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]

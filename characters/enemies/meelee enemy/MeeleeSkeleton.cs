@@ -41,6 +41,17 @@ public partial class MeeleeSkeleton : Enemy
             animatedSprite2D.Modulate = hurtColor;
         }
     }
+
+    public void Knockback(float direction, float force = 400f)
+    {
+        var tween = GetTree().CreateTween();
+        tween.TweenMethod(Callable.From((float v) =>
+        {
+            Velocity = new Vector2(v, Velocity.Y);
+            MoveAndSlide();
+        }), direction * force, 0f, 0.1f);
+    }
+
     private void OnFrameChanged()
     {
         var regularColor = new Color("#FFFFFF");

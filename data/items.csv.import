@@ -3,11 +3,13 @@
 importer="csv_translation"
 type="Translation"
 uid="uid://cricxrmda0q5o"
-valid=false
 
 [deps]
 
+files=["res://data/items.name.translation", "res://data/items.slot.translation", "res://data/items.icon.translation", "res://data/items.damage.translation", "res://data/items.damage.translation", "res://data/items.life.translation", "res://data/items.life.translation", "res://data/items.defense.translation", "res://data/items.defense.translation", "res://data/items.movement.translation", "res://data/items.movement.translation"]
+
 source_file="res://data/items.csv"
+dest_files=["res://data/items.name.translation", "res://data/items.slot.translation", "res://data/items.icon.translation", "res://data/items.damage.translation", "res://data/items.damage.translation", "res://data/items.life.translation", "res://data/items.life.translation", "res://data/items.defense.translation", "res://data/items.defense.translation", "res://data/items.movement.translation", "res://data/items.movement.translation"]
 
 [params]
 
