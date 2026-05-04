@@ -20,6 +20,8 @@ public partial class UIManager : Node
     private Label playerAttackDamageLabel;
     private Label playerAttackSpeedLabel;
     private Label playerMovementSpeedLabel;
+    private Label playerCritChanceLabel;
+    private Label playerCritDamageLabel;
 
     private Label enemyHealthLabel;
     private Label enemyAttackDamageLabel;
@@ -46,6 +48,8 @@ public partial class UIManager : Node
         playerAttackDamageLabel = statsNode.GetNode<Label>("%PlayerAttackDamageLabel");
         playerAttackSpeedLabel = statsNode.GetNode<Label>("%PlayerAttackSpeedLabel");
         playerMovementSpeedLabel = statsNode.GetNode<Label>("%PlayerMovementSpeedLabel");
+        playerCritChanceLabel = statsNode.GetNode<Label>("%PlayerCrititcalChanceLabel");
+        playerCritDamageLabel = statsNode.GetNode<Label>("%PlayerCriticalDamageLabel");
         
         enemyHealthLabel = statsNode.GetNode<Label>("%EnemyHealthLabel");
         enemyAttackDamageLabel = statsNode.GetNode<Label>("%EnemyAttackDamageLabel");
@@ -61,6 +65,9 @@ public partial class UIManager : Node
         UpdatePlayerHealth(healthNode.currentHealth, healthNode.maxHealth);
         UpdatePlayerAttackDamage((float)stats[Statistics.Traits.Damage].GetValue());
         UpdatePlayerAttackSpeed((float)stats[Statistics.Traits.AttackSpeed].GetValue());
+        UpdatePlayerCritChance((float)stats[Statistics.Traits.CritChance].GetValue());
+        UpdatePlayerCritDamage((float)stats[Statistics.Traits.CritDamage].GetValue());
+
         UpdateSkillPointsUI(ExperienceManager.Instance.GetUnspentSkillPoints());
 
         var baseSpeed    = stats[Statistics.Traits.MovementSpeed].BaseValue;
@@ -81,6 +88,8 @@ public partial class UIManager : Node
         var currentSpeed = (float)stats[Statistics.Traits.MovementSpeed].GetValue();
         UpdateEnemyMovementSpeed(currentSpeed / baseSpeed * 100f);
     }
+
+    // PLAYER
     
     public void UpdatePlayerHealth(double newPlayerHealth, double playerMaxHealth)
     {
@@ -101,6 +110,18 @@ public partial class UIManager : Node
     {
         playerMovementSpeedLabel.Text = $"{playerMovementSpeed:F0}%";
     }
+
+    public void UpdatePlayerCritChance(float val)
+    {
+        playerCritChanceLabel.Text = $"{val*100:F0}%";
+    }
+
+    public void UpdatePlayerCritDamage(float val)
+    {
+        playerCritDamageLabel.Text = $"{val*100:F0}%";
+    }
+
+    // ENEMY
 
     public void UpdateEnemyHealth(double newEnemyHealth, double enemyMaxHealth)
     {
@@ -151,20 +172,29 @@ public partial class UIManager : Node
         expLabel.Text = $"{expValue} / {maxExp}";
     }
 
-    private void DisplayDamageNumber(CharacterBody2D source, CharacterBody2D target, float damageAmount)
+    private void DisplayDamageNumber(CharacterBody2D source, CharacterBody2D target, float damageAmount, bool isCrit)
     {
         Vector2 sourcePosition = source.Position;
         Vector2 targetPosition = target.Position;
 
         var number = new Label
         {
+
             GlobalPosition = targetPosition + new Vector2(0, -80),
             Text = Mathf.RoundToInt(damageAmount).ToString(),
-            ZIndex = 5
+            ZIndex = 5,
+            Theme = pixelKubastaFontTheme
+
         };
 
-        number.Theme = pixelKubastaFontTheme;
-        number.AddThemeFontSizeOverride("font_size", 32);
+        
+        if (isCrit)
+        {
+            number.AddThemeColorOverride("font_color", new Color("#ff0000")); // gold
+            number.AddThemeFontSizeOverride("font_size", 48); // bigger
+        }
+        else number.AddThemeFontSizeOverride("font_size", 32);
+        
         AddChild(number);
 
         // set up RNG

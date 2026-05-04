@@ -8,14 +8,14 @@ namespace Upgrades;
 public partial class Statistics : Control
 {
     [Signal]
-    public delegate void PlayerStatUpgradedEventHandler(Traits traits);
+    public delegate void PlayerStatUpgradedEventHandler(Traits traits, float value);
 
     [Signal]
-    public delegate void EnemyStatUpgradedEventHandler(Traits traits);
+    public delegate void EnemyStatUpgradedEventHandler(Traits traits, float value);
 
     public static Statistics Instance { get; private set; }
 
-    public enum Traits { Damage, Health, AttackSpeed, MovementSpeed, ExperienceGained }
+    public enum Traits { Damage, Health, AttackSpeed, MovementSpeed, ExperienceGained, CritChance, CritDamage}
 
     public Dictionary<Traits, ModifiableStat> playerStats = new();
     public Dictionary<Traits, ModifiableStat> enemyStats = new();
@@ -25,8 +25,10 @@ public partial class Statistics : Control
     {
         { Traits.Damage,        (flat: 2,  increased: 0)      },
         { Traits.Health,        (flat: 5,  increased: 0)      },
-        { Traits.AttackSpeed,   (flat: 0,  increased: 100f)   },
-        { Traits.MovementSpeed, (flat: 0,  increased: 0.01f)  },
+        { Traits.AttackSpeed,   (flat: 0,  increased: 0.1f)   },
+        { Traits.MovementSpeed, (flat: 0,  increased: 0.1f)  },
+        { Traits.CritChance,    (flat: 0.1f,  increased: 0.1f)  },
+        { Traits.CritDamage,    (flat: 0,  increased: 10f)  },
     };
 
     public override void _Ready()
@@ -38,11 +40,13 @@ public partial class Statistics : Control
 
     private void InitializeStats()
     {
-        playerStats[Traits.Damage]           = new ModifiableStat(30);
+        playerStats[Traits.Damage]           = new ModifiableStat(1);
         playerStats[Traits.Health]           = new ModifiableStat(30);
         playerStats[Traits.AttackSpeed]      = new ModifiableStat(1.33f);
         playerStats[Traits.MovementSpeed]    = new ModifiableStat(85f);
         playerStats[Traits.ExperienceGained] = new ModifiableStat(0f);
+        playerStats[Traits.CritChance]       = new ModifiableStat(1f); // 5% base
+        playerStats[Traits.CritDamage]       = new ModifiableStat(1.5f);      // 1.5x base
 
         enemyStats[Traits.Damage]            = new ModifiableStat(1);
         enemyStats[Traits.Health]            = new ModifiableStat(17);
@@ -52,12 +56,15 @@ public partial class Statistics : Control
 
     private void SetupButtons()
     {
+        // MAKE THIS MORE SOLID
         var playerButtons = new Dictionary<string, Traits>
         {
             { "%PlayerAttackDamageButton",  Traits.Damage        },
             { "%PlayerHealthButton",        Traits.Health          },
             { "%PlayerAttackSpeedButton",   Traits.AttackSpeed   },
             { "%PlayerMovementSpeedButton", Traits.MovementSpeed },
+            { "%PlayerCriticalChanceButton", Traits.CritChance },
+            { "%PlayerCriticalDamageButton", Traits.CritDamage },
         };
 
         var enemyButtons = new Dictionary<string, Traits>
@@ -80,10 +87,18 @@ public partial class Statistics : Control
         if (ExperienceManager.Instance.GetUnspentSkillPoints() <= 0) return;
         ExperienceManager.Instance.DecreaseUnspentSkillPoints();
         var (flat, increased) = upgradeAmounts[trait];
-        if (flat      != 0) stats[trait].AddFlat(flat);
-        if (increased != 0) stats[trait].AddIncreased(increased);
+        if (flat      != 0)
+        {
+            stats[trait].AddFlat(flat);
+            EmitSignal(signal, Variant.From(trait), flat);
+        }
+        if (increased != 0) 
+        {
+            stats[trait].AddIncreased(increased);
+            EmitSignal(signal, Variant.From(trait), increased);
+        }
 
-        EmitSignal(signal, Variant.From(trait));
+        
     }
 
     public Dictionary<Traits, ModifiableStat> GetplayerStats() => playerStats;

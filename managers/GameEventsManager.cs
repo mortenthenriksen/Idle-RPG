@@ -11,7 +11,7 @@ public partial class GameEventsManager : Node
 {
 	
     [Signal]
-    public delegate void PlayerMovementSpeedChangedEventHandler();
+    public delegate void PlayerMovementSpeedChangedEventHandler(float percentageIncrease);
 
     [Export]
     private Vector2 enemySpawnPosition = new Vector2(736, 481);
@@ -85,18 +85,18 @@ public partial class GameEventsManager : Node
     // ── Stats ────────────────────────────────────────────────────────────────
 
 
-    private void OnPlayerStatUpgraded(Traits trait)
+    private void OnPlayerStatUpgraded(Traits trait, float value)
     {
         UIManager.Instance.RefreshPlayerStats(playerHealthNode);
 
         if (trait == Traits.MovementSpeed)
-            EmitSignal(SignalName.PlayerMovementSpeedChanged);
+            EmitSignal(SignalName.PlayerMovementSpeedChanged, value);
 
         if (trait == Traits.Health)
             playerHealthNode.GetMaxHealthFromStatsDict();
     }
 
-    private void OnEnemyStatUpgraded(Traits trait)
+    private void OnEnemyStatUpgraded(Traits trait, float value)
 	{
 		UIManager.Instance.RefreshEnemyStats(enemyHealthNode);
 		if (trait == Traits.Health)
@@ -134,8 +134,7 @@ public partial class GameEventsManager : Node
 
     private void SpawnEnemy()
     {
-        enemy = ResourceLoader.Load<PackedScene>("res://characters/enemies/meelee enemy/MeeleeSkeleton.tscn")
-            .Instantiate<MeeleeSkeleton>();
+        enemy = ResourceLoader.Load<PackedScene>("res://characters/enemies/meelee enemy/MeeleeSkeleton.tscn").Instantiate<MeeleeSkeleton>();
 
         float offset = player.Position.X - 500;
         enemy.GlobalPosition = new Vector2(enemySpawnPosition.X + offset, enemySpawnPosition.Y);
@@ -145,6 +144,11 @@ public partial class GameEventsManager : Node
         enemyHealthNode.HealthChanged += OnEnemyHealthChanged;
         enemyHealthNode.Died += OnEnemyDied;
 		UIManager.Instance.RefreshEnemyStats(enemyHealthNode);
+    }
+
+    public void EmitOnPlayerMovementSpeedChanged(float percentage)
+    {
+        EmitSignal(SignalName.PlayerMovementSpeedChanged, percentage);
     }
 
 }

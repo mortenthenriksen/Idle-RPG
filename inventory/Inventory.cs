@@ -200,9 +200,10 @@ public partial class Inventory : Control
         var stats = Statistics.Instance.playerStats;
 
         if (item.Damage        != 0) stats[Statistics.Traits.Damage].AddFlat(item.Damage);
-        if (item.MovementSpeed != 0) stats[Statistics.Traits.MovementSpeed].AddFlat(item.MovementSpeed);
+        if (item.MovementSpeed != 0) 
         {
-            // EmitSignal(GameEventsManager.Instance.PlayerMovementSpeedChanged);
+            stats[Statistics.Traits.MovementSpeed].AddFlat(item.MovementSpeed);
+            GameEventsManager.Instance.EmitOnPlayerMovementSpeedChanged(item.MovementSpeed);
         }
         if (item.Health          != 0)
         {
@@ -218,11 +219,15 @@ public partial class Inventory : Control
         if (item == null) return;
         var stats = Statistics.Instance.playerStats;
 
-        if (item.Damage        != 0) stats[Statistics.Traits.Damage].AddFlat(-item.Damage);
-        if (item.MovementSpeed != 0) stats[Statistics.Traits.MovementSpeed].AddFlat(-item.MovementSpeed);
+        if (item.Damage        != 0) stats[Statistics.Traits.Damage].AddFlat(item.Damage);
+        if (item.MovementSpeed != 0) 
+        {
+            stats[Statistics.Traits.MovementSpeed].RemoveFlat(item.MovementSpeed);
+            GameEventsManager.Instance.EmitOnPlayerMovementSpeedChanged(item.MovementSpeed);
+        }
         if (item.Health          != 0)
         {
-            stats[Statistics.Traits.Health].AddFlat(-item.Health);
+            stats[Statistics.Traits.Health].RemoveFlat(item.Health);
             GetPlayerHealthNode()?.GetMaxHealthFromStatsDict();
         }
 

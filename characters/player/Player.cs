@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Autoload;
 using Components;
@@ -40,10 +41,11 @@ public partial class Player : CharacterBody2D
 		area2D = GetNode<Area2D>("Area2D");
 		camera2D = GetNode<Camera2D>("Camera2D");
 		animationPlayer.SpeedScale = animationPlayerSpeedScale;
-		animationPlayer.AnimationFinished += OnAnimationFinished;
+        animationPlayer.AnimationFinished += OnAnimationFinished;
+        GameEventsManager.Instance.PlayerMovementSpeedChanged += OnMovementSpeedIncrease;
 	}
 
-	public override void _PhysicsProcess(double delta)
+    public override void _PhysicsProcess(double delta)
 	{
 		if (Input.IsActionJustPressed("toggle_autoplay"))
 			isAutoPlay = !isAutoPlay;
@@ -141,10 +143,11 @@ public partial class Player : CharacterBody2D
 
 	public void OnMovementSpeedIncrease(float percentageIncrease)
 	{
-		var playerMovementSpeed = Statistics.Instance.playerStats[Statistics.Traits.MovementSpeed];
-		playerMovementSpeed.AddIncreased(percentageIncrease);
-		
-		animationPlayerSpeedScale = 0.35f * (1 + playerMovementSpeed.GetIncreased().Sum());
+		var baseSpeed    = Statistics.Instance.playerStats[Statistics.Traits.MovementSpeed].BaseValue;
+		var currentSpeed = Statistics.Instance.playerStats[Statistics.Traits.MovementSpeed].GetValue();
+		float ratio = (float)(currentSpeed / baseSpeed);
+
+		animationPlayerSpeedScale = 0.35f * ratio;
 		animationPlayer.SpeedScale = animationPlayerSpeedScale;
 	}
 	

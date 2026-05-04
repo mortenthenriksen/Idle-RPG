@@ -9,7 +9,7 @@ namespace Managers;
 public partial class DamageManager : Node
 {
     [Signal]
-    public delegate void DamageDealtEventHandler(CharacterBody2D source, CharacterBody2D target, float DamageAmount);
+    public delegate void DamageDealtEventHandler(CharacterBody2D source, CharacterBody2D target, float DamageAmount, bool isCrit);
 
     [Signal]
     public delegate void AttackBlockedEventHandler(CharacterBody2D source, CharacterBody2D target);
@@ -32,10 +32,22 @@ public partial class DamageManager : Node
     public void ApplyDamage(CharacterBody2D source, CharacterBody2D target)
     {
         var healthNode = target.GetNode<HealthNode>("HealthNode");
-        if (healthNode.isDying) return; 
+        if (healthNode.isDying) return;
 
         var attackerStats = GetStatsFor(source);
-        var damageAmount = attackerStats[Statistics.Traits.Damage].GetValue();
+        var damage = attackerStats[Statistics.Traits.Damage].GetValue();
+
+        bool isCrit = false;
+        if (source.IsInGroup("player"))
+        {
+            float critChance = playerStats[Statistics.Traits.CritChance].GetValue();
+            if (GD.Randf() <= critChance)
+            {
+                damage *= playerStats[Statistics.Traits.CritDamage].GetValue();
+                isCrit = true;
+            }
+        }
+
         if (target.GetType() == typeof(Player))
         {
             var player = (Player)target;
@@ -45,8 +57,9 @@ public partial class DamageManager : Node
                 return;
             }
         }
-        healthNode.ApplyDamage(damageAmount);
-        EmitSignal("DamageDealt", source, target, damageAmount);
+
+        healthNode.ApplyDamage(damage);
+        EmitSignal("DamageDealt", source, target, damage, isCrit);
     }
 
     private Dictionary<Statistics.Traits, ModifiableStat> GetStatsFor(CharacterBody2D character2d)

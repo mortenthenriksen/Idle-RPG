@@ -58,7 +58,7 @@ public partial class Ancestry : Control
 
     private void OnTextureRectGuiInput(TextureRect textureRect, InputEvent input)
     {
-        if (input is InputEventMouseButton mouseEvent && mouseEvent.Pressed)
+        if (input is InputEventMouseButton mouseEvent && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left)
         {  
             string nameOfAncestor = textureRect.Name;
             (Statistics.Traits, float, float, float) value = ancestryDict.GetValueOrDefault(nameOfAncestor);

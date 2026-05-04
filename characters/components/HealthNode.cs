@@ -114,6 +114,10 @@ public partial class HealthNode : Node
         float totalDamage = 0f;
         foreach (var entry in damageHistory)
             totalDamage += entry.damage;
-        return totalDamage / 1f;
+
+        float dps = totalDamage / 1f;
+        // GD.Print($"[DPS] {GetParent().Name}: {dps:F1}");
+        return dps;
     }
+
 }
