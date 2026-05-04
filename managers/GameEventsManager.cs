@@ -1,4 +1,3 @@
-
 using Characters;
 using Components;
 using Godot;
@@ -10,177 +9,142 @@ namespace Autoload;
 
 public partial class GameEventsManager : Node
 {
-	[Export]
-	private Vector2 enemySpawnPosition = new Vector2(736, 481);
+	
+    [Signal]
+    public delegate void PlayerMovementSpeedChangedEventHandler();
 
-	[Signal]
-	public delegate void PlayerMovementSpeedChangedEventHandler(float percentageIncrease);
-    
+    [Export]
+    private Vector2 enemySpawnPosition = new Vector2(736, 481);
+
     public static GameEventsManager Instance { get; private set; }
 
-	private HealthNode playerHealth;
-	private HealthNode enemyHealth;
-	private MeeleeSkeleton meeleeEnemy;
-	private Player player;
-	private Enemy enemy;
-	private Statistics statistics;
-	private int increaseWaveValue = 1;
-	private ulong enemiesKilledThisPrestige = 0;
-	private bool blockedDamageBuffIsActive;
+    private HealthNode playerHealthNode;
+    private HealthNode enemyHealthNode;
+    private Player player;
+    private Enemy enemy;
+    private bool blockedDamageBuffIsActive;
 
-
-	public async override void _Ready()
+    public async override void _Ready()
     {
-		Instance = this;
-		await ToSignal(GetTree(), "process_frame"); // Wait one frame
-		player = GetTree().GetFirstNodeInGroup("player") as Player;
-		enemy = GetTree().GetFirstNodeInGroup("enemy") as Enemy;
+        Instance = this;
+        await ToSignal(GetTree(), "process_frame");
 
-		playerHealth = GetNode<HealthNode>("/root/Main/Player/HealthNode");
-        playerHealth.HealthChanged += OnPlayerHealthChanged;
-		playerHealth.Died += OnPlayerDied;
-		
-		statistics = GetNode<Statistics>("/root/Main/UserInterface/Statistics");
-		statistics.PlayerStatUpgraded += StatsGainedFromSkillPoints;
+        player = GetTree().GetFirstNodeInGroup("player") as Player;
 
-		DamageManager.Instance.AttackBlocked += OnAttackBlocked;
-		Ancestry.Instance.AncestryUpdated += StatsGainedFromAncestry;
+        playerHealthNode = player.GetNode<HealthNode>("HealthNode");
+		playerHealthNode.HealthChanged += OnPlayerHealthChanged;
+        playerHealthNode.Died += OnPlayerDied;
 
-		SpawnEnemy();
+        Statistics.Instance.PlayerStatUpgraded += OnPlayerStatUpgraded;
+        Statistics.Instance.EnemyStatUpgraded  += OnEnemyStatUpgraded;
+        DamageManager.Instance.AttackBlocked   += OnAttackBlocked;
+        Ancestry.Instance.AncestryUpdated      += OnAncestryUpdated;
 
-        UpdateUI();
-	}
+        SpawnEnemy();
+		UIManager.Instance.RefreshPlayerStats(playerHealthNode);
 
-
-	private void OnAttackBlocked(CharacterBody2D source, CharacterBody2D target)
-	{
-		TemporaryBuffsForPlayer("AttackDamageMultiplicative", 1);
-		if (source is MeeleeSkeleton skeleton)
-		{
-			
-		}
-	}
-
-	// make these go away after some time
-	private void TemporaryBuffsForPlayer(string statName, float value)
-	{
-		switch (statName)
-		{
-			case "AttackDamageMultiplicative":
-				if (!blockedDamageBuffIsActive)
-				{
-					blockedDamageBuffIsActive = true;
-
-					Statistics.Instance.playerStats[Statistics.Traits.Damage].AddMore(value);
-
-					Timer timer = CreateTempBuffTimer(5.0f);
-
-					timer.Timeout += () => {
-						Statistics.Instance.playerStats[Statistics.Traits.Damage].RemoveMore(value);
-						blockedDamageBuffIsActive = false;
-						timer.QueueFree(); 
-						UpdateUI();
-					};
-				}
-				break;
-
-			default:
-				GD.Print("Unknown temp buff: " + statName);
-				break;
-		}	
-		UpdateUI();
-	}
-
-    private Timer CreateTempBuffTimer(float buffDurationTime)
-    {
-		Timer timer = new Timer();
-		AddChild(timer);
-		timer.WaitTime = buffDurationTime;
-		timer.OneShot = true;
-		timer.Start();
-		return timer;
+        UpdateGeneralUI();
     }
 
-    private void StatsGainedFromAncestry(string nameOfAncestor)
-	{
-		// remove some honor used here maybe, or just keep that internally
-		UpdateUI();
-	}
-	
-	// could also add value param here, so that GameEventManager isnt responsible for this
-    private void StatsGainedFromSkillPoints(Traits traits)
-	{
-		// fix this spaghette
-        switch(traits) 
-        {
-            case Traits.MovementSpeed:
-                EmitSignal(SignalName.PlayerMovementSpeedChanged);
-                break;
-        }
-		UpdateUI();
-    }
-
-    private void UpdateUI()
-    {
-        UIManager.Instance.UpdatePlayerHealth(playerHealth.currentHealth, playerHealth.maxHealth);
-        UIManager.Instance.UpdateEnemyHealth(enemyHealth.currentHealth, enemyHealth.maxHealth);
-        UIManager.Instance.UpdateWaveCounter(WaveManager.Instance.currentWave);
-        UIManager.Instance.UpdateTotalKillsCounter(KillTracker.Instance.GetTotalKills());
-		UIManager.Instance.UpdateExpUI((ulong)ExperienceManager.Instance.currentExp, (ulong)ExperienceManager.Instance.GetExpRequiredForNextLevel());
-		UIManager.Instance.UpdatePlayerAttackDamage((float)Statistics.Instance.playerStats[Statistics.Traits.Damage].GetValue());
-		UIManager.Instance.UpdatePlayerAttackSpeed((float)Statistics.Instance.playerStats[Statistics.Traits.AttackSpeed].GetValue());
-		UIManager.Instance.UpdateSkillPointsUI(ExperienceManager.Instance.GetUnspentSkillPoints());
-
-		var basePlayerMovementSpeed = Statistics.Instance.playerStats[Statistics.Traits.MovementSpeed].BaseValue;
-		var playerMovementSpeed = Statistics.Instance.playerStats[Statistics.Traits.MovementSpeed].GetValue();
-		float movementSpeedPercentage = playerMovementSpeed / basePlayerMovementSpeed * 100; 
-		UIManager.Instance.UpdatePlayerMovementSpeed(movementSpeedPercentage);
-    }
-
-	private void SpawnEnemy()
-	{
-		// change this to not just instantiate some Meeleskeleton, but rather the enemy for that place or a random one maybe
-		// var newEnemy = ResourceLoader.Load<PackedScene>("res://characters/enemies/meelee enemy/SlimeBoss.tscn").Instantiate<SlimeBoss>();
-		var newEnemy = ResourceLoader.Load<PackedScene>("res://characters/enemies/meelee enemy/MeeleeSkeleton.tscn").Instantiate<MeeleeSkeleton>();
-		// also, find another way to do this than using the player pos
-		float offset = player.Position.X - 500;
-		newEnemy.GlobalPosition = new Vector2(enemySpawnPosition.X + offset, newEnemy.GlobalPosition.Y + 481);
-
-		AddChild(newEnemy);
-
-		enemyHealth = newEnemy.GetNode<HealthNode>("HealthNode");
-		enemyHealth.HealthChanged += OnEnemyHealthChanged;
-		enemyHealth.Died += OnEnemyDied;
-	}
-
-	private void OnEnemyDied(CharacterBody2D enemy)
-	{	
-		WaveManager.Instance.IncreaseWaveCounter();
-		KillTracker.Instance.IncreaseKillTracker(enemy);
-		ExperienceManager.Instance.AddExp(enemy);
-
-		SpawnEnemy();
-
-		UpdateUI();
-	}
-
-
-    private void OnPlayerDied(CharacterBody2D characterBody2D)
-    {
-		GD.Print("Player died!");
-		playerHealth.ResetHealth();
-		
-		UIManager.Instance.UpdatePlayerHealth(playerHealth.currentHealth, playerHealth.maxHealth);
-    }
+    // ── Health ───────────────────────────────────────────────────────────────
 
     private void OnPlayerHealthChanged(float newHealth, float maxHealth)
     {
-		UIManager.Instance.UpdatePlayerHealth(newHealth, maxHealth);
+        UIManager.Instance.UpdatePlayerHealth(newHealth, maxHealth);
     }
 
-	private void OnEnemyHealthChanged(float newHealth, float maxHealth)
+    private void OnPlayerDied(CharacterBody2D body)
+    {
+        playerHealthNode.ResetHealth();
+    }
+
+    private void OnEnemyHealthChanged(float newHealth, float maxHealth)
+    {
+        UIManager.Instance.UpdateEnemyHealth(newHealth, maxHealth);
+    }
+
+    private async void OnEnemyDied(CharacterBody2D enemy)
+    {
+        WaveManager.Instance.IncreaseWaveCounter();
+        KillTracker.Instance.IncreaseKillTracker(enemy);
+        ExperienceManager.Instance.AddExp(enemy);
+
+        UpdateGeneralUI();
+        
+        await ToSignal(enemy, Enemy.SignalName.DeathAnimationFinished);
+        SpawnEnemy();
+    }
+
+    private void UpdateGeneralUI()
+    {
+        UIManager.Instance.UpdateWaveCounter(WaveManager.Instance.currentWave);
+        UIManager.Instance.UpdateTotalKillsCounter(KillTracker.Instance.GetTotalKills());
+        UIManager.Instance.UpdateExpUI((ulong)ExperienceManager.Instance.currentExp, (ulong)ExperienceManager.Instance.GetExpRequiredForNextLevel());
+    }
+
+    // ── Stats ────────────────────────────────────────────────────────────────
+
+
+    private void OnPlayerStatUpgraded(Traits trait)
+    {
+        UIManager.Instance.RefreshPlayerStats(playerHealthNode);
+
+        if (trait == Traits.MovementSpeed)
+            EmitSignal(SignalName.PlayerMovementSpeedChanged);
+
+        if (trait == Traits.Health)
+            playerHealthNode.GetMaxHealthFromStatsDict();
+    }
+
+    private void OnEnemyStatUpgraded(Traits trait)
 	{
-		UIManager.Instance.UpdateEnemyHealth(newHealth, maxHealth);
+		UIManager.Instance.RefreshEnemyStats(enemyHealthNode);
+		if (trait == Traits.Health)
+            enemyHealthNode.GetMaxHealthFromStatsDict();
 	}
+
+    private void OnAncestryUpdated(string nameOfAncestor)
+    {
+        UIManager.Instance.RefreshPlayerStats(playerHealthNode);
+    }
+
+    // ── Buffs ────────────────────────────────────────────────────────────────
+
+    private void OnAttackBlocked(CharacterBody2D source, CharacterBody2D target)
+    {
+        if (blockedDamageBuffIsActive) return;
+
+        blockedDamageBuffIsActive = true;
+        Statistics.Instance.playerStats[Traits.Damage].AddMore(1);
+        UIManager.Instance.RefreshPlayerStats(playerHealthNode);
+
+        var timer = new Timer { WaitTime = 5.0f, OneShot = true };
+        AddChild(timer);
+        timer.Timeout += () =>
+        {
+            Statistics.Instance.playerStats[Traits.Damage].RemoveMore(1);
+            blockedDamageBuffIsActive = false;
+            UIManager.Instance.RefreshPlayerStats(playerHealthNode);
+            timer.QueueFree();
+        };
+        timer.Start();
+    }
+
+    // ── Spawning ─────────────────────────────────────────────────────────────
+
+    private void SpawnEnemy()
+    {
+        enemy = ResourceLoader.Load<PackedScene>("res://characters/enemies/meelee enemy/MeeleeSkeleton.tscn")
+            .Instantiate<MeeleeSkeleton>();
+
+        float offset = player.Position.X - 500;
+        enemy.GlobalPosition = new Vector2(enemySpawnPosition.X + offset, enemySpawnPosition.Y);
+        AddChild(enemy);
+
+        enemyHealthNode = enemy.GetNode<HealthNode>("HealthNode");
+        enemyHealthNode.HealthChanged += OnEnemyHealthChanged;
+        enemyHealthNode.Died += OnEnemyDied;
+		UIManager.Instance.RefreshEnemyStats(enemyHealthNode);
+    }
 
 }

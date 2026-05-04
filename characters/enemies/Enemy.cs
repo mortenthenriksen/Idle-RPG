@@ -3,40 +3,45 @@ using Components;
 using Godot;
 using Helpers;
 using Managers;
+using Upgrades;
 
 namespace Characters;
 
 public abstract partial class Enemy : CharacterBody2D
 {
-    private ProgressBar healthBar;
+    [Signal]
+    public delegate void DeathAnimationFinishedEventHandler();
+    
     private float healthMultiplier;
     private float damageMultiplier;
     private HealthNode healthNode;
-
-    protected float MeeleeEnemyMovementSpeed = -60.0f;
-    
+        
     public override void _Ready()
     {
         AddToGroup(Groups.Enemy);
-        healthBar = GetNode<ProgressBar>("HealthBar");
         healthNode = GetNode<HealthNode>("HealthNode");
-        healthNode.HealthChanged += OnHealthChanged;
 
         var waveDifficulty = WaveManager.Instance.GetWaveDifficulty();
+        healthMultiplier  = 1 + (float)(waveDifficulty * 0.1);
+        damageMultiplier  = 1 + (float)(waveDifficulty * 0.05);
 
-        // HP scales at 10% per difficulty
-        healthMultiplier = 1 + (float)(waveDifficulty * 0.1);
-        healthNode.maxHealth = Math.Floor(healthNode.maxHealth * healthMultiplier);
-        healthNode.currentHealth = Math.Floor(healthNode.currentHealth * healthMultiplier);
-
-        // Damage scales at 5% per difficulty (slower than HP)
-        damageMultiplier = 1 + (float)(waveDifficulty * 0.05);
-        Upgrades.Statistics.Instance.enemyStats[Upgrades.Statistics.Traits.Damage].AddMore(damageMultiplier - 1);
+        // always re-read from stat dict so upgrades are respected
+        var baseHealth = Statistics.Instance.enemyStats[Statistics.Traits.Health].GetValue();
+        healthNode.maxHealth     = Math.Floor(baseHealth * healthMultiplier);
+        healthNode.currentHealth = healthNode.maxHealth;
     }
 
-    private void OnHealthChanged(float newHealth, float maxHealth)
+    public float GetAttackInterval()
     {
-        if (healthBar != null)
-            healthBar.Value = newHealth;
+        var attackSpeed = Statistics.Instance.enemyStats[Statistics.Traits.AttackSpeed].GetValue();
+        return 1f / attackSpeed;
     }
+
+
+    protected void EmitOnDeathAnimationFinished()
+    {
+        EmitSignal(SignalName.DeathAnimationFinished);
+    }
+    
+    public float GetDamageMultiplier() => damageMultiplier;
 }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://c0ju5m2hkncdj"]
+[gd_scene load_steps=24 format=3 uid="uid://c0ju5m2hkncdj"]
 
 [ext_resource type="Script" path="res://scenes/Main.cs" id="1_afkx3"]
 [ext_resource type="PackedScene" uid="uid://dia4df047bi02" path="res://characters/player/Player.tscn" id="3_pnmoo"]
@@ -24,75 +24,6 @@
 [ext_resource type="PackedScene" uid="uid://n4fnjrs3y045" path="res://scenes/ui/Ancestry.tscn" id="22_2cq8c"]
 [ext_resource type="PackedScene" uid="uid://ba6wwuu6crodm" path="res://characters/player/MouseClicker.tscn" id="23_6rihw"]
 
-[sub_resource type="CSharpScript" id="CSharpScript_5slkb"]
-script/source = "using Godot;
-
-
-public partial class Coin : Node2D
-{
-    
-}
-"
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_an2w1"]
-load_path = "res://.godot/imported/spinning coin.png-526c642d62fdf12f13b8df374229918a.ctex"
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_s0aos"]
-atlas = SubResource("CompressedTexture2D_an2w1")
-region = Rect2(0, 0, 20, 18)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_datjp"]
-atlas = SubResource("CompressedTexture2D_an2w1")
-region = Rect2(21, 0, 20, 18)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_23tqr"]
-atlas = SubResource("CompressedTexture2D_an2w1")
-region = Rect2(42, 0, 20, 18)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_4goyl"]
-atlas = SubResource("CompressedTexture2D_an2w1")
-region = Rect2(63, 0, 20, 18)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_tkwsv"]
-atlas = SubResource("CompressedTexture2D_an2w1")
-region = Rect2(84, 0, 20, 18)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_gdxwk"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_s0aos")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_datjp")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_23tqr")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_4goyl")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_tkwsv")
-}],
-"loop": true,
-"name": &"default",
-"speed": 10.0
-}]
-
-[sub_resource type="PackedScene" id="PackedScene_qmt8e"]
-_bundled = {
-"conn_count": 0,
-"conns": PackedInt32Array(),
-"editable_instances": [],
-"names": PackedStringArray("Coin", "Node2D", "script", "AnimatedSprite2D", "AnimatedSprite2D", "sprite_frames", "autoplay", "frame", "frame_progress"),
-"node_count": 2,
-"node_paths": [NodePath(".")],
-"nodes": PackedInt32Array(-1, -1, 1, 0, -1, 1, 2, 0, 0, 1073741824, 0, 4, 3, -1, 4, 5, 1, 6, 2, 7, 3, 8, 4, 0),
-"variants": [SubResource("CSharpScript_5slkb"), SubResource("SpriteFrames_gdxwk"), "default", 4, 1.0],
-"version": 3
-}
-
 [node name="Main" type="Node2D"]
 script = ExtResource("1_afkx3")
 metadata/_edit_lock_ = true
@@ -108,7 +39,6 @@ script = ExtResource("6_7uq1e")
 [node name="UIManager" type="Node" parent="Managers"]
 script = ExtResource("7_73xji")
 pixelKubastaFontTheme = ExtResource("6_um6vy")
-coinPackedScene = SubResource("PackedScene_qmt8e")
 
 [node name="KillTracker" type="Node" parent="Managers"]
 script = ExtResource("7_858o5")
@@ -124,12 +54,6 @@ unspentSkillPoints = 100
 
 [node name="ItemDatabaseManager" type="Node" parent="Managers"]
 script = ExtResource("11_5x3sm")
-
-[node name="Player" parent="." instance=ExtResource("3_pnmoo")]
-position = Vector2(264, 480)
-metadata/_edit_lock_ = true
-
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="Player"]
 
 [node name="ParallaxBackground" parent="." instance=ExtResource("5_te7os")]
 
@@ -150,7 +74,7 @@ offset_top = 8.0
 offset_right = 64.0
 offset_bottom = 24.0
 theme = ExtResource("6_um6vy")
-text = "Life: "
+text = "Health: "
 vertical_alignment = 1
 
 [node name="EnemyHealthLabel" type="Label" parent="UserInterface/BottomPanel"]
@@ -161,7 +85,7 @@ offset_top = 8.0
 offset_right = 395.0
 offset_bottom = 24.0
 theme = ExtResource("6_um6vy")
-text = "Enemy life: "
+text = "Enemy Health: "
 vertical_alignment = 1
 
 [node name="ExpBar" type="TextureProgressBar" parent="UserInterface/BottomPanel"]
@@ -279,3 +203,9 @@ offset_bottom = 32.0
 metadata/_edit_lock_ = true
 
 [node name="MouseClicker" parent="." instance=ExtResource("23_6rihw")]
+
+[node name="Player" parent="." instance=ExtResource("3_pnmoo")]
+position = Vector2(264, 480)
+metadata/_edit_lock_ = true
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="Player"]

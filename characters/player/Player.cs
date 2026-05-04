@@ -36,11 +36,11 @@ public partial class Player : CharacterBody2D
 		animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 		sprite2d = GetNode<Sprite2D>("Sprite2D");
 		healthNode = GetNode<HealthNode>("HealthNode");
+		healthNode.InitializeHealth(Statistics.Instance.playerStats[Statistics.Traits.Health].GetValue());
 		area2D = GetNode<Area2D>("Area2D");
 		camera2D = GetNode<Camera2D>("Camera2D");
 		animationPlayer.SpeedScale = animationPlayerSpeedScale;
 		animationPlayer.AnimationFinished += OnAnimationFinished;
-		GameEventsManager.Instance.PlayerMovementSpeedChanged += OnMovementSpeedIncrease;
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -147,6 +147,7 @@ public partial class Player : CharacterBody2D
 		animationPlayerSpeedScale = 0.35f * (1 + playerMovementSpeed.GetIncreased().Sum());
 		animationPlayer.SpeedScale = animationPlayerSpeedScale;
 	}
+	
 
 	private void StartAttack()
 	{

@@ -2,6 +2,7 @@ using System;
 using Characters;
 using Components;
 using Godot;
+using Upgrades;
 
 namespace Managers;
 
@@ -10,21 +11,20 @@ public partial class UIManager : Node
     [Export]
     public Theme pixelKubastaFontTheme;
 
-    [Export]
-    public PackedScene coinPackedScene;
-
     public static UIManager Instance { get; private set; }
 
-    private Label playerHealthLabel;
-    private Label enemyHealthLabel;
-
     // stats tab
-    private Label playerLifeLabel;
-    private Label enemyLifeLabel;
+    private Label skillPointsLabel;
+
+    private Label playerHealthLabel;
     private Label playerAttackDamageLabel;
     private Label playerAttackSpeedLabel;
     private Label playerMovementSpeedLabel;
-    private Label skillPointsLabel;
+
+    private Label enemyHealthLabel;
+    private Label enemyAttackDamageLabel;
+    private Label enemyAttackSpeedLabel;
+    private Label enemyMovementSpeedLabel;
 
     private Label waveCounterLabel;
     private Label totalKillsCounterLabel;
@@ -34,52 +34,62 @@ public partial class UIManager : Node
     public override void _Ready()
     {
         Instance = this;
-        playerHealthLabel = GetNode<Label>("/root/Main/UserInterface/BottomPanel/PlayerHealthLabel");
-        enemyHealthLabel = GetNode<Label>("/root/Main/UserInterface/BottomPanel/EnemyHealthLabel");
         waveCounterLabel = GetNode<Label>("/root/Main/UserInterface/TopPanel/WaveCounterLabel");
         totalKillsCounterLabel = GetNode<Label>("/root/Main/UserInterface/TopPanel/TotalKillsCounterLabel");
         expBar = GetNode<TextureProgressBar>("%ExpBar");
         expLabel = GetNode<Label>("%ExpLabel");
 
         var statsNode = GetNode("/root/Main/UserInterface/Statistics");
-        playerLifeLabel = statsNode.GetNode<Label>("%PlayerLifeLabel");
-        enemyLifeLabel = statsNode.GetNode<Label>("%EnemyLifeLabel");
+        skillPointsLabel = statsNode.GetNode<Label>("%SkillPointsLabel");
+
+        playerHealthLabel = statsNode.GetNode<Label>("%PlayerHealthLabel");
         playerAttackDamageLabel = statsNode.GetNode<Label>("%PlayerAttackDamageLabel");
         playerAttackSpeedLabel = statsNode.GetNode<Label>("%PlayerAttackSpeedLabel");
         playerMovementSpeedLabel = statsNode.GetNode<Label>("%PlayerMovementSpeedLabel");
-        skillPointsLabel = statsNode.GetNode<Label>("%SkillPointsLabel");
+        
+        enemyHealthLabel = statsNode.GetNode<Label>("%EnemyHealthLabel");
+        enemyAttackDamageLabel = statsNode.GetNode<Label>("%EnemyAttackDamageLabel");
+        enemyAttackSpeedLabel = statsNode.GetNode<Label>("%EnemyAttackSpeedLabel");
+        enemyMovementSpeedLabel = statsNode.GetNode<Label>("%EnemyMovementSpeedLabel");
 
         DamageManager.Instance.DamageDealt += DisplayDamageNumber;
     }
+
+    public void RefreshPlayerStats(HealthNode healthNode)
+    {
+        var stats = Statistics.Instance.playerStats;
+        UpdatePlayerHealth(healthNode.currentHealth, healthNode.maxHealth);
+        UpdatePlayerAttackDamage((float)stats[Statistics.Traits.Damage].GetValue());
+        UpdatePlayerAttackSpeed((float)stats[Statistics.Traits.AttackSpeed].GetValue());
+        UpdateSkillPointsUI(ExperienceManager.Instance.GetUnspentSkillPoints());
+
+        var baseSpeed    = stats[Statistics.Traits.MovementSpeed].BaseValue;
+        var currentSpeed = (float)stats[Statistics.Traits.MovementSpeed].GetValue();
+        UpdatePlayerMovementSpeed(currentSpeed / baseSpeed * 100f);
+    }
+
+    public void RefreshEnemyStats(HealthNode healthNode)
+    {
+        var stats = Statistics.Instance.enemyStats;
+        UpdateEnemyHealth(healthNode.currentHealth, healthNode.maxHealth);
+        UpdateEnemyAttackDamage((float)stats[Statistics.Traits.Damage].GetValue());
+        UpdateEnemyAttackSpeed((float)stats[Statistics.Traits.AttackSpeed].GetValue());
+
+        UpdateSkillPointsUI(ExperienceManager.Instance.GetUnspentSkillPoints());
+
+        var baseSpeed    = stats[Statistics.Traits.MovementSpeed].BaseValue;
+        var currentSpeed = (float)stats[Statistics.Traits.MovementSpeed].GetValue();
+        UpdateEnemyMovementSpeed(currentSpeed / baseSpeed * 100f);
+    }
     
-    public void UpdateSkillPointsUI(int amount)
-    {
-        if (amount == 0)
-        {
-            skillPointsLabel.Visible = false;
-        } else
-        {
-            skillPointsLabel.Visible = true;
-            skillPointsLabel.Text = $"Points: {amount}";
-        }
-    }
-
-    public void UpdateExpUI(ulong expValue, ulong maxExp)
-    {
-        expBar.Value = expValue;
-        expBar.MaxValue = maxExp;
-
-        expLabel.Text = $"{expValue} / {maxExp}";
-    }
-
     public void UpdatePlayerHealth(double newPlayerHealth, double playerMaxHealth)
     {
-        playerLifeLabel.Text = $"{(int)newPlayerHealth} / {(int)playerMaxHealth}";
+        playerHealthLabel.Text = $"{(int)newPlayerHealth:F0} / {(int)playerMaxHealth:F0}";
     }
 
     public void UpdatePlayerAttackDamage(float playerDamage)
     {
-        playerAttackDamageLabel.Text = $"{playerDamage}";
+        playerAttackDamageLabel.Text = $"{playerDamage:F0}";
     }
 
     public void UpdatePlayerAttackSpeed(float attackSpeed)
@@ -92,22 +102,54 @@ public partial class UIManager : Node
         playerMovementSpeedLabel.Text = $"{playerMovementSpeed:F0}%";
     }
 
-
     public void UpdateEnemyHealth(double newEnemyHealth, double enemyMaxHealth)
     {
-        enemyLifeLabel.Text = $"{(int)newEnemyHealth} / {(int)enemyMaxHealth}";
+        enemyHealthLabel.Text = $"{(int)newEnemyHealth:F0} / {(int)enemyMaxHealth:F0}";
     }
 
+    public void UpdateEnemyAttackDamage(float enemyDamage)
+    {
+        enemyAttackDamageLabel.Text = $"{enemyDamage:F0}";
+    }   
+    public void UpdateEnemyAttackSpeed(float attackSpeed)
+    {
+        enemyAttackSpeedLabel.Text = $"{attackSpeed:F2}";
+    }
+    public void UpdateEnemyMovementSpeed(float enemyMovementSpeed)
+    {
+        enemyMovementSpeedLabel.Text = $"{enemyMovementSpeed:F0}%";
+    }
+
+    public void UpdateSkillPointsUI(int amount)
+    {
+        if (amount == 0)
+        {
+            skillPointsLabel.Visible = false;
+        } else
+        {
+            skillPointsLabel.Visible = true;
+            skillPointsLabel.Text = $"Points: {amount}";
+        }
+    }
+
+    // GENERAL UI 
     public void UpdateWaveCounter(int changeWaveValue)
     {
         waveCounterLabel.Text = $"Wave: {changeWaveValue} / {WaveManager.Instance.maxWave}";
     }
-
+    
     public void UpdateTotalKillsCounter(int totalKills)
     {
         totalKillsCounterLabel.Text = $"Total kills: {totalKills}";
     }
 
+    public void UpdateExpUI(ulong expValue, ulong maxExp)
+    {
+        expBar.Value = expValue;
+        expBar.MaxValue = maxExp;
+
+        expLabel.Text = $"{expValue} / {maxExp}";
+    }
 
     private void DisplayDamageNumber(CharacterBody2D source, CharacterBody2D target, float damageAmount)
     {

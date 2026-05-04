@@ -55,9 +55,6 @@ public partial class ExperienceManager : Node
         currentLevel++;
 
         unspentSkillPoints += 3;
-
-        // TODO: make the exp not rely on ulong, but rather use one that can handle even larger
-        UIManager.Instance.UpdateExpUI((ulong)currentExp, (ulong)GetExpRequiredForNextLevel());
     }
 
     public int GetUnspentSkillPoints()

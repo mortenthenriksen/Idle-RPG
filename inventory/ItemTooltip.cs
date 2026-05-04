@@ -8,7 +8,7 @@ public partial class ItemTooltip : PanelContainer
     private Label _slot;
     private Label _damage;
     private Label _defense;
-    private Label _life;
+    private Label _Health;
     private Label _movementSpeed;
 
     public override void _Ready()
@@ -17,7 +17,7 @@ public partial class ItemTooltip : PanelContainer
         _slot     = GetNode<Label>("%SlotLabel");
         _damage   = GetNode<Label>("%DamageLabel");
         _defense  = GetNode<Label>("%DefenseLabel");
-        _life   = GetNode<Label>("%LifeLabel");
+        _Health   = GetNode<Label>("%HealthLabel");
         _movementSpeed    = GetNode<Label>("%MovementSpeedLabel");
 
     }
@@ -29,7 +29,7 @@ public partial class ItemTooltip : PanelContainer
 
         SetStatLabel(_damage,  "Damage",  item.Damage,  item.DamageMin,  item.DamageMax);
         SetStatLabel(_defense, "Defense", item.Defense, item.DefenseMin, item.DefenseMax);
-        SetStatLabel(_life,  "Health",  item.Life,  item.LifeMin,  item.LifeMax);
+        SetStatLabel(_Health,  "Health",  item.Health,  item.HealthMin,  item.HealthMax);
         SetStatLabel(_movementSpeed,   "Speed",   item.MovementSpeed,   item.MovementSpeedMin,   item.MovementSpeedMax);
 
         GlobalPosition = position + new Vector2(8, 8);

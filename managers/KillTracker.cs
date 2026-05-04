@@ -41,8 +41,9 @@ namespace Managers
         {
             int total = 0;
             foreach (var count in killCounts.Values)
-                total += count;
+                total += count;       
             return total;
+
         }
 
         public int GetKillsForType(string enemyType)

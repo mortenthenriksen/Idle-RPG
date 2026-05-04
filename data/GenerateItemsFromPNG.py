@@ -27,7 +27,7 @@ DEFAULT_CSV_PATH   = "data/items.csv"
 CSV_COLUMNS = [
     "id", "name", "slot", "icon_path",
     "damage_min", "damage_max",
-    "life_min",   "life_max",
+    "Health_min",   "Health_max",
     "defense_min","defense_max",
     "movement_speed_min", "movement_speed_max",
 ]
@@ -58,7 +58,7 @@ SLOT_KEYWORDS = {
 
 # Per-slot: which stats the slot primarily gives (others get 0)
 SLOT_STAT_WEIGHTS = {
-    # (damage_w, life_w, defense_w, move_w)
+    # (damage_w, Health_w, defense_w, move_w)
     "Weapon":  (1.0,  0.0,  0.0,  0.0),
     "Shield":  (0.0,  0.3,  1.0,  0.0),
     "Helmet":  (0.0,  0.5,  0.8,  0.0),
@@ -73,7 +73,7 @@ SLOT_STAT_WEIGHTS = {
 # Base stat values at type=1 (before type scaling)
 BASE_STATS = {
     "damage":   (2.0,  5.0),   # (min, max)
-    "life":     (5.0, 12.0),
+    "Health":     (5.0, 12.0),
     "defense":  (2.0,  6.0),
     "move":     (1.0,  3.0),   # % bonus
 }
@@ -203,10 +203,10 @@ def main():
 
         type_level = infer_type_level(stem)
         weights    = SLOT_STAT_WEIGHTS.get(slot, (0, 0, 0, 0))
-        dmg_w, life_w, def_w, move_w = weights
+        dmg_w, Health_w, def_w, move_w = weights
 
         dmg_min,  dmg_max  = compute_stat_range(*BASE_STATS["damage"],  type_level, dmg_w)
-        life_min, life_max = compute_stat_range(*BASE_STATS["life"],    type_level, life_w)
+        Health_min, Health_max = compute_stat_range(*BASE_STATS["Health"],    type_level, Health_w)
         def_min,  def_max  = compute_stat_range(*BASE_STATS["defense"], type_level, def_w)
         mov_min,  mov_max  = compute_stat_range(*BASE_STATS["move"],    type_level, move_w)
 
@@ -217,8 +217,8 @@ def main():
             "icon_path":          icon_path,
             "damage_min":         dmg_min,
             "damage_max":         dmg_max,
-            "life_min":           life_min,
-            "life_max":           life_max,
+            "Health_min":           Health_min,
+            "Health_max":           Health_max,
             "defense_min":        def_min,
             "defense_max":        def_max,
             "movement_speed_min": mov_min,
@@ -238,13 +238,13 @@ def main():
 
     # preview
     print("\nNew rows preview:")
-    print(f"  {'id':>4}  {'name':<40}  {'slot':<8}  type  dmg        life       def        move")
+    print(f"  {'id':>4}  {'name':<40}  {'slot':<8}  type  dmg        Health       def        move")
     print(f"  {'-'*4}  {'-'*40}  {'-'*8}  {'-'*4}  {'-'*10} {'-'*10} {'-'*10} {'-'*10}")
     for r in new_rows:
         type_lvl = infer_type_level(r["name"].lower().replace(" ","_"))
         print(f"  {r['id']:>4}  {r['name']:<40}  {r['slot']:<8}  {type_lvl:>4}  "
               f"{r['damage_min']:>4}-{r['damage_max']:<4}  "
-              f"{r['life_min']:>4}-{r['life_max']:<4}  "
+              f"{r['Health_min']:>4}-{r['Health_max']:<4}  "
               f"{r['defense_min']:>4}-{r['defense_max']:<4}  "
               f"{r['movement_speed_min']:>4}-{r['movement_speed_max']:<4}")
 

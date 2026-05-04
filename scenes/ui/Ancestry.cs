@@ -80,7 +80,7 @@ public partial class Ancestry : Control
     {
         ancestryDict.Add("AD1339_1",(Statistics.Traits.Damage, 0.15f,0,10));
         ancestryDict.Add("AD1339_2",(Statistics.Traits.ExperienceGained,0.05f,0,10));
-        ancestryDict.Add("AD1339_3",(Statistics.Traits.Life,0.05f,0,10));
+        ancestryDict.Add("AD1339_3",(Statistics.Traits.Health,0.05f,0,10));
         ancestryDict.Add("AD1339_4",(Statistics.Traits.MovementSpeed,0.05f,0,10));
     }
 

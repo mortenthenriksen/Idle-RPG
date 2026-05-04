@@ -2,6 +2,7 @@ using Godot;
 using Upgrades;
 using Managers;
 using Components;
+using Autoload;
 namespace Inventory;
 
 public partial class Inventory : Control
@@ -20,7 +21,7 @@ public partial class Inventory : Control
     private TextureRect holdingDisplay;
 
     // ─────────────────────────────────────────────
-    // Lifecycle
+    // Healthcycle
     // ─────────────────────────────────────────────
 
     public override void _Ready()
@@ -193,47 +194,40 @@ public partial class Inventory : Control
         };
     }
 
-	private void ApplyItemStats(Item item)
-	{
-		if (item == null) return;
-		var stats = Statistics.Instance.playerStats;
+    private void ApplyItemStats(Item item)
+    {
+        if (item == null) return;
+        var stats = Statistics.Instance.playerStats;
 
-		if (item.Damage        != 0) stats[Statistics.Traits.Damage].AddFlat(item.Damage);
-		if (item.MovementSpeed != 0) stats[Statistics.Traits.MovementSpeed].AddFlat(item.MovementSpeed);
-		if (item.Life != 0)
-		{
-			stats[Statistics.Traits.Life].AddFlat(item.Life);
-			var healthNode = GetPlayerHealthNode();
-			if (healthNode != null)
-			{
-				healthNode.IncreaseMaxHealth(item.Life);
-				healthNode.IncreaseCurrentHealth(item.Life); 
-			}
-		}
+        if (item.Damage        != 0) stats[Statistics.Traits.Damage].AddFlat(item.Damage);
+        if (item.MovementSpeed != 0) stats[Statistics.Traits.MovementSpeed].AddFlat(item.MovementSpeed);
+        {
+            // EmitSignal(GameEventsManager.Instance.PlayerMovementSpeedChanged);
+        }
+        if (item.Health          != 0)
+        {
+            stats[Statistics.Traits.Health].AddFlat(item.Health);
+            GetPlayerHealthNode()?.GetMaxHealthFromStatsDict();
+        }
 
-		RefreshStatsUI();
-	}
+        RefreshStatsUI();
+    }
 
-	private void RemoveItemStats(Item item)
-	{
-		if (item == null) return;
-		var stats = Statistics.Instance.playerStats;
+    private void RemoveItemStats(Item item)
+    {
+        if (item == null) return;
+        var stats = Statistics.Instance.playerStats;
 
-		if (item.Damage        != 0) stats[Statistics.Traits.Damage].AddFlat(-item.Damage);
-		if (item.MovementSpeed != 0) stats[Statistics.Traits.MovementSpeed].AddFlat(-item.MovementSpeed);
-		if (item.Life != 0)
-		{
-			stats[Statistics.Traits.Life].AddFlat(-item.Life);
-			var healthNode = GetPlayerHealthNode();
-			if (healthNode != null)
-			{
-				healthNode.IncreaseMaxHealth(-item.Life);
-				healthNode.IncreaseCurrentHealth(0); // forces clamp + UI update
-			}
-		}
+        if (item.Damage        != 0) stats[Statistics.Traits.Damage].AddFlat(-item.Damage);
+        if (item.MovementSpeed != 0) stats[Statistics.Traits.MovementSpeed].AddFlat(-item.MovementSpeed);
+        if (item.Health          != 0)
+        {
+            stats[Statistics.Traits.Health].AddFlat(-item.Health);
+            GetPlayerHealthNode()?.GetMaxHealthFromStatsDict();
+        }
 
-		RefreshStatsUI();
-	}
+        RefreshStatsUI();
+    }
 
 	private HealthNode GetPlayerHealthNode()
 	{

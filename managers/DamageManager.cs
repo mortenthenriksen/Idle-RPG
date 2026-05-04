@@ -31,9 +31,11 @@ public partial class DamageManager : Node
 
     public void ApplyDamage(CharacterBody2D source, CharacterBody2D target)
     {
+        var healthNode = target.GetNode<HealthNode>("HealthNode");
+        if (healthNode.isDying) return; 
+
         var attackerStats = GetStatsFor(source);
         var damageAmount = attackerStats[Statistics.Traits.Damage].GetValue();
-        var healthNode = target.GetNode<HealthNode>("HealthNode");
         if (target.GetType() == typeof(Player))
         {
             var player = (Player)target;
@@ -53,24 +55,6 @@ public partial class DamageManager : Node
         if (character2d.IsInGroup("enemy")) return enemyStats;
         if (character2d.IsInGroup("player")) return playerStats;
         return null;
-    }
-
-    public void AdditiveIncreasePlayerDamage(float increaseDamageValue)
-    {
-        var damageStat = playerStats[Statistics.Traits.Damage];
-        damageStat.AddFlat(increaseDamageValue);
-    }
-
-    public void MultiplicativeIncreasePlayerDamage(float increaseDamageValue)
-    {
-        var damageStat = playerStats[Statistics.Traits.Damage];
-        damageStat.AddIncreased(increaseDamageValue);
-    }
-
-    public void IncreasePlayerAttackSpeed(float percentageIncrease)
-    {
-        var attackSpeedStat = playerStats[Statistics.Traits.AttackSpeed];
-        attackSpeedStat.AddIncreased(percentageIncrease);
     }
 }
 

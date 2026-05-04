@@ -35,8 +35,8 @@ public partial class ItemDatabaseManager : Node
                 Icon       = GD.Load<Texture2D>(cols[3]),  
                 DamageMin  = float.Parse(cols[4]),
                 DamageMax  = float.Parse(cols[5]),
-                LifeMin    = float.Parse(cols[6]),
-                LifeMax    = float.Parse(cols[7]),
+                HealthMin    = float.Parse(cols[6]),
+                HealthMax    = float.Parse(cols[7]),
                 DefenseMin = float.Parse(cols[8]),
                 DefenseMax = float.Parse(cols[9]),
                 MovementSpeedMin = float.Parse(cols[10]),
@@ -68,14 +68,14 @@ public partial class ItemDatabaseManager : Node
             DamageMax  = t.DamageMax,
             DefenseMin = t.DefenseMin,
             DefenseMax = t.DefenseMax,
-            LifeMin  = t.LifeMin,
-            LifeMax  = t.LifeMax,
+            HealthMin  = t.HealthMin,
+            HealthMax  = t.HealthMax,
             MovementSpeedMin   = t.MovementSpeedMin,
             MovementSpeedMax   = t.MovementSpeedMax,
             // Roll the actual stats
             Damage  = RollStat(t.DamageMin,  t.DamageMax),
             Defense = RollStat(t.DefenseMin, t.DefenseMax),
-            Life  = RollStat(t.LifeMin,  t.LifeMax),
+            Health  = RollStat(t.HealthMin,  t.HealthMax),
             MovementSpeed   = RollStat(t.MovementSpeedMin,   t.MovementSpeedMax),
         };
     }

@@ -1,4 +1,4 @@
-id,name,slot,icon_path,damage_min,damage_max,life_min,life_max,defense_min,defense_max,movement_speed_min,movement_speed_max
+id,name,slot,icon_path,damage_min,damage_max,Health_min,Health_max,defense_min,defense_max,movement_speed_min,movement_speed_max
 1,wooden_boots_type1_tier1,Boots,res://assets/items/equipment/equipable/wooden_boots_type1_tier1.png,0.0,0.0,1.0,2.4,0.6,1.8,1.0,3.0
 2,wooden_boots_type2_tier1,Boots,res://assets/items/equipment/equipable/wooden_boots_type2_tier1.png,0.0,0.0,1.35,3.24,0.81,2.43,300,4.05
 3,wooden_boots_type3_tier1,Boots,res://assets/items/equipment/equipable/wooden_boots_type3_tier1.png,0.0,0.0,1.82,4.37,1.09,3.28,1.82,5.47

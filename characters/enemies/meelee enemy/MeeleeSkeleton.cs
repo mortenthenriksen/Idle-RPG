@@ -1,6 +1,7 @@
 using Components;
 using Godot;
 using Managers;
+using Upgrades;
 
 namespace Characters;
 
@@ -42,16 +43,6 @@ public partial class MeeleeSkeleton : Enemy
         }
     }
 
-    public void Knockback(float direction, float force = 400f)
-    {
-        var tween = GetTree().CreateTween();
-        tween.TweenMethod(Callable.From((float v) =>
-        {
-            Velocity = new Vector2(v, Velocity.Y);
-            MoveAndSlide();
-        }), direction * force, 0f, 0.1f);
-    }
-
     private void OnFrameChanged()
     {
         var regularColor = new Color("#FFFFFF");
@@ -75,10 +66,12 @@ public partial class MeeleeSkeleton : Enemy
         if (animatedSprite2D.Animation == "attack1")
         {
             animatedSprite2D.Play("idle");
+            attackTimer.WaitTime = GetAttackInterval(); // re-read in case it changed
             attackTimer.Start();
         }
         if (animatedSprite2D.Animation == "death")
         {
+            EmitOnDeathAnimationFinished();
             QueueFree();
         }
         if (animatedSprite2D.Animation == "spawn")
@@ -94,6 +87,7 @@ public partial class MeeleeSkeleton : Enemy
         {
             playerInRange = true;
             animatedSprite2D.Play("idle");
+            attackTimer.WaitTime = GetAttackInterval(); // read from stats
             attackTimer.Start();
         }
     }
@@ -117,7 +111,8 @@ public partial class MeeleeSkeleton : Enemy
     {
         if (!playerInRange && hasSpawned)
         {
-            Velocity = new Vector2((float)this.MeeleeEnemyMovementSpeed, Velocity.Y);
+            var movementSpeed = Statistics.Instance.enemyStats[Statistics.Traits.MovementSpeed].GetValue();
+            Velocity = new Vector2((float)movementSpeed, Velocity.Y);
             MoveAndSlide();
         }
     }

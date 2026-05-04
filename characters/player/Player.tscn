@@ -163,7 +163,6 @@ shape = SubResource("CapsuleShape2D_2gqiw")
 metadata/_edit_lock_ = true
 
 [node name="HealthNode" parent="." instance=ExtResource("4_vqo02")]
-maxHealth = 20.0
 
 [node name="Area2D" type="Area2D" parent="."]
 visible = false

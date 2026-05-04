@@ -451,7 +451,6 @@ shape = SubResource("CapsuleShape2D_p3dhf")
 wait_time = 1.2
 
 [node name="HealthNode" parent="." instance=ExtResource("5_ogs6i")]
-maxHealth = 10.0
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 visible = false
