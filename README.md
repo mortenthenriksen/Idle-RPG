@@ -2,6 +2,7 @@
 
 - **Have fun and enjoy the journey :)**
 - Make the prestige system -> make enemies scale
+- Fix the health node / traits system, so that both are not keeping track of the health
 - Make the upgrade tab for the damage
 - Make the inventory :) -> going well,
 - add skill to the game (more attacks)

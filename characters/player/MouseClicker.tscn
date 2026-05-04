@@ -1,6 +1,15 @@
-[gd_scene load_steps=2 format=3 uid="uid://ba6wwuu6crodm"]
+[gd_scene load_steps=3 format=3 uid="uid://ba6wwuu6crodm"]
 
 [ext_resource type="Script" path="res://characters/player/MouseClicker.cs" id="1_e1esm"]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_s5ype"]
+radius = 16.0
+
 [node name="MouseClicker" type="Node2D"]
 script = ExtResource("1_e1esm")
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_s5ype")

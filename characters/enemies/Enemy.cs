@@ -10,6 +10,7 @@ public abstract partial class Enemy : CharacterBody2D
 {
     private ProgressBar healthBar;
     private float healthMultiplier;
+    private float damageMultiplier;
     private HealthNode healthNode;
 
     protected float MeeleeEnemyMovementSpeed = -60.0f;
@@ -21,23 +22,21 @@ public abstract partial class Enemy : CharacterBody2D
         healthNode = GetNode<HealthNode>("HealthNode");
         healthNode.HealthChanged += OnHealthChanged;
 
-        DifficultyToHealthMultiplier();
-        
+        var waveDifficulty = WaveManager.Instance.GetWaveDifficulty();
+
+        // HP scales at 10% per difficulty
+        healthMultiplier = 1 + (float)(waveDifficulty * 0.1);
         healthNode.maxHealth = Math.Floor(healthNode.maxHealth * healthMultiplier);
         healthNode.currentHealth = Math.Floor(healthNode.currentHealth * healthMultiplier);
+
+        // Damage scales at 5% per difficulty (slower than HP)
+        damageMultiplier = 1 + (float)(waveDifficulty * 0.05);
+        Upgrades.Statistics.Instance.enemyStats[Upgrades.Statistics.Traits.Damage].AddMore(damageMultiplier - 1);
     }
 
     private void OnHealthChanged(float newHealth, float maxHealth)
     {
         if (healthBar != null)
             healthBar.Value = newHealth;
-    }
-
-    private double DifficultyToHealthMultiplier()
-    {
-        // 2% increase per wave difficulty?
-        var waveDifficulty = WaveManager.Instance.GetWaveDifficulty();
-        healthMultiplier = 1 + (float)(waveDifficulty * 0.1);
-        return healthMultiplier;
     }
 }

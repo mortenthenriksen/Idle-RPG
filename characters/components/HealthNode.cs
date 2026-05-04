@@ -10,7 +10,7 @@ public partial class HealthNode : Node
     public double maxHealth = 100;
     public double currentHealth;
     public bool IsDead => currentHealth <= 0;
-    private bool isDying = false; 
+    public bool isDying = false; 
 
     [Signal]
     public delegate void HealthChangedEventHandler(float newHealth, float maxHealth);
