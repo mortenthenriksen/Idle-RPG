@@ -348,8 +348,9 @@ script = ExtResource("1_uedg7")
 position = Vector2(4, -39)
 scale = Vector2(1.45, 1.45)
 sprite_frames = SubResource("SpriteFrames_kyiot")
-animation = &"run"
-frame_progress = 0.467035
+animation = &"spawn"
+frame = 3
+frame_progress = 1.0
 flip_h = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

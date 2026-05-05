@@ -43,7 +43,8 @@ public partial class GameEventsManager : Node
         SpawnEnemy();
 		UIManager.Instance.RefreshPlayerStats(playerHealthNode);
 
-        UpdateGeneralUI();
+        // find a better name for htis
+        UpdatePanelsUI();
     }
 
     // ── Health ───────────────────────────────────────────────────────────────
@@ -69,13 +70,15 @@ public partial class GameEventsManager : Node
         KillTracker.Instance.IncreaseKillTracker(enemy);
         ExperienceManager.Instance.AddExp(enemy);
 
-        UpdateGeneralUI();
+        UpdatePanelsUI();
         
         await ToSignal(enemy, Enemy.SignalName.DeathAnimationFinished);
         SpawnEnemy();
+
+        
     }
 
-    private void UpdateGeneralUI()
+    private void UpdatePanelsUI()
     {
         UIManager.Instance.UpdateWaveCounter(WaveManager.Instance.currentWave);
         UIManager.Instance.UpdateTotalKillsCounter(KillTracker.Instance.GetTotalKills());
@@ -87,24 +90,27 @@ public partial class GameEventsManager : Node
 
     private void OnPlayerStatUpgraded(Traits trait, float value)
     {
-        UIManager.Instance.RefreshPlayerStats(playerHealthNode);
 
         if (trait == Traits.MovementSpeed)
             EmitSignal(SignalName.PlayerMovementSpeedChanged, value);
 
         if (trait == Traits.Health)
             playerHealthNode.GetMaxHealthFromStatsDict();
+            
+        UIManager.Instance.RefreshPlayerStats(playerHealthNode);
     }
 
     private void OnEnemyStatUpgraded(Traits trait, float value)
 	{
-		UIManager.Instance.RefreshEnemyStats(enemyHealthNode);
 		if (trait == Traits.Health)
             enemyHealthNode.GetMaxHealthFromStatsDict();
+		UIManager.Instance.RefreshEnemyStats(enemyHealthNode);
 	}
 
-    private void OnAncestryUpdated(string nameOfAncestor)
+    private void OnAncestryUpdated(AncestryEntry ancestryEntry)
     {
+        if (ancestryEntry.Trait == Traits.Health)
+            playerHealthNode.GetMaxHealthFromStatsDict();
         UIManager.Instance.RefreshPlayerStats(playerHealthNode);
     }
 
@@ -134,10 +140,9 @@ public partial class GameEventsManager : Node
 
     private void SpawnEnemy()
     {
-        enemy = ResourceLoader.Load<PackedScene>("res://characters/enemies/meelee enemy/MeeleeSkeleton.tscn").Instantiate<MeeleeSkeleton>();
+        enemy = ResourceLoader.Load<PackedScene>("res://characters/enemies/ranged enemy/GhostWarrior.tscn").Instantiate<GhostWarrior>();
 
-        float offset = player.Position.X - 500;
-        enemy.GlobalPosition = new Vector2(enemySpawnPosition.X + offset, enemySpawnPosition.Y);
+        enemy.GlobalPosition = new Vector2(player.GlobalPosition.X + 200, 481);
         AddChild(enemy);
 
         enemyHealthNode = enemy.GetNode<HealthNode>("HealthNode");

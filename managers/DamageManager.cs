@@ -29,7 +29,7 @@ public partial class DamageManager : Node
         enemyStats = Statistics.Instance.GetenemyStats();
     }
 
-    public void ApplyDamage(CharacterBody2D source, CharacterBody2D target)
+    public void ApplyDamage(CharacterBody2D source, CharacterBody2D target, bool isCrit)
     {
         var healthNode = target.GetNode<HealthNode>("HealthNode");
         if (healthNode.isDying) return;
@@ -37,14 +37,11 @@ public partial class DamageManager : Node
         var attackerStats = GetStatsFor(source);
         var damage = attackerStats[Statistics.Traits.Damage].GetValue();
 
-        bool isCrit = false;
         if (source.IsInGroup("player"))
         {
-            float critChance = playerStats[Statistics.Traits.CritChance].GetValue();
-            if (GD.Randf() <= critChance)
+            if (isCrit)
             {
                 damage *= playerStats[Statistics.Traits.CritDamage].GetValue();
-                isCrit = true;
             }
         }
 
@@ -56,10 +53,20 @@ public partial class DamageManager : Node
                 EmitSignal("AttackBlocked", source, target);
                 return;
             }
+            damage = CalculateDamageAfterDefence(damage);
         }
 
         healthNode.ApplyDamage(damage);
         EmitSignal("DamageDealt", source, target, damage, isCrit);
+    }
+    
+    private float CalculateDamageAfterDefence(float rawDamage)
+    {
+        var defence = (float)playerStats[Statistics.Traits.Defence].GetValue();
+        // D4-style: damage reduction = defence / (defence + 50)
+        // 50 defence = 50% reduction, 100 = 67%, scales but never reaches 100%
+        var reductionPercent = defence / (defence + 50f);
+        return rawDamage * (1f - reductionPercent);
     }
 
     private Dictionary<Statistics.Traits, ModifiableStat> GetStatsFor(CharacterBody2D character2d)

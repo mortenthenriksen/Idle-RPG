@@ -17,6 +17,7 @@ public partial class UIManager : Node
     private Label skillPointsLabel;
 
     private Label playerHealthLabel;
+    private Label playerDefenceLabel;
     private Label playerAttackDamageLabel;
     private Label playerAttackSpeedLabel;
     private Label playerMovementSpeedLabel;
@@ -36,6 +37,7 @@ public partial class UIManager : Node
     public override void _Ready()
     {
         Instance = this;
+        // make these accessible in anaother way
         waveCounterLabel = GetNode<Label>("/root/Main/UserInterface/TopPanel/WaveCounterLabel");
         totalKillsCounterLabel = GetNode<Label>("/root/Main/UserInterface/TopPanel/TotalKillsCounterLabel");
         expBar = GetNode<TextureProgressBar>("%ExpBar");
@@ -45,6 +47,7 @@ public partial class UIManager : Node
         skillPointsLabel = statsNode.GetNode<Label>("%SkillPointsLabel");
 
         playerHealthLabel = statsNode.GetNode<Label>("%PlayerHealthLabel");
+        playerDefenceLabel = statsNode.GetNode<Label>("%PlayerDefenceLabel");
         playerAttackDamageLabel = statsNode.GetNode<Label>("%PlayerAttackDamageLabel");
         playerAttackSpeedLabel = statsNode.GetNode<Label>("%PlayerAttackSpeedLabel");
         playerMovementSpeedLabel = statsNode.GetNode<Label>("%PlayerMovementSpeedLabel");
@@ -63,6 +66,7 @@ public partial class UIManager : Node
     {
         var stats = Statistics.Instance.playerStats;
         UpdatePlayerHealth(healthNode.currentHealth, healthNode.maxHealth);
+        UpdatePlayerDefence((float)stats[Statistics.Traits.Defence].GetValue());
         UpdatePlayerAttackDamage((float)stats[Statistics.Traits.Damage].GetValue());
         UpdatePlayerAttackSpeed((float)stats[Statistics.Traits.AttackSpeed].GetValue());
         UpdatePlayerCritChance((float)stats[Statistics.Traits.CritChance].GetValue());
@@ -74,6 +78,12 @@ public partial class UIManager : Node
         var currentSpeed = (float)stats[Statistics.Traits.MovementSpeed].GetValue();
         UpdatePlayerMovementSpeed(currentSpeed / baseSpeed * 100f);
     }
+
+    private void UpdatePlayerDefence(float playerDefence)
+    {
+        playerDefenceLabel.Text = $"{playerDefence:F0}";
+    }
+
 
     public void RefreshEnemyStats(HealthNode healthNode)
     {
@@ -141,18 +151,6 @@ public partial class UIManager : Node
         enemyMovementSpeedLabel.Text = $"{enemyMovementSpeed:F0}%";
     }
 
-    public void UpdateSkillPointsUI(int amount)
-    {
-        if (amount == 0)
-        {
-            skillPointsLabel.Visible = false;
-        } else
-        {
-            skillPointsLabel.Visible = true;
-            skillPointsLabel.Text = $"Points: {amount}";
-        }
-    }
-
     // GENERAL UI 
     public void UpdateWaveCounter(int changeWaveValue)
     {
@@ -171,6 +169,20 @@ public partial class UIManager : Node
 
         expLabel.Text = $"{expValue} / {maxExp}";
     }
+
+    
+    public void UpdateSkillPointsUI(int amount)
+    {
+        if (amount == 0)
+        {
+            skillPointsLabel.Visible = false;
+        } else
+        {
+            skillPointsLabel.Visible = true;
+            skillPointsLabel.Text = $"Points: {amount}";
+        }
+    }
+
 
     private void DisplayDamageNumber(CharacterBody2D source, CharacterBody2D target, float damageAmount, bool isCrit)
     {

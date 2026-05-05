@@ -15,7 +15,7 @@ public partial class Statistics : Control
 
     public static Statistics Instance { get; private set; }
 
-    public enum Traits { Damage, Health, AttackSpeed, MovementSpeed, ExperienceGained, CritChance, CritDamage}
+    public enum Traits { Damage, Health, Defence, AttackSpeed, MovementSpeed, ExperienceGained, CritChance, CritDamage}
 
     public Dictionary<Traits, ModifiableStat> playerStats = new();
     public Dictionary<Traits, ModifiableStat> enemyStats = new();
@@ -23,11 +23,12 @@ public partial class Statistics : Control
     // ── To add a new stat upgrade: add one entry here ────────────────────────
     private static readonly Dictionary<Traits, (float flat, float increased)> upgradeAmounts = new()
     {
-        { Traits.Damage,        (flat: 2,  increased: 0)      },
         { Traits.Health,        (flat: 5,  increased: 0)      },
+        { Traits.Defence,       (flat: 10,  increased: 0)      },
+        { Traits.Damage,        (flat: 2,  increased: 0)      },
         { Traits.AttackSpeed,   (flat: 0,  increased: 0.1f)   },
         { Traits.MovementSpeed, (flat: 0,  increased: 0.1f)  },
-        { Traits.CritChance,    (flat: 0.1f,  increased: 0.1f)  },
+        { Traits.CritChance,    (flat: 0.1f,  increased: 0.0f)  },
         { Traits.CritDamage,    (flat: 0,  increased: 10f)  },
     };
 
@@ -40,17 +41,18 @@ public partial class Statistics : Control
 
     private void InitializeStats()
     {
-        playerStats[Traits.Damage]           = new ModifiableStat(1);
         playerStats[Traits.Health]           = new ModifiableStat(30);
-        playerStats[Traits.AttackSpeed]      = new ModifiableStat(1.33f);
+        playerStats[Traits.Defence]          = new ModifiableStat(0);
+        playerStats[Traits.Damage]           = new ModifiableStat(1);
+        playerStats[Traits.AttackSpeed]      = new ModifiableStat(2f);
         playerStats[Traits.MovementSpeed]    = new ModifiableStat(85f);
         playerStats[Traits.ExperienceGained] = new ModifiableStat(0f);
-        playerStats[Traits.CritChance]       = new ModifiableStat(1f); // 5% base
+        playerStats[Traits.CritChance]       = new ModifiableStat(0.25f); // 5% base
         playerStats[Traits.CritDamage]       = new ModifiableStat(1.5f);      // 1.5x base
 
-        enemyStats[Traits.Damage]            = new ModifiableStat(1);
-        enemyStats[Traits.Health]            = new ModifiableStat(17);
-        enemyStats[Traits.AttackSpeed]       = new ModifiableStat(1.33f);
+        enemyStats[Traits.Damage]            = new ModifiableStat(100);
+        enemyStats[Traits.Health]            = new ModifiableStat(12);
+        enemyStats[Traits.AttackSpeed]       = new ModifiableStat(0.75f);
         enemyStats[Traits.MovementSpeed]     = new ModifiableStat(-60f);
     }
 
@@ -60,6 +62,7 @@ public partial class Statistics : Control
         var playerButtons = new Dictionary<string, Traits>
         {
             { "%PlayerAttackDamageButton",  Traits.Damage        },
+            { "%PlayerDefenceButton",       Traits.Defence        },
             { "%PlayerHealthButton",        Traits.Health          },
             { "%PlayerAttackSpeedButton",   Traits.AttackSpeed   },
             { "%PlayerMovementSpeedButton", Traits.MovementSpeed },

@@ -44,7 +44,7 @@ offset_right = 325.0
 offset_bottom = 288.0
 theme = ExtResource("1_5opkg")
 theme_override_styles/panel = SubResource("StyleBoxTexture_u51f2")
-scroll_vertical = 100
+scroll_vertical = 158
 horizontal_scroll_mode = 3
 vertical_scroll_mode = 3
 

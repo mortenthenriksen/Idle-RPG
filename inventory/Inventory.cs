@@ -210,6 +210,7 @@ public partial class Inventory : Control
             stats[Statistics.Traits.Health].AddFlat(item.Health);
             GetPlayerHealthNode()?.GetMaxHealthFromStatsDict();
         }
+        if (item.Defense != 0) stats[Statistics.Traits.Defence].AddFlat(item.Defense);
 
         RefreshStatsUI();
     }
@@ -219,7 +220,7 @@ public partial class Inventory : Control
         if (item == null) return;
         var stats = Statistics.Instance.playerStats;
 
-        if (item.Damage        != 0) stats[Statistics.Traits.Damage].AddFlat(item.Damage);
+        if (item.Damage        != 0) stats[Statistics.Traits.Damage].RemoveFlat(item.Damage);
         if (item.MovementSpeed != 0) 
         {
             stats[Statistics.Traits.MovementSpeed].RemoveFlat(item.MovementSpeed);
@@ -230,6 +231,7 @@ public partial class Inventory : Control
             stats[Statistics.Traits.Health].RemoveFlat(item.Health);
             GetPlayerHealthNode()?.GetMaxHealthFromStatsDict();
         }
+        if (item.Defense != 0) stats[Statistics.Traits.Defence].RemoveFlat(item.Defense);
 
         RefreshStatsUI();
     }

@@ -54,7 +54,7 @@ public partial class SlimeBoss : Enemy
                 if (body is Player player)
                 {
                     // also make this damageamount come from the damagemanager
-                    DamageManager.Instance.ApplyDamage(this, player);
+                    DamageManager.Instance.ApplyDamage(this, player, false);
                 }
             }
         }

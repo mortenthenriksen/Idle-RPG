@@ -6,7 +6,6 @@ namespace Characters;
 
 public partial class MouseClicker : Node2D
 {
-    private Enemy enemy;
     private Area2D area2D;
     private CollisionShape2D collisionShape2D;
 
@@ -17,9 +16,9 @@ public partial class MouseClicker : Node2D
     }
 
 
-    public void GetEnemy()
+    public Enemy GetEnemy()
     {
-        enemy = GetTree().GetFirstNodeInGroup("enemy") as Enemy;        
+        return GetTree().GetFirstNodeInGroup("enemy") as Enemy;        
     }
 
     public override void _Input(InputEvent @event)
@@ -28,7 +27,8 @@ public partial class MouseClicker : Node2D
 
         if (@event is InputEventMouseButton mb && mb.Pressed && mb.ButtonIndex == MouseButton.Left)
         {
-            GetEnemy();
+            var enemy = GetEnemy();     
+            if (enemy == null) return;
             var enemyArea2D = enemy.GetNode<Area2D>("Area2D");
             var overlapping = area2D.GetOverlappingAreas();
             var healthNode = enemy.GetNode<HealthNode>("HealthNode");
@@ -37,7 +37,7 @@ public partial class MouseClicker : Node2D
             {
                 var player = GetTree().GetFirstNodeInGroup("player") as Player;
                 if (player != null)
-                    DamageManager.Instance.ApplyDamage(player, enemy);
+                    DamageManager.Instance.ApplyDamage(player, enemy, false);
             }
         }
     }

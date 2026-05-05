@@ -1,0 +1,145 @@
+[gd_scene load_steps=21 format=3 uid="uid://crkn17mithpfy"]
+
+[ext_resource type="Script" path="res://characters/enemies/ranged enemy/GhostProjectile.cs" id="1_2ve7g"]
+[ext_resource type="Texture2D" uid="uid://ddrmb4sw205hr" path="res://assets/characters/enemies/ranged/ghost warrior/Bringer-of-Death-SpritSheet.png" id="1_3emme"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_rline"]
+radius = 15.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2se07"]
+atlas = ExtResource("1_3emme")
+region = Rect2(140, 558, 140, 93)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d465l"]
+atlas = ExtResource("1_3emme")
+region = Rect2(280, 558, 140, 93)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y2con"]
+atlas = ExtResource("1_3emme")
+region = Rect2(420, 558, 140, 93)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cl7oo"]
+atlas = ExtResource("1_3emme")
+region = Rect2(560, 558, 140, 93)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7ujcm"]
+atlas = ExtResource("1_3emme")
+region = Rect2(700, 558, 140, 93)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a8xpu"]
+atlas = ExtResource("1_3emme")
+region = Rect2(840, 558, 140, 93)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l1y1q"]
+atlas = ExtResource("1_3emme")
+region = Rect2(980, 558, 140, 93)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rhll3"]
+atlas = ExtResource("1_3emme")
+region = Rect2(0, 558, 140, 93)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4fyl7"]
+atlas = ExtResource("1_3emme")
+region = Rect2(0, 651, 140, 93)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vlxq8"]
+atlas = ExtResource("1_3emme")
+region = Rect2(140, 651, 140, 93)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h05y7"]
+atlas = ExtResource("1_3emme")
+region = Rect2(280, 651, 140, 93)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fygj8"]
+atlas = ExtResource("1_3emme")
+region = Rect2(420, 651, 140, 93)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kj48x"]
+atlas = ExtResource("1_3emme")
+region = Rect2(560, 651, 140, 93)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w3bdi"]
+atlas = ExtResource("1_3emme")
+region = Rect2(700, 651, 140, 93)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4jk8i"]
+atlas = ExtResource("1_3emme")
+region = Rect2(840, 651, 140, 93)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x8eaf"]
+atlas = ExtResource("1_3emme")
+region = Rect2(980, 651, 140, 93)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_kx640"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2se07")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d465l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y2con")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cl7oo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7ujcm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a8xpu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l1y1q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rhll3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4fyl7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vlxq8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h05y7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fygj8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kj48x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w3bdi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4jk8i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x8eaf")
+}],
+"loop": false,
+"name": &"default",
+"speed": 20.0
+}]
+
+[node name="GhostProjectile" type="Area2D"]
+collision_layer = 8
+script = ExtResource("1_2ve7g")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -39)
+shape = SubResource("CircleShape2D_rline")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(4, -68)
+scale = Vector2(1.5, 1.5)
+sprite_frames = SubResource("SpriteFrames_kx640")
+frame = 15
+frame_progress = 1.0
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="OnAnimationFinished"]
+[connection signal="frame_changed" from="AnimatedSprite2D" to="." method="OnFrameChanged"]

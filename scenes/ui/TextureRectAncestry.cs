@@ -16,9 +16,10 @@ public partial class TextureRectAncestry : TextureRect
     {
         var label = new Label();
         var ancestryDict = Ancestry.Instance.GetAncestryDict();
-        if (ancestryDict.TryGetValue(this.Name, out var value))
+        if (ancestryDict.TryGetValue(Name, out var value))
         {
-            label.Text = $"Increases {value.Item1} with {(int)(value.Item2 * 100)}%\nTotal: {(int)(value.Item2 * value.Item3 * 100)}%";
+            label.Text = $"Increases {value.Trait} with {(int)(value.AmountPerLevel * 100)}%" + 
+            $"\nTotal: {(int)(value.AmountPerLevel * value.CurrentLevel * 100)}%";
         }
 
         return label;

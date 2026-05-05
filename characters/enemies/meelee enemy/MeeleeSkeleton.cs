@@ -55,7 +55,7 @@ public partial class MeeleeSkeleton : Enemy
             {
                 if (body is Player player)
                 {
-                    DamageManager.Instance.ApplyDamage(this, player);
+                    DamageManager.Instance.ApplyDamage(this, player, false);
                 }
             }
         }

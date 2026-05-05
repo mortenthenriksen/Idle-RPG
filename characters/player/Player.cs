@@ -22,12 +22,12 @@ public partial class Player : CharacterBody2D
 	private HealthNode healthNode;
     private Area2D area2D;
 	private Camera2D camera2D;
-    private float attacksPerSecond;
 	
 	private bool enemyInRange = false;
 	private bool isBlocking = false;
 	private bool isAutoPlay = true;
 
+    private float attacksPerSecond;
 	private float attackCooldown = 0.0f;
 	private float attackInterval = 1.0f;
 
@@ -60,7 +60,7 @@ public partial class Player : CharacterBody2D
 
 	private void HandleAutoPlay()
 	{
-		if (enemyInRange || animationPlayer.CurrentAnimation == "attack1" || isBlocking)
+		if (enemyInRange || animationPlayer.CurrentAnimation == "attack1" || animationPlayer.CurrentAnimation == "crit" || isBlocking)
 		{
 			Velocity = new Vector2(0, Velocity.Y);
 			return;
@@ -70,7 +70,10 @@ public partial class Player : CharacterBody2D
 		Velocity = new Vector2(speed, Velocity.Y);
 
 		if (animationPlayer.CurrentAnimation != "run")
+		{
+			animationPlayer.SpeedScale = animationPlayerSpeedScale; 
 			animationPlayer.Play("run");
+		}
 	}
 
 	private void HandleManualControl()
@@ -126,8 +129,14 @@ public partial class Player : CharacterBody2D
 		while (attackCooldown >= attackInterval && !isBlocking)
 		{
 			attackCooldown -= attackInterval;
-			StartAttack();
-			DealDamage();
+			bool isCrit = false;
+			float critChance = Statistics.Instance.playerStats[Statistics.Traits.CritChance].GetValue();
+			if (GD.Randf() <= critChance)
+			{
+				isCrit = true;
+			}
+			StartAttack(isCrit);
+			DealDamage(isCrit);
 		}
 	}
 
@@ -152,14 +161,15 @@ public partial class Player : CharacterBody2D
 	}
 	
 
-	private void StartAttack()
+	private void StartAttack(bool isCrit)
 	{
 		if (attacksPerSecond < 5)
 			animationPlayer.SpeedScale = attacksPerSecond / 2;
 		else
 			animationPlayer.SpeedScale = attacksPerSecond * 5;
 
-		animationPlayer.Play("attack1");
+		if (isCrit) animationPlayer.Play("crit");
+		else animationPlayer.Play("attack1");
 	}
 
 	private void OnAnimationFinished(StringName animName)
@@ -173,13 +183,13 @@ public partial class Player : CharacterBody2D
 		}
 	}
 
-	private void DealDamage()
+	private void DealDamage(bool isCrit)
 	{
 		var bodies = area2D.GetOverlappingBodies();
 		foreach (var body in bodies)
 		{
 			if (body is CharacterBody2D target && body.IsInGroup("enemy"))
-				DamageManager.Instance.ApplyDamage(this, target);
+				DamageManager.Instance.ApplyDamage(this, target, isCrit);
 		}
 	}
 
