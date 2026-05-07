@@ -169,7 +169,10 @@ public partial class Player : CharacterBody2D
 			animationPlayer.SpeedScale = attacksPerSecond * 5;
 
 		if (isCrit) animationPlayer.Play("crit");
-		else animationPlayer.Play("attack1");
+		else
+		{
+			animationPlayer.Play("attack1");
+		}
 	}
 
 	private void OnAnimationFinished(StringName animName)
@@ -179,7 +182,7 @@ public partial class Player : CharacterBody2D
 		if (animName == "block")
 		{
 			isBlocking = false;
-			attackCooldown = attackInterval;
+			attackCooldown = 0;
 		}
 	}
 

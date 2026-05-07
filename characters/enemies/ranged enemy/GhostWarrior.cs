@@ -73,7 +73,6 @@ public partial class GhostWarrior : Enemy
         }
         else if (animName == "death")
         {
-            currentState = State.Dying;
             EmitOnDeathAnimationFinished();
             QueueFree();
         }
@@ -82,6 +81,7 @@ public partial class GhostWarrior : Enemy
     private void OnDeath(CharacterBody2D characterBody2D)
     {
         // clean up crew
+        currentState = State.Dying;
         var collision = GetNode<CollisionShape2D>("CollisionShape2D");
         collision.Disabled = true;
         meleeArea2D.Monitoring = false;

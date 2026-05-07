@@ -89,4 +89,6 @@ public partial class ItemDatabaseManager : Node
     // Keep GetByName for lookups that don't need a roll (e.g. checking slot type)
     public Item GetByName(string name) =>
         _templates.TryGetValue(name, out var t) ? t : null;
+
+    public IEnumerable<string> GetAllItemNames() => _templates.Keys;
 }

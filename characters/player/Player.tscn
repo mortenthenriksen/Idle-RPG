@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dia4df047bi02"]
+[gd_scene load_steps=15 format=3 uid="uid://dia4df047bi02"]
 
 [ext_resource type="Script" path="res://characters/player/Player.cs" id="1_d6upt"]
 [ext_resource type="PackedScene" uid="uid://omp0jrbimtfm" path="res://characters/components/HealthNode.tscn" id="4_vqo02"]
@@ -53,7 +53,7 @@ tracks/2/keys = {
 
 [sub_resource type="Animation" id="Animation_l3g6w"]
 resource_name = "attack1"
-length = 0.2
+length = 0.1667
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -159,10 +159,27 @@ tracks/0/keys = {
 "values": [48, 49, 50, 51, 52, 53, 54, 55]
 }
 
+[sub_resource type="Animation" id="Animation_67pi8"]
+resource_name = "attack2"
+length = 0.1667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0333333, 0.0666667, 0.1, 0.133333),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [12, 13, 14, 15, 16]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_hq8m2"]
 _data = {
 "RESET": SubResource("Animation_e2bf0"),
 "attack1": SubResource("Animation_l3g6w"),
+"attack2": SubResource("Animation_67pi8"),
 "block": SubResource("Animation_8obhs"),
 "crit": SubResource("Animation_07lxq"),
 "dash": SubResource("Animation_ws7ww"),

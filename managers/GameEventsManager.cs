@@ -71,11 +71,16 @@ public partial class GameEventsManager : Node
         ExperienceManager.Instance.AddExp(enemy);
 
         UpdatePanelsUI();
-        
+
+        var drop = LootTableManager.Instance.RollDrop();
+        if (drop != null)
+        {
+            var inventory = GetTree().GetFirstNodeInGroup("inventory") as global::Inventory.Inventory;
+            inventory?.TryAddItem(drop);
+        }
+
         await ToSignal(enemy, Enemy.SignalName.DeathAnimationFinished);
         SpawnEnemy();
-
-        
     }
 
     private void UpdatePanelsUI()

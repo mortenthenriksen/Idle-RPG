@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cpw0xqvx7al43"
-path="res://.godot/imported/wooden_gloves_type10_tier1.png-912cff414ad2b58d5bc5554b00f28028.ctex"
+uid="uid://8h20mu7xvnmc"
+path="res://.godot/imported/shadow_boots.png-cba677d808f40a74e9ce2f0851e842db.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/items/equipment/equipable/wooden_gloves_type10_tier1.png"
-dest_files=["res://.godot/imported/wooden_gloves_type10_tier1.png-912cff414ad2b58d5bc5554b00f28028.ctex"]
+source_file="res://assets/items/equipment/shadow_boots.png"
+dest_files=["res://.godot/imported/shadow_boots.png-cba677d808f40a74e9ce2f0851e842db.ctex"]
 
 [params]
 

@@ -26,6 +26,7 @@ public partial class Inventory : Control
 
     public override void _Ready()
     {
+        AddToGroup("inventory");
         ConnectSignalsToInventorySlots(GetNode<GridContainer>("%GridContainer"));
         ConnectSignalsToInventorySlots(GetNode<HBoxContainer>("%HBoxContainer"));
 
@@ -273,6 +274,19 @@ public partial class Inventory : Control
             if (item != null)
                 InventoryItems[slot++] = item;
         }
+    }
+
+    public bool TryAddItem(Item item)
+    {
+        for (int i = 0; i < InventoryItems.Length; i++)
+        {
+            if (InventoryItems[i] != null) continue;
+            InventoryItems[i] = item;
+            SyncInventoryUI();
+            return true;
+        }
+        GD.Print("[Inventory] Full — drop was lost.");
+        return false;
     }
     // ─────────────────────────────────────────────
     // UI sync

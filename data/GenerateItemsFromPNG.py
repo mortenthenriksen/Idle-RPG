@@ -73,7 +73,7 @@ SLOT_STAT_WEIGHTS = {
 # Base stat values at type=1 (before type scaling)
 BASE_STATS = {
     "damage":   (2.0,  5.0),   # (min, max)
-    "Health":     (5.0, 12.0),
+    "Health":   (5.0, 12.0),
     "defense":  (2.0,  6.0),
     "move":     (1.0,  3.0),   # % bonus
 }

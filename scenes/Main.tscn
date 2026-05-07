@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://c0ju5m2hkncdj"]
+[gd_scene load_steps=25 format=3 uid="uid://c0ju5m2hkncdj"]
 
 [ext_resource type="Script" path="res://scenes/Main.cs" id="1_afkx3"]
 [ext_resource type="PackedScene" uid="uid://dia4df047bi02" path="res://characters/player/Player.tscn" id="3_pnmoo"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://managers/UIManager.cs" id="7_73xji"]
 [ext_resource type="Script" path="res://managers/KillTracker.cs" id="7_858o5"]
 [ext_resource type="Script" path="res://managers/GameEventsManager.cs" id="7_ncrx3"]
+[ext_resource type="Script" path="res://managers/LootTableManager.cs" id="11_1doqh"]
 [ext_resource type="Script" path="res://managers/ItemDatabaseManager.cs" id="11_5x3sm"]
 [ext_resource type="PackedScene" uid="uid://bunytm4c8r6b0" path="res://managers/SoundManager.tscn" id="11_qxir3"]
 [ext_resource type="Script" path="res://managers/ExperienceManager.cs" id="11_sbfnc"]
@@ -54,6 +55,9 @@ unspentSkillPoints = 100
 
 [node name="ItemDatabaseManager" type="Node" parent="Managers"]
 script = ExtResource("11_5x3sm")
+
+[node name="LootTableManager" type="Node" parent="Managers"]
+script = ExtResource("11_1doqh")
 
 [node name="ParallaxBackground" parent="." instance=ExtResource("5_te7os")]
 
@@ -206,6 +210,7 @@ metadata/_edit_lock_ = true
 
 [node name="Player" parent="." instance=ExtResource("3_pnmoo")]
 position = Vector2(264, 480)
+animationPlayerSpeedScale = 0.35
 metadata/_edit_lock_ = true
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="Player"]
