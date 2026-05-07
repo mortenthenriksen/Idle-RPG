@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ckgvctnqkob8x"
-path="res://.godot/imported/32x32_RingsandAmulets.png-8a10595a5ff4b9298f60cfdc627a2eaa.ctex"
+uid="uid://fqw2qxayxojx"
+path="res://.godot/imported/rings_type1_tier5.png-65f98256968b6c116e9af6f21f854046.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/items/equipment/equipable/32x32_RingsandAmulets.png"
-dest_files=["res://.godot/imported/32x32_RingsandAmulets.png-8a10595a5ff4b9298f60cfdc627a2eaa.ctex"]
+source_file="res://assets/items/equipment/equipable/rings_type1_tier5.png"
+dest_files=["res://.godot/imported/rings_type1_tier5.png-65f98256968b6c116e9af6f21f854046.ctex"]
 
 [params]
 

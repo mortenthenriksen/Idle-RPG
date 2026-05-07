@@ -12,6 +12,7 @@ public partial class Item : Resource
     [Export] public float Health { get; set; }
     [Export] public float MovementSpeed{ get; set; }
     [Export] public float Defense { get; set; }
+    [Export] public float AttackSpeed { get; set; }
 
     // ranges
     public float DamageMin  { get; set; }
@@ -22,6 +23,8 @@ public partial class Item : Resource
     public float HealthMax  { get; set; }
     public float MovementSpeedMin   { get; set; }
     public float MovementSpeedMax   { get; set; }
+    public float AttackSpeedMin   { get; set; }
+    public float AttackSpeedMax   { get; set; }
 }
 
 

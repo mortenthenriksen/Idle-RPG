@@ -210,7 +210,6 @@ metadata/_edit_lock_ = true
 
 [node name="Player" parent="." instance=ExtResource("3_pnmoo")]
 position = Vector2(264, 480)
-animationPlayerSpeedScale = 0.35
 metadata/_edit_lock_ = true
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="Player"]

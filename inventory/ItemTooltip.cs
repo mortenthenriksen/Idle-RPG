@@ -10,6 +10,7 @@ public partial class ItemTooltip : PanelContainer
     private Label _defense;
     private Label _Health;
     private Label _movementSpeed;
+    private Label _attackSpeed;
 
     public override void _Ready()
     {
@@ -19,6 +20,7 @@ public partial class ItemTooltip : PanelContainer
         _defense  = GetNode<Label>("%DefenseLabel");
         _Health   = GetNode<Label>("%HealthLabel");
         _movementSpeed    = GetNode<Label>("%MovementSpeedLabel");
+        _attackSpeed    = GetNode<Label>("%AttackSpeedLabel");
 
     }
 
@@ -31,6 +33,7 @@ public partial class ItemTooltip : PanelContainer
         SetStatLabel(_defense, "Defense", item.Defense, item.DefenseMin, item.DefenseMax);
         SetStatLabel(_Health,  "Health",  item.Health,  item.HealthMin,  item.HealthMax);
         SetStatLabel(_movementSpeed,   "Speed",   item.MovementSpeed,   item.MovementSpeedMin,   item.MovementSpeedMax);
+        SetStatLabel(_attackSpeed,   "Attack Speed",   item.AttackSpeed,  item.AttackSpeedMin,   item.AttackSpeedMax);
 
         GlobalPosition = position + new Vector2(8, 8);
         Visible = true;

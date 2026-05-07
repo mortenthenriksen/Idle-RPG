@@ -1,12 +1,15 @@
-[gd_scene load_steps=8 format=3 uid="uid://bcrj5p7y4eawc"]
+[gd_scene load_steps=11 format=3 uid="uid://bcrj5p7y4eawc"]
 
 [ext_resource type="Theme" uid="uid://dtwfjgidd1q24" path="res://resources/theme.tres" id="1_0u2p3"]
 [ext_resource type="Script" path="res://inventory/Inventory.cs" id="1_18fsx"]
 [ext_resource type="Texture2D" uid="uid://dfkkroy8k2ppy" path="res://assets/items/equipment/shadow_helmet.png" id="3_2vlns"]
+[ext_resource type="Texture2D" uid="uid://0op6d3kypui3" path="res://assets/items/equipment/shadow_shield.png" id="3_we04b"]
+[ext_resource type="Texture2D" uid="uid://cj2637qj5rc5r" path="res://assets/items/equipment/shadow_sword.png" id="4_7hf1i"]
 [ext_resource type="Texture2D" uid="uid://b2srf6gvyq56d" path="res://assets/items/equipment/shadow_chest.png" id="4_u1v6t"]
 [ext_resource type="Texture2D" uid="uid://bfn3og2kscqqm" path="res://assets/items/equipment/shadow_pants.png" id="5_uhgl5"]
 [ext_resource type="Texture2D" uid="uid://8h20mu7xvnmc" path="res://assets/items/equipment/shadow_boots.png" id="6_hlup6"]
 [ext_resource type="Texture2D" uid="uid://bxvndg14pq241" path="res://assets/items/equipment/shadow_gloves.png" id="7_f60ve"]
+[ext_resource type="Texture2D" uid="uid://caim7vrkj26yx" path="res://assets/items/equipment/shadow_ring.png" id="9_cw3ew"]
 
 [node name="Inventory" type="Control"]
 layout_mode = 3
@@ -241,28 +244,25 @@ custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 theme = ExtResource("1_0u2p3")
 
+[node name="Shadow" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/RightVBox/ShieldSlot"]
+modulate = Color(1, 1, 1, 0.4)
+self_modulate = Color(0, 0, 0, 1)
+layout_mode = 0
+offset_top = 1.0
+offset_right = 32.0
+offset_bottom = 33.0
+mouse_filter = 2
+texture = ExtResource("3_we04b")
+
 [node name="ItemIcon" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/RightVBox/ShieldSlot"]
 layout_mode = 0
 offset_right = 32.0
 offset_bottom = 32.0
 
-[node name="Shadow" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/RightVBox/ShieldSlot"]
-modulate = Color(1, 1, 1, 0.4)
-self_modulate = Color(0, 0, 0, 1)
-layout_mode = 0
-offset_right = 32.0
-offset_bottom = 32.0
-mouse_filter = 2
-
 [node name="WeaponSlot" type="Panel" parent="Panel/MarginContainer/HBoxContainer/RightVBox"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 theme = ExtResource("1_0u2p3")
-
-[node name="ItemIcon" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/RightVBox/WeaponSlot"]
-layout_mode = 0
-offset_right = 32.0
-offset_bottom = 32.0
 
 [node name="Shadow" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/RightVBox/WeaponSlot"]
 modulate = Color(1, 1, 1, 0.4)
@@ -271,6 +271,12 @@ layout_mode = 0
 offset_right = 32.0
 offset_bottom = 32.0
 mouse_filter = 2
+texture = ExtResource("4_7hf1i")
+
+[node name="ItemIcon" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/RightVBox/WeaponSlot"]
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 32.0
 
 [node name="MiddleVBox" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer"]
 layout_mode = 2
@@ -279,11 +285,6 @@ layout_mode = 2
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 theme = ExtResource("1_0u2p3")
-
-[node name="ItemIcon" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/MiddleVBox/HelmetSlot"]
-layout_mode = 0
-offset_right = 32.0
-offset_bottom = 32.0
 
 [node name="Shadow" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/MiddleVBox/HelmetSlot"]
 modulate = Color(1, 1, 1, 0.4)
@@ -294,15 +295,15 @@ offset_bottom = 32.0
 mouse_filter = 2
 texture = ExtResource("3_2vlns")
 
+[node name="ItemIcon" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/MiddleVBox/HelmetSlot"]
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 32.0
+
 [node name="ChestSlot" type="Panel" parent="Panel/MarginContainer/HBoxContainer/MiddleVBox"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 theme = ExtResource("1_0u2p3")
-
-[node name="ItemIcon" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/MiddleVBox/ChestSlot"]
-layout_mode = 0
-offset_right = 32.0
-offset_bottom = 32.0
 
 [node name="Shadow" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/MiddleVBox/ChestSlot"]
 modulate = Color(1, 1, 1, 0.4)
@@ -314,15 +315,15 @@ offset_bottom = 33.0
 mouse_filter = 2
 texture = ExtResource("4_u1v6t")
 
+[node name="ItemIcon" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/MiddleVBox/ChestSlot"]
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 32.0
+
 [node name="PantsSlot" type="Panel" parent="Panel/MarginContainer/HBoxContainer/MiddleVBox"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 theme = ExtResource("1_0u2p3")
-
-[node name="ItemIcon" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/MiddleVBox/PantsSlot"]
-layout_mode = 0
-offset_right = 32.0
-offset_bottom = 32.0
 
 [node name="Shadow" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/MiddleVBox/PantsSlot"]
 modulate = Color(1, 1, 1, 0.4)
@@ -333,15 +334,15 @@ offset_bottom = 32.0
 mouse_filter = 2
 texture = ExtResource("5_uhgl5")
 
+[node name="ItemIcon" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/MiddleVBox/PantsSlot"]
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 32.0
+
 [node name="BootsSlot" type="Panel" parent="Panel/MarginContainer/HBoxContainer/MiddleVBox"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 theme = ExtResource("1_0u2p3")
-
-[node name="ItemIcon" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/MiddleVBox/BootsSlot"]
-layout_mode = 0
-offset_right = 32.0
-offset_bottom = 32.0
 
 [node name="Shadow" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/MiddleVBox/BootsSlot"]
 modulate = Color(1, 1, 1, 0.4)
@@ -351,6 +352,11 @@ offset_right = 32.0
 offset_bottom = 32.0
 mouse_filter = 2
 texture = ExtResource("6_hlup6")
+
+[node name="ItemIcon" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/MiddleVBox/BootsSlot"]
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 32.0
 
 [node name="LeftVBox" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer"]
 layout_mode = 2
@@ -362,11 +368,6 @@ custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 theme = ExtResource("1_0u2p3")
 
-[node name="ItemIcon" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/LeftVBox/AmuletSlot"]
-layout_mode = 0
-offset_right = 32.0
-offset_bottom = 32.0
-
 [node name="Shadow" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/LeftVBox/AmuletSlot"]
 modulate = Color(1, 1, 1, 0.4)
 self_modulate = Color(0, 0, 0, 1)
@@ -374,16 +375,18 @@ layout_mode = 0
 offset_right = 32.0
 offset_bottom = 32.0
 mouse_filter = 2
+texture = ExtResource("9_cw3ew")
+flip_h = true
+
+[node name="ItemIcon" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/LeftVBox/AmuletSlot"]
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 32.0
 
 [node name="GlovesSlot" type="Panel" parent="Panel/MarginContainer/HBoxContainer/LeftVBox"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 theme = ExtResource("1_0u2p3")
-
-[node name="ItemIcon" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/LeftVBox/GlovesSlot"]
-layout_mode = 0
-offset_right = 32.0
-offset_bottom = 32.0
 
 [node name="Shadow" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/LeftVBox/GlovesSlot"]
 modulate = Color(1, 1, 1, 0.4)
@@ -394,15 +397,15 @@ offset_bottom = 32.0
 mouse_filter = 2
 texture = ExtResource("7_f60ve")
 
+[node name="ItemIcon" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/LeftVBox/GlovesSlot"]
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 32.0
+
 [node name="RingSlot" type="Panel" parent="Panel/MarginContainer/HBoxContainer/LeftVBox"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 theme = ExtResource("1_0u2p3")
-
-[node name="ItemIcon" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/LeftVBox/RingSlot"]
-layout_mode = 0
-offset_right = 32.0
-offset_bottom = 32.0
 
 [node name="Shadow" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/LeftVBox/RingSlot"]
 modulate = Color(1, 1, 1, 0.4)
@@ -411,6 +414,12 @@ layout_mode = 0
 offset_right = 32.0
 offset_bottom = 32.0
 mouse_filter = 2
+texture = ExtResource("9_cw3ew")
+
+[node name="ItemIcon" type="TextureRect" parent="Panel/MarginContainer/HBoxContainer/LeftVBox/RingSlot"]
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 32.0
 
 [node name="HoldingDisplay" type="TextureRect" parent="."]
 unique_name_in_owner = true

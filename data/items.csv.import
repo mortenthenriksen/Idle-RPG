@@ -2,14 +2,14 @@
 
 importer="csv_translation"
 type="Translation"
-uid="uid://cvcfrph1tesb2"
+uid="uid://brxntt4cm8kjk"
 
 [deps]
 
-files=["res://data/items.name.translation", "res://data/items.slot.translation", "res://data/items.icon.translation", "res://data/items.damage.translation", "res://data/items.damage.translation", "res://data/items.Health.translation", "res://data/items.Health.translation", "res://data/items.defense.translation", "res://data/items.defense.translation", "res://data/items.movement.translation", "res://data/items.movement.translation"]
+files=["res://data/items.name.translation", "res://data/items.slot.translation", "res://data/items.icon.translation", "res://data/items.damage.translation", "res://data/items.damage.translation", "res://data/items.Health.translation", "res://data/items.Health.translation", "res://data/items.defense.translation", "res://data/items.defense.translation", "res://data/items.movement.translation", "res://data/items.movement.translation", "res://data/items.attack.translation", "res://data/items.attack.translation"]
 
 source_file="res://data/items.csv"
-dest_files=["res://data/items.name.translation", "res://data/items.slot.translation", "res://data/items.icon.translation", "res://data/items.damage.translation", "res://data/items.damage.translation", "res://data/items.Health.translation", "res://data/items.Health.translation", "res://data/items.defense.translation", "res://data/items.defense.translation", "res://data/items.movement.translation", "res://data/items.movement.translation"]
+dest_files=["res://data/items.name.translation", "res://data/items.slot.translation", "res://data/items.icon.translation", "res://data/items.damage.translation", "res://data/items.damage.translation", "res://data/items.Health.translation", "res://data/items.Health.translation", "res://data/items.defense.translation", "res://data/items.defense.translation", "res://data/items.movement.translation", "res://data/items.movement.translation", "res://data/items.attack.translation", "res://data/items.attack.translation"]
 
 [params]
 

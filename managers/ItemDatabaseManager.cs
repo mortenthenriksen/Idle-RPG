@@ -41,6 +41,10 @@ public partial class ItemDatabaseManager : Node
                 DefenseMax = float.Parse(cols[9]),
                 MovementSpeedMin = float.Parse(cols[10]),
                 MovementSpeedMax = float.Parse(cols[11]),
+                AttackSpeedMin = float.Parse(cols[12]),
+                AttackSpeedMax = float.Parse(cols[13]),
+
+                
             };
 
             _templates[cols[1]] = template;
@@ -72,11 +76,14 @@ public partial class ItemDatabaseManager : Node
             HealthMax  = t.HealthMax,
             MovementSpeedMin   = t.MovementSpeedMin,
             MovementSpeedMax   = t.MovementSpeedMax,
+            AttackSpeedMin = t.AttackSpeedMin,
+            AttackSpeedMax = t.AttackSpeedMax,
             // Roll the actual stats
             Damage  = RollStat(t.DamageMin,  t.DamageMax),
             Defense = RollStat(t.DefenseMin, t.DefenseMax),
             Health  = RollStat(t.HealthMin,  t.HealthMax),
             MovementSpeed   = RollStat(t.MovementSpeedMin,   t.MovementSpeedMax),
+            AttackSpeed    = RollStat(t.AttackSpeedMin, t.AttackSpeedMax)
         };
     }
 

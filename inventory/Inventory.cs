@@ -197,6 +197,7 @@ public partial class Inventory : Control
 
     private void ApplyItemStats(Item item)
     {
+        // just check what the item has then update, this is stupid >:()
         if (item == null) return;
         var stats = Statistics.Instance.playerStats;
 
@@ -212,8 +213,9 @@ public partial class Inventory : Control
             GetPlayerHealthNode()?.GetMaxHealthFromStatsDict();
         }
         if (item.Defense != 0) stats[Statistics.Traits.Defence].AddFlat(item.Defense);
+        if (item.AttackSpeed != 0) stats[Statistics.Traits.AttackSpeed].AddIncreased(item.AttackSpeed);
 
-        RefreshStatsUI();
+        UIManager.Instance.RefreshPlayerStats(GetPlayerHealthNode());
     }
 
     private void RemoveItemStats(Item item)
@@ -233,8 +235,9 @@ public partial class Inventory : Control
             GetPlayerHealthNode()?.GetMaxHealthFromStatsDict();
         }
         if (item.Defense != 0) stats[Statistics.Traits.Defence].RemoveFlat(item.Defense);
+        if (item.AttackSpeed != 0) stats[Statistics.Traits.AttackSpeed].RemoveIncreased(item.AttackSpeed);
 
-        RefreshStatsUI();
+        UIManager.Instance.RefreshPlayerStats(GetPlayerHealthNode());
     }
 
 	private HealthNode GetPlayerHealthNode()
@@ -255,7 +258,8 @@ public partial class Inventory : Control
             "wooden_helm_type7_tier1", 
             "wooden_pants_type8_tier1",
             "wooden_chest_type6_tier1",
-            "wooden_boots_type2_tier1"
+            "wooden_boots_type2_tier1",
+            "wooden_sword_large7_tier1"
             // add more item IDs from your CSV here
         };
 
@@ -285,33 +289,11 @@ public partial class Inventory : Control
             SyncInventoryUI();
             return true;
         }
+        // fix so the item isnt lost
         GD.Print("[Inventory] Full — drop was lost.");
         return false;
     }
-    // ─────────────────────────────────────────────
-    // UI sync
-    // ─────────────────────────────────────────────
-	private void RefreshStatsUI()
-	{
-		if (UIManager.Instance == null || Statistics.Instance == null) return;
 
-		var stats = Statistics.Instance.playerStats;
-
-		UIManager.Instance.UpdatePlayerAttackDamage(
-			(float)stats[Statistics.Traits.Damage].GetValue());
-		UIManager.Instance.UpdatePlayerAttackSpeed(
-			(float)stats[Statistics.Traits.AttackSpeed].GetValue());
-
-		// Match GameEventsManager: show as % of base
-		var baseSpeed = stats[Statistics.Traits.MovementSpeed].BaseValue;
-		var currentSpeed = (float)stats[Statistics.Traits.MovementSpeed].GetValue();
-		UIManager.Instance.UpdatePlayerMovementSpeed(currentSpeed / baseSpeed * 100f);
-
-		// Update health display with the actual HealthNode values
-		var healthNode = GetPlayerHealthNode();
-		if (healthNode != null)
-			UIManager.Instance.UpdatePlayerHealth(healthNode.currentHealth, healthNode.maxHealth);
-	}
 
     private void SyncInventoryUI()
     {
