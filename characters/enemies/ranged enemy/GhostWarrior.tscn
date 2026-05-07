@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://d227rjot78xxr"]
+[gd_scene load_steps=15 format=3 uid="uid://d227rjot78xxr"]
 
 [ext_resource type="PackedScene" uid="uid://omp0jrbimtfm" path="res://characters/components/HealthNode.tscn" id="1_5b254"]
 [ext_resource type="Script" path="res://characters/enemies/ranged enemy/GhostWarrior.cs" id="1_51q2k"]
@@ -9,11 +9,27 @@ radius = 26.0
 height = 80.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tyj34"]
-radius = 88.0
-height = 176.0
+radius = 59.0
+height = 126.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3s3sb"]
+radius = 41.0
+height = 360.0
 
 [sub_resource type="Animation" id="Animation_pp2qe"]
 length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimationPlayer:speed_scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.5]
+}
 
 [sub_resource type="Animation" id="Animation_bojce"]
 resource_name = "attack1"
@@ -127,6 +143,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="Animation_0ybep"]
 resource_name = "spawn"
 length = 0.3667
+step = 0.0298
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -138,6 +155,18 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimationPlayer:speed_scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.352941),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.5, 0.3]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_wmmed"]
@@ -157,19 +186,24 @@ script = ExtResource("1_51q2k")
 metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
 position = Vector2(1, -36)
 shape = SubResource("CapsuleShape2D_rswmq")
 metadata/_edit_lock_ = true
 
-[node name="Area2D" type="Area2D" parent="."]
-visible = false
+[node name="MeleeArea2D" type="Area2D" parent="."]
 collision_layer = 8
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-visible = false
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MeleeArea2D"]
 position = Vector2(0, -31)
 shape = SubResource("CapsuleShape2D_tyj34")
+
+[node name="RangedArea2D" type="Area2D" parent="."]
+collision_layer = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RangedArea2D"]
+position = Vector2(0, -31)
+rotation = -1.57079
+shape = SubResource("CapsuleShape2D_3s3sb")
 
 [node name="HealthNode" parent="." instance=ExtResource("1_5b254")]
 
@@ -177,7 +211,7 @@ shape = SubResource("CapsuleShape2D_tyj34")
 libraries = {
 "": SubResource("AnimationLibrary_wmmed")
 }
-speed_scale = 0.3
+speed_scale = 0.5
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(-44, -55)
@@ -185,7 +219,10 @@ scale = Vector2(1.2, 1.2)
 texture = ExtResource("2_h7gfw")
 hframes = 8
 vframes = 8
-frame = 15
+frame = 38
 
-[connection signal="body_entered" from="Area2D" to="." method="OnArea2DBodyEntered"]
+[connection signal="body_entered" from="MeleeArea2D" to="." method="OnArea2DBodyEntered"]
+[connection signal="body_exited" from="MeleeArea2D" to="." method="OnArea2DBodyExited"]
+[connection signal="body_entered" from="RangedArea2D" to="." method="OnRangedArea2DBodyEntered"]
+[connection signal="body_exited" from="RangedArea2D" to="." method="OnRangedArea2DBodyExited"]
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="OnAnimationFinished"]

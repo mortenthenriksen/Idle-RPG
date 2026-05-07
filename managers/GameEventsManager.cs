@@ -142,7 +142,8 @@ public partial class GameEventsManager : Node
     {
         enemy = ResourceLoader.Load<PackedScene>("res://characters/enemies/ranged enemy/GhostWarrior.tscn").Instantiate<GhostWarrior>();
 
-        enemy.GlobalPosition = new Vector2(player.GlobalPosition.X + 200, 481);
+        enemy.GlobalPosition = new Vector2(player.GlobalPosition.X + 250, 481);
+        
         AddChild(enemy);
 
         enemyHealthNode = enemy.GetNode<HealthNode>("HealthNode");

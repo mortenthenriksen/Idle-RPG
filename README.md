@@ -12,3 +12,4 @@
 - Consider scaling attack speed in a different way, add " chaining"
 - Fix the movement speed from boots so it is more clear what gives which stat etc
 - make enemies inherit from ranged / meelee / boss, so i can easily add new ones
+- add some umph

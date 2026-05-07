@@ -15,20 +15,7 @@ public partial class GhostProjectile : Area2D
     {
         animatedSprite2D = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
         animatedSprite2D.Play("default");
-        animatedSprite2D.AnimationFinished += OnAnimationFinished;
-        BodyEntered += OnBodyEntered;
     }
-
-    private void OnBodyEntered(Node2D body)
-    {
-        if (hasHit) return;
-        if (body is Player player && body.IsInGroup("player"))
-        {
-            hasHit = true;
-            DamageManager.Instance.ApplyDamage(Source, player, false);
-        }
-    }
-
 
     private void OnFrameChanged()
     {

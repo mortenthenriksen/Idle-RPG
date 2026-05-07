@@ -25,18 +25,16 @@ public abstract partial class Enemy : CharacterBody2D
         healthMultiplier  = 1 + (float)(waveDifficulty * 0.1);
         damageMultiplier  = 1 + (float)(waveDifficulty * 0.05);
 
-        // always re-read from stat dict so upgrades are respected
         var baseHealth = Statistics.Instance.enemyStats[Statistics.Traits.Health].GetValue();
         healthNode.maxHealth     = Math.Floor(baseHealth * healthMultiplier);
         healthNode.currentHealth = healthNode.maxHealth;
     }
-
+    
     public float GetAttackInterval()
     {
         var attackSpeed = Statistics.Instance.enemyStats[Statistics.Traits.AttackSpeed].GetValue();
         return 1f / attackSpeed;
     }
-
 
     protected void EmitOnDeathAnimationFinished()
     {

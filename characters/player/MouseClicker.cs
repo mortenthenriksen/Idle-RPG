@@ -29,7 +29,7 @@ public partial class MouseClicker : Node2D
         {
             var enemy = GetEnemy();     
             if (enemy == null) return;
-            var enemyArea2D = enemy.GetNode<Area2D>("Area2D");
+            var enemyArea2D = enemy.GetNode<Area2D>("MeleeArea2D");
             var overlapping = area2D.GetOverlappingAreas();
             var healthNode = enemy.GetNode<HealthNode>("HealthNode");
 
